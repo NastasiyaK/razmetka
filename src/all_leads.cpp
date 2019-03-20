@@ -11,7 +11,7 @@ All_Leads::All_Leads (info_for_new_peak* ptr_info_new_peak, int N)
 		temp_leads.push_back(NULL);
 	}
 	if (N_leads == 1)
-		temp_leads[1] = new one_lead(II, N_leads, ptr_info_new_peak);
+		temp_leads[6] = new one_lead(v1, N_leads, ptr_info_new_peak);
 
 	if (N_leads == 2) 
 	{

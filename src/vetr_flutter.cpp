@@ -7,9 +7,9 @@ if signal have regular high peaks in
  if there're rhythm 240  - VFL*/
 
 
-#define GET_START_VF(start_vf, count); \
+#define GET_START_VF(start_vf, count,average_R); \
 start_vf = static_cast<int>(count - 3 * Fs); \
-start_vf = start_severe_distortion(&all_extrasys_of_lead, &array_of_peak_R, start_vf); \
+start_vf = start_severe_distortion(&all_extrasys_of_lead, &array_of_peak_R, start_vf, average_R); \
 if (start_vf < 0)\
 	start_vf = 0; \
 if (type_of_lead == II || type_of_lead == v5) \
@@ -109,9 +109,10 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 				int ind = set_indices(*(list_extrasys.end() - 2), count_iter, mem, mem_sdvig);
 				int ind2 = set_indices(*(list_extrasys.end() - 1), count_iter, mem, mem_sdvig);
 				if (filter_signal.at(ind) - filter_signal.at(ind + QRS.height*Fs) < static_cast<int>(QRS_hight_min) ||
-					 abs(filter_signal.at(ind) / filter_signal.at(ind2)) < 1 / 2.5)
+					 abs(filter_signal.at(ind) / filter_signal.at(ind2)) < 1 / 2.5 )
 				{
-					list_extrasys.erase(list_extrasys.end() - 2);
+					if ( abs(ind2 - ind) < length.T_middle/2 * Fs)
+						list_extrasys.erase(list_extrasys.end() - 2);
 				}
 				if ( (ind2 - ind) < 2 * QRS.height*Fs)
 					list_extrasys.erase(list_extrasys.end() - 2);
@@ -142,14 +143,14 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 		double rhythm_vf = (static_cast<double>(num_beat)) / 3 * 60;
 
 		//part of heart rating analysing
-		if (rhythm_vf >= 140 && rhythm_vf < 200)
+		if (rhythm_vf > 140 && rhythm_vf < 200)
 
 		{
 			//cout<<type_of_lead<<endl;
 			current_rhythm = 60.f * Fs / rhythm_vf;
 			if (pathology_signal.VT == 0 && start_vf == 0) 
 			{
-				GET_START_VF(start_vf, count);
+				GET_START_VF(start_vf, count,average_R)
 				
 			} else 
 			{
@@ -170,7 +171,7 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 			current_rhythm = 60 * Fs / rhythm_vf;
 			if (pathology_signal.VFib == 0 && start_vf == 0) 
 			{
-				GET_START_VF(start_vf,count);
+				GET_START_VF(start_vf,count,average_R);
 
 			}else {
 				static int window_old = 0;
@@ -207,7 +208,8 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 
 
 
-int start_severe_distortion( vector<int>*extrasystoles,  vector<int>*R_peaks,const int& start_VF) 
+int start_severe_distortion(vector<int> *extrasystoles, vector<int> *R_peaks, const int &start_VF,
+							const int &average_interval)
 {
 	int start = start_VF;
 	//n_tryed - number of attemp to find first distortion
@@ -224,6 +226,7 @@ int start_severe_distortion( vector<int>*extrasystoles,  vector<int>*R_peaks,con
 		n_tryed++;
 
 	}
-
+	if (extrasystoles->size() >1 && abs(*(extrasystoles->end() - 2) - *(extrasystoles->end() - 1)) < average_interval/3)
+		start = start_VF;
 	return start_VF;
 }

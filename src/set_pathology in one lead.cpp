@@ -45,11 +45,16 @@ void leadII_V::check_BlockII( vector<int>& array_of_peak_R, int ind_of_last_extr
 				auto it_max_lost = max_element(begin(*ptr_signal) + i2,
 											   begin(*ptr_signal) + i2 + static_cast<int>((QRS.height * Fs) / 2));
 				int dur = it_max_lost - begin(*ptr_signal) + ind_vn - i1;
-				if (*it_max_lost / R.amplitude > 1.2 || *it_max_lost / R.amplitude < 0.8)// &&
+				if (*it_max_lost / R.amplitude > 1.2 || *it_max_lost / R.amplitude < 0.8) {// &&
 
-					pathology_signal.BlockII++;
-				bool lost_R_is = true;
-				finding_of_P(lost_R_is, *(array_of_peak_R.end() - 1));
+					bool lost_R_is = true;
+					if (finding_of_P(lost_R_is, *(array_of_peak_R.end() - 1))) {
+                        pathology_signal.BlockII++;
+                        pathology_signal.SBR = 0;
+                    }
+
+				}
+
 			}
 		}
 	}
@@ -91,8 +96,8 @@ void leadII_V::check_Afibr( vector<int>& array_of_peak_R)
 
 				
 			}
-
-			pathology_signal.AFIb++;
+            if (peaks_p_norm < 3 )
+			    pathology_signal.AFIb++;
 		}else
 		{
 			if (afibr_decision_memory.size() > 1 && afibr_decision == 0 && pathology_signal.AFIb != 0) 
@@ -140,6 +145,7 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 		check_BlockII(R_s, ind_of_last_extrasystole);
 		set_peaks(new_pair.first);
 		check_WPW(R_v);
+
 		vector<int>_extrasystoles = check_SV_A_extras(R_s, ind_of_last_extrasystole, average_R);
 
 		if (!_extrasystoles.empty() )

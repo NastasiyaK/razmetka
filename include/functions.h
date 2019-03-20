@@ -12,7 +12,8 @@ double derivative_of_filtered_signals(vector<double>*);
 void to_merge_peaks(vector< pair<int, pat_name>>*, vector<int>*, int);
 
 //for ventricular flutter
-int start_severe_distortion( vector<int>*,  vector<int>*, const int&);
+int start_severe_distortion(vector<int> *extrasystoles, vector<int> *R_peaks, const int &start_VF,
+                            const int &average_interval);
 bool value_ok(const int& ind,const int&);
 void change_type_in_all_peak( vector <  pair<int, pat_name >>&, pat_name, const int&, const double);
 

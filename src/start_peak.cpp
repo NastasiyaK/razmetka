@@ -19,6 +19,8 @@ int one_lead::start_peak(const int &peak, vector<double> *ptr_signal) {
 
     if (ind >= 0 && ind2 > 0 && ptr_signal->size() > ind2) {
         double isolinia_here = isolinia;
+        if ( abs(isolinia_here) > QRS_filtered_min)
+            isolinia_here = 0;
         copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
         double current_amplitude = ptr_signal->at(ind2);
 
@@ -32,12 +34,6 @@ int one_lead::start_peak(const int &peak, vector<double> *ptr_signal) {
         start_R = static_cast<int>(round(x));
         int start = 0;
 
-
-
-      //  while (start_R < ptr_signal->size() - 1 && value_ok(start_R + 2, ptr_signal->size())
-        //       && (abs(ptr_signal->at(start_R) - isolinia_here) >= abs(ptr_signal->at(start_R + 2) - isolinia_here))) {
-       //     start_R++;
-       // }
         bool _FIND_VAL = 0;
         if (start_R < 0)
             start_R = 0;
@@ -101,6 +97,8 @@ int one_lead::stop_peak(const int peak, vector<double>* ptr_signal)
         copy(begin(*ptr_signal)+ind,begin(*ptr_signal)+ind2,back_inserter(bufer));
 
         double isolinia_here = isolinia;
+        if ( abs(isolinia_here) > QRS_filtered_min)
+            isolinia_here = 0;
         copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
         double current_amplitude = ptr_signal->at(ind);
 

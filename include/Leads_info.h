@@ -84,7 +84,7 @@ protected:
 	rr RR; 
 	Lengths length;
 
-	double QRS_hight_min, QRS_height, ampl_P_threshold,
+	double QRS_hight_min, QRS_height, ampl_P_threshold = 0.1,
 		ampl_P_standart, ampl_T_standart, QRS_filtered_min;
 	average_value average_amplitude;
 
@@ -98,7 +98,7 @@ protected:
 	my_map pathologies;
 	storage_of_pathology path_mathods;
 	bool fibr( vector<int>&);
-	bool flutter();
+	bool flutter(const vector<int>&,const vector<double>* );
 	Signal pathology_signal;
 
 	

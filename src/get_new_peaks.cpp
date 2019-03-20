@@ -95,7 +95,7 @@ inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>&
 		}
 
 	}
-	if (NUM_PEAKS < _num_of_leads/2 || _num_of_leads < N_leads/2-2)
+	if (NUM_PEAKS < _num_of_leads/2 || NUM_PEAKS < N_leads/2-2)
 	    sum = 0;
 	char* des;
 	pat_name patho;
@@ -199,6 +199,7 @@ void leadII_V::get_new_peaks()
 							type_sample_des.second = E;
 
                         	clean_peaks.push_back(type_sample_des);
+
 
 
 

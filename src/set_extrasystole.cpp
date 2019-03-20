@@ -86,7 +86,7 @@ if ( (!array_of_extrasys.empty() && probably_extrasystole != *(array_of_extrasys
      }
  }
  else {
-	 if (probably_extrasystole - peak_for_analysis < QRS.height * Fs &&
+	 if (probably_extrasystole - peak_for_analysis < QRS.height * Fs/2 &&
 		 amplitude_new_peak > amplitude_old_peak) 
 	 {
 		 *(array_of_peak_R.end() - 1) = probably_extrasystole;

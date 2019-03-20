@@ -2,14 +2,14 @@
 #include "one lead.h"
 #include "LeadII_V.h"
 
-void leadII_V::finding_of_P(bool& lost_R_is,const int& peak){
+bool leadII_V::finding_of_P(bool& lost_R_is,const int& peak){
 
  vector <double> bufer;
  vector<double>::iterator it = bufer.begin();
 int ind,ind2,ind_vn,otstup;
 
 
-otstup = (lost_R_is) ? abs(len_R/2) : 0;
+otstup = (lost_R_is) ? abs( 0.9 * average_R) : 0;
 
 ind = peak  - static_cast<int>(length.PQ_int*Fs + (Fs*QRS.low)/2)-otstup;
 ind2 = peak - static_cast<int>((Fs*QRS.height)/2+length.PQ_seg*Fs/2)-otstup;
@@ -29,12 +29,16 @@ if (ind>0 && ind2>ind)
 
 	if (P.amplitude > ampl_P_threshold) {
 		push_el(P_v, P, n_peaks);
+        peaks_p_norm++;
+		return true;
+
 	}
 
 	 if (P.amplitude < ampl_P_threshold){
-        flutter();
+         peaks_p_norm = 0;
+         flutter(R_s, ptr_signal);
     }
-		
+		return false;
 }
 }
 

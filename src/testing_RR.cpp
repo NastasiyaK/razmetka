@@ -41,8 +41,7 @@ bool one_lead::check_ventr_extrasys(vector<double>*signal, const int& peak1, int
 					}else
 
 
-				    if (type_of_lead ==II)
-				        int a = 1;
+
 					ADD_EXRASYS(V_b);
 					return true;
 				}
@@ -105,8 +104,8 @@ void one_lead::testing_of_RR()
 		}
 		if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
 		{
-			if (static_cast<double>((peak2 - peak3) / (peak1 - peak2) < 1.2 &&
-				static_cast<double>((peak2 - peak3) / (peak1 - peak2) > 0.8) && ind_of_last_extrasystole < peak3) &&
+			if (static_cast<double>((peak2 - peak3) / (peak1 - peak2) > 1.2 ||
+				static_cast<double>((peak2 - peak3) / (peak1 - peak2) < 0.8) && ind_of_last_extrasystole < peak3) &&
 				peak1 - peak2 < 2 * RR.middle * Fs )
 			{
 				ADD_EXRASYS(V_b);

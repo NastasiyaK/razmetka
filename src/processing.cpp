@@ -45,14 +45,14 @@ bool& one_lead::processing_lead(double& sam, bool& signal_new_peak)
 
 					if (main_peak_in_interval =='R')
 					{
-						if (check_peak()) 
+						if (check_peak())
 						{
 							testing_of_RR();
 							if (array_of_peak_R.size()>2 && !ptr_info_new_peak->get_R_is() &&
 									ptr_info_new_peak->get_sample() <  *(array_of_peak_R.end() - 3))
 							{
-                                if (type_of_lead ==II)
-                                    int a = 1;
+                                //if (type_of_lead ==II)
+                                //    int a = 1;
 								ptr_info_new_peak->set_is_peak(true);
 								ptr_info_new_peak->set_sample(*(array_of_peak_R.end() - 3));
 								ptr_info_new_peak->set_is_peak(true);

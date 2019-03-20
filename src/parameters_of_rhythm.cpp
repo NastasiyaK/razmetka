@@ -40,7 +40,7 @@ void leadII_V::rhythm(pair<int, pat_name > new_some_point, vector<int>& array_of
 		if (current_rhythm != 0 && 60 * Fs / current_rhythm + 1 > 55 && pathology_signal.SBR > 0)
 		{
 			pathology_signal.SBR = -1;
-			if (pathology_signal.SBR > 3)
+			if (pathology_signal.SBR > 4)
 				pathology_signal.SBR++;
 		}
 

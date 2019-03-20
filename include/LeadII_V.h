@@ -28,6 +28,7 @@ public:
 	void set_all_leads(All_Leads* ptr_leads);
 
 private:
+    int peaks_p_norm = 0;
 	bool check_SV_A_extrasustole( vector<pair<int,pat_name > > & peaks, const int& );
 	bool check_last_four_peaks( vector<pair<int,pat_name > > & , const int& );
 	void print_all();
@@ -62,7 +63,7 @@ private:
 	void level_of_segment( vector<double>&, const int&);
 
 	int  finding_of_Q(const int&);
-	void finding_of_P(bool&, const int&);
+	bool finding_of_P(bool&, const int&);
 	void finding_of_S(const int&);
 	int finding_of_T(const int&);
 	int stop_of_R(const int, bool type);

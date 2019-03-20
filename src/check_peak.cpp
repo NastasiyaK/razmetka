@@ -50,7 +50,8 @@ bool one_lead::check_peak()
 	}
 
 	//cout<< QRS_filtered_min<<endl;
-	if (check_peak_R( new_peak ) && diff > average_amplitude.get() )
+    if (array_of_peak_R.size() !=0 && new_peak - *(array_of_peak_R.end()-1) > length.T_middle/2 && diff > average_amplitude.get() )
+	//if (check_peak_R( new_peak ) && diff > average_amplitude.get() )
 	{
 		int start_R = start_of_R(new_peak, (Fs * QRS.height) / 2, 1, nullptr);
 		if (type_of_lead == II)
@@ -64,7 +65,8 @@ bool one_lead::check_peak()
 
 
 		//if new_peak hasn't become extrasystole yet, it's normal R beat
-		if (new_peak - *(array_of_peak_R.end() - 1) > Fs*QRS.height && diff > QRS_filtered_min &&
+		if (new_peak - *(array_of_peak_R.end() - 1) > Fs*QRS.height && diff > QRS_hight_min &&
+        //if (new_peak - *(array_of_peak_R.end() - 1) > Fs*QRS.height && signal.at(dist) > QRS_hight_min &&
 			 abs(new_peak - start_R) <= 3 * static_cast<int>( (Fs*QRS.height) / 2))
 		{
 
@@ -76,22 +78,24 @@ bool one_lead::check_peak()
 				double original_hight_peak = signal.at(dist) - * min_element(signal.begin() + dist - (int)(Fs*QRS.low / 2), signal.begin() + dist);
 
 				//Sometimes filtered signal isn't as original,so added check is useful
-				//if (original_hight_peak > QRS_hight_min)
-				//{
-				if (type_of_lead == II)
-					int a = 1;
+
+
                 push_el(array_of_peak_R, (new_peak), n_peaks); //there's normal R beat
                 push_el(peaks_with_types, new_peak, N_b, n_peaks);
                 R_is = true;
                 start_R = R.start;
                 N_count++;
                 amplitude_old_peak = amplitude_new_peak;
+                QRS_hight_min = amplitude_new_peak / 2;
+
+                if (QRS_hight_min < QRS_filtered_min)
+                    QRS_hight_min = QRS_filtered_min;
+                if (QRS_hight_min > 3 * QRS_filtered_min )
+                    QRS_hight_min =  QRS_hight_min/2;
                 R.amplitude = amplitude_new_peak - isolinia;
                 R.peak = new_peak;
                 average_amplitude.set(amplitude_old_peak);
                 first_check_of_anormal_RR(array_of_extrasys);
-
-
 
 			}		
 			

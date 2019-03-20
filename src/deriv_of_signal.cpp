@@ -66,7 +66,7 @@ void one_lead::filter( vector<double>&input,  vector<double>&output, int order)
 	static bool first_loading = 1;
 	if (first_loading)
 	{
-		 ifstream input("buter_koef.txt");
+		ifstream input("buter_koef.txt");
 		float koef;
 		for (size_t i = 0; i <= order; i++)
 		{
