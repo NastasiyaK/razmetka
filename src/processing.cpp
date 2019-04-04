@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "one lead.h"
 #include "Leads_info.h"
 #include "All_leads.h"
@@ -90,53 +91,23 @@ bool& one_lead::processing_lead(double& sam, bool& signal_new_peak)
 					
 				}
 			}
+            int last_peak_asystol = 0;
+			if (!peaks_with_types.empty())
+			    last_peak_asystol = (peaks_with_types.end()-1)->first;
+
+			if (!extrasystoles.empty() && *(extrasystoles.end()-1) > last_peak_asystol )
+			    last_peak_asystol =  *(extrasystoles.end()-1);
+
+            if (count - last_peak_asystol > static_cast<int>(5 * Fs)) {
+                pathology_signal.Asystol++;
+            }
+            if (pathology_signal.Asystol > 0 && count - last_peak_asystol < static_cast<int>(5 * Fs)) {
+                pathology_signal.Asystol = 0;
+            }
 		}
 		
 	} catch (const  exception& oor) {
 		 cerr << "Out of Range error: " << oor.what() << " count and type " << count << " "<<type_of_lead <<'\n';
-		exit(1);
-
-	}
-	return signal_new_peak;
-}
-
-
-bool& leadII_V::processing_lead(double& sam, bool& signal_new_peak)
-{
-
-	/*��� ������ ��� ������� ������ ���������� �����. 
-	���� � ��� ���� ������������� �������� �����, � ������������ ����� (V,A,SV ) �� ���� ���������,
-	�� �� ��� ����� ��������� ������� ���������� ��������� � ��������� ������� ����, ����� ����� �����������
-	*/
-	if (ptr_info_new_peak->get_R_is())
-	{
-		//function to  collect info 
-		if ( abs(count - ptr_info_new_peak->get_sample()) > ptr_info_new_peak->fusion_window_sec*Fs / 2)
-		{
-			ptr_info_new_peak->set_is_peak(false);
-			ptr_info_new_peak->set_collect(true);
-		}
-	}
-
-	count++;
-	
-	try 
-	{
-		
-
-		print_all();
-
-		
-		if (count - new_peak > static_cast<int>(5 * Fs)) {
-			pathology_signal.Asystol++;
-		}
-		if (pathology_signal.Asystol > 0 && count - new_peak < static_cast<int>(5 * Fs)) {
-			pathology_signal.Asystol = 0;
-		}
-
-	}
-	catch (const  exception& oor) {
-		 cerr << "Out of Range error: " << oor.what() << " count and type " << count << " " << type_of_lead << '\n';
 		exit(1);
 
 	}

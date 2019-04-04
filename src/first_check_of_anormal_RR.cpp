@@ -171,8 +171,8 @@ void one_lead::first_check_of_anormal_RR( vector<int>& array_of_extrasys)
 				{
 					ADD_EXRASYS(SV_b, array_of_extrasys.at(0));
 				}
-			else
-				ADD_EXRASYS(V_b, array_of_extrasys.at(0));
+			//else
+			//	ADD_EXRASYS(V_b, array_of_extrasys.at(0));
 		}
 		else
 			if (((double)(dist) / (dist2) < 1.2 && ((double)(dist) / (dist2)) > 0.8))

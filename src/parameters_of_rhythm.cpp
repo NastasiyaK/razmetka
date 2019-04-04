@@ -6,9 +6,9 @@
 void leadII_V::rhythm(pair<int, pat_name > new_some_point, vector<int>& array_of_peak_R)
 {
 	int new_point = new_some_point.first;
-	if (last_peak_for_rhythm < new_point)
+	if (last_peak_for_rhythm + (length.T_middle + length.ST_seg) * Fs < new_point)
 	{
-		if (last_points.size()<3)
+		if (last_points.size()< 4)
 			last_points.push_back(new_point);
 		else
 			last_points.at(N_last_points) = new_point;
@@ -21,18 +21,30 @@ void leadII_V::rhythm(pair<int, pat_name > new_some_point, vector<int>& array_of
 			if (last_points.size() == 2)
 				current_rhythm = static_cast<float>(last_points.at(1) - last_points.at(0));
 			else
-				if (last_points.size() >= 3) 
+				if (last_points.size() > 3)
 				{
 					if (N_last_points == 1)
-						current_rhythm = static_cast<float>(((last_points.at(2) - last_points.at(1)) + (last_points.at(0) - last_points.at(2)))) / 2;
+						current_rhythm = static_cast<float>( last_points.at(3) - last_points.at(2) + (last_points.at(2) - last_points.at(1)) + (last_points.at(0) - last_points.at(3) )) / 3;
+
 					if (N_last_points == 2)
-						current_rhythm = static_cast<float>(((last_points.at(1) - last_points.at(0)) + (last_points.at(1) - last_points.at(2)))) / 2;
-					if (N_last_points == 3) {
-						current_rhythm = static_cast<float>(((last_points.at(2) - last_points.at(1)) + (last_points.at(1) - last_points.at(0)))) / 2;
+						current_rhythm = static_cast<float>(last_points.at(3) - last_points.at(2) + (last_points.at(1) - last_points.at(0)) + (last_points.at(0) - last_points.at(3))) / 3;
+
+					if (N_last_points == 3)
+					{
+						current_rhythm = static_cast<float>((last_points.at(0) - last_points.at(3) + (last_points.at(2) - last_points.at(1)) + (last_points.at(1) - last_points.at(0)))) / 3;
+
+					}
+					if (N_last_points == 4)
+					{
+						current_rhythm = static_cast<float>(last_points.at(3) - last_points.at(2) + last_points.at(2) - last_points.at(1) + (last_points.at(1) - last_points.at(0))) / 3;
 						N_last_points = 0;
 					}
 
 				}
+
+
+
+
 
 		if ( current_rhythm !=0 &&  60 * Fs / current_rhythm + 1 < 55 && R_v.size() > 3)
 			pathology_signal.SBR++;

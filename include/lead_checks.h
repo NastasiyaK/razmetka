@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 
+/*This additional class saves average values of variables and
+ * calculates average value
+ */
 
 class average_value
 {

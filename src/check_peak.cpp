@@ -39,7 +39,8 @@ array_of_peak_R.erase(array_of_peak_R.end() - 2); \
 
 bool one_lead::check_peak()
 {
-	
+	if (type_of_lead == II )
+		 int a = 1;
 	bool R_is = 0, lost_R_is = 0;
 	int dist = set_indices(new_peak, count_iter, mem, mem_sdvig);
 	
@@ -50,12 +51,12 @@ bool one_lead::check_peak()
 	}
 
 	//cout<< QRS_filtered_min<<endl;
-    if (array_of_peak_R.size() !=0 && new_peak - *(array_of_peak_R.end()-1) > length.T_middle/2 && diff > average_amplitude.get() )
+    if (array_of_peak_R.size() !=0 && new_peak - *(array_of_peak_R.end()-1) > length.T_middle/2 && diff > average_amplitude.get() &&
+			filter_signal.at(dist) > 0.8*QRS_filtered_min)
 	//if (check_peak_R( new_peak ) && diff > average_amplitude.get() )
 	{
 		int start_R = start_of_R(new_peak, (Fs * QRS.height) / 2, 1, nullptr);
-		if (type_of_lead == II)
-			int a = 1;
+
 		//if length of R/2 >norm, it can be extrasys 
 		if ((  abs(new_peak - start_R) >= static_cast<int>((Fs*QRS.height) / 2) + 2) &&
 			 abs(new_peak - start_R) <= 3 * static_cast<int>((Fs*QRS.height) / 2))

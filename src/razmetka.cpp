@@ -15,6 +15,7 @@
 #include "LeadII_V.h"
 
 
+//int All_Leads::count_leads = 0;
 int All_Leads::count_leads = 0;
 int Leads_Info::N_leads = 1;
 double Leads_Info::Fs = 257;
@@ -22,7 +23,7 @@ size_t Leads_Info::window = static_cast<size_t>(30 * Fs);
 size_t Leads_Info::mem = static_cast<size_t>(Fs * 8 * 60);
 
 void test_one_lead();
-int n = 140000;
+int n = 100000;
  //string input_path = "C:\\Users\\Amantayr\\Documents\\Visual Studio 2015\\Projects\\razmetka\\razmetka\\signals for project\\";
  string input_path = "/home/amantayr/signals for projects/";
 
@@ -45,7 +46,7 @@ void test_leadII()
 	int N_leads = 12;
 	//ofstream output("new_.txt");
 	//output << "fdf"  << endl;
-	ifstream input("I02.text");
+	ifstream input("I21.txt");
 	vector<vector<double>> leads_samples(13);
 
 	double sam = 0;
@@ -86,12 +87,11 @@ void test_leadII()
 	bool res;
 	if (N_leads ==12) {
         for (int k = 0; k < n; k++) {
-           if (k == 6000)
+           if (k == 1300)
              int a = 1;
-            //cout<<array_of_leads.size() << endl;
-            //cout<<leads_samples.size() << endl;
+
             for (int i = 0; i < 12; i++) {
-              if (i == 6)
+              if (i == 2)
                   int a = 1;
                 array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k), res);
                //cout << i << endl;
@@ -104,11 +104,11 @@ void test_leadII()
     }
     if (N_leads == 1) {
         for (int k = 1; k < n; k++) {
-            if (k == 6400)
+            if (k == 1100)
                 int a = 1;
 
 
-            array_of_leads.At(6)->processing_lead(leads_samples.at(6).at(k), res);
+            array_of_leads.At(1)->processing_lead(leads_samples.at(1).at(k), res);
 
 
             //cout << k << endl;

@@ -11,6 +11,11 @@
 #include "pat_storage.h"
 /* type of leads: st I,II,III; aVR,aVL,aVF;
 v1,v2,v3,v4,v5,v,v6 */
+/*
+ * This calss is created for some auxillary information
+ * It collects the info about a new peak, about leads,
+ * about type of work
+ */
 class All_Leads;
 
 class leads:protected Leads_Info
@@ -21,7 +26,7 @@ public:
 	/*S - start with original  signals; D - debugging of R-s; 	*/
 	leads(char Type);
 
-	~leads() {};
+	virtual ~leads() {};
 
 	void set_new_peak_info(info_for_new_peak* ptr_info_new_peak);
 	void set_all_leads(All_Leads&new_leads);
@@ -31,7 +36,7 @@ public:
 	{
 		 string path_full = where + paths;
 		 ofstream output(path_full,  ios::app);
-		 output << value <<  endl;
+		 output << value <<  "\n";
 	}	
 	
 protected:	

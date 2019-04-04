@@ -93,9 +93,13 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 
 	max_el = (count_iter == 0) ? (max_el) : (max_el + (count_iter - 1)*(mem)+mem_sdvig);
 
+	int extras_last = 0;
+	if (!list_extrasys.empty())
+		extras_last = set_indices(*(list_extrasys.end()-1), count_iter, mem, mem_sdvig);
 
 
-	if ( abs(ampl - *min1)>QRS_hight_min)
+	if ( abs(ampl - *min1)>QRS_hight_min && extras_last >= 0 && extras_last < filter_signal.size() &&
+	ampl > 0.3*filter_signal.at(extras_last))
 	{
 		if (list_extrasys.size() == 0 || ( abs(max_el - *(list_extrasys.end() - 1)) > 2 * QRS.height*Fs))
 		{

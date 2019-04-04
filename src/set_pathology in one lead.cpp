@@ -74,25 +74,26 @@ void leadII_V::check_BlockII( vector<int>& array_of_peak_R, int ind_of_last_extr
 
 
 
-void leadII_V::check_Afibr( vector<int>& array_of_peak_R)
+void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 {
 	N_peaks_fibr++;
-	if (array_of_peak_R.size() >= win_fibr && N_peaks_fibr >= win_fibr)
+	if (array_of_RR.size() >= win_fibr && N_peaks_fibr >= win_fibr)
 	{
-		vector<int>intervals(win_fibr);
-		adjacent_difference(array_of_peak_R.end() - win_fibr, array_of_peak_R.end(), intervals.begin());
-		bool afibr_decision = fibr(intervals);
+		//vector<int>intervals(win_fibr);
+		//adjacent_difference(array_of_peak_R.end() - win_fibr, array_of_peak_R.end(), intervals.begin());
+		bool afibr_decision = fibr(array_of_RR);
 		push_el(afibr_decision_memory, afibr_decision, n_peaks);	
 
 		if (afibr_decision_memory.size() > 1 && afibr_decision == 1 && *(afibr_decision_memory.end() - 2) == 1)
 		{
 			if (pathology_signal.AFIb == 0)
 			{
-				path_mathods.insert(pathologies, array_of_peak_R.at(array_of_peak_R.size() - win_fibr), AFIBR, n_peaks);
-				erase(&Q_v, array_of_peak_R.at(array_of_peak_R.size() - win_fibr));//array_of_peak_R.at(n_peaks - win_fibr)
-				erase(&P_v, array_of_peak_R.at(array_of_peak_R.size()- win_fibr));
-				erase(&T_v, array_of_peak_R.at(array_of_peak_R.size() - win_fibr));
-				erase(&ST_v, array_of_peak_R.at(array_of_peak_R.size() - win_fibr));
+				path_mathods.insert(pathologies, array_of_RR.at(array_of_RR.size() - win_fibr), AFIBR, n_peaks);
+
+				erase(&Q_v, last_point);//array_of_peak_R.at(n_peaks - win_fibr)
+				erase(&P_v, last_point);
+				erase(&T_v, last_point);
+				erase(&ST_v, last_point);
 
 				
 			}
@@ -102,7 +103,7 @@ void leadII_V::check_Afibr( vector<int>& array_of_peak_R)
 		{
 			if (afibr_decision_memory.size() > 1 && afibr_decision == 0 && pathology_signal.AFIb != 0) 
 			{
-				path_mathods.insert(pathologies, *(array_of_peak_R.end() - win_fibr), no_AFIBR, n_peaks);
+				path_mathods.insert(pathologies, last_point, no_AFIBR, n_peaks);
 				pathology_signal.AFIb = 0;
 			}
 			
@@ -135,13 +136,14 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 	pat_name old_type = N_b;
 	
 	if (new_pair.second != N_b)
-		allorhythm_lead(R_s, new_pair.first, new_pair.second);
+		allorhythm_lead(clean_peaks, new_pair);
 
 	
 	
 	if (new_pair.second == N_b)
 	{
-		check_Afibr(R_s);
+		if (R_s.size() >= win_fibr)
+        	check_Afibr(R_peak_for_fibr, *(R_s.end()-win_fibr));
 		check_BlockII(R_s, ind_of_last_extrasystole);
 		set_peaks(new_pair.first);
 		check_WPW(R_v);
@@ -168,7 +170,7 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 	}
 
 	auto it = pathologies.end();
-	if ((current_rhythm != 0) && pathology_signal.SVTA>=3 && (--it)->second != no_VT
+	if (pathologies.size() > 1 && (current_rhythm != 0) && pathology_signal.SVTA>=3 && (--it)->second != no_VT
 		&& (--it)->second != no_VFIBR)
 	{
 		if (R_v.size() > 0)

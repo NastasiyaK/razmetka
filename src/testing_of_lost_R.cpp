@@ -15,7 +15,7 @@ if (array_of_peak_R.size()>=2){
     peak2 = *(array_of_peak_R.end()-1);
     if (new_peak==peak1)
         peak1 = peak2;
- if (  abs(new_peak-peak1)>2*(RR.middle*Fs)/3 )
+ if (  abs(new_peak-peak1) > (length.T_middle + length.ST_seg) * Fs )
     return true;
  
 } 
@@ -93,8 +93,8 @@ bool Leads_Info::check_peak_amplitudes_max(int&first_peak, int&second_peak, int&
 	if (first > 0 && third < signal.size() && second_peak!=0)
 	{
 		
-		if ( abs(0.3*filter_signal.at(first)) >  abs(filter_signal.at(second)) &&
-			 abs(0.3*filter_signal.at(third)) >  abs(filter_signal.at(second)))
+		if ( abs(0.5*filter_signal.at(first)) >  abs(filter_signal.at(second)) &&
+			 abs(0.5*filter_signal.at(third)) >  abs(filter_signal.at(second)))
 		{
 			return false;
 		}

@@ -112,15 +112,16 @@ void leadII_V::print_all() {
 		minutes++;
 		int print_min = 2;
 		 string path, path_full;
-		int time_find = abs(count - static_cast<int>(print_min * 60 * Fs));
-
+		int time_find = (count - static_cast<int>(1.3 * print_min * 60 * Fs));
+        if (time_find < 0)
+            time_find = 0;
 		
 		//printing_vector(array_of_peak_R, "main_peak", time_find);
-		printing_vector(R_v, "R", time_find);
-		printing_vector(P_v, "P", time_find);
-		printing_vector(Q_v, "Q", time_find);
-		printing_vector(S_v, "S", time_find);
-		printing_vector(T_v, "T", time_find);	
+		//printing_vector(R_v, "R", time_find);
+		//printing_vector(P_v, "P", time_find);
+		//printing_vector(Q_v, "Q", time_find);
+		//printing_vector(S_v, "S", time_find);
+		//printing_vector(T_v, "T", time_find);
 		//printing_vector(all_extrasys_of_lead, "R", time_find);
 
 		//all peaks
@@ -141,8 +142,8 @@ void leadII_V::print_all() {
 					print(clean_peaks.at(i));
 		}
 		
-		for (auto i:ST_v) 
-			print(ST.start, ST.type, ST.slope, "ST.txt");
+		//for (auto i:ST_v)
+		//	print(ST.start, ST.type, ST.slope, "ST.txt");
 
 		if (!pathologies.empty())
 			print(pathologies, count - window, count);
@@ -183,6 +184,9 @@ void Leads_Info::print(const my_map& paths, int time_start, int time_stop) const
 
 void Leads_Info::print( pair<int, pat_name>& peaks) const
 {
+	if (peaks.first == 92159)
+		int a = 1;
+
 	 string type_string;
 	MAKE_TYPE_LEAD_STRING(type_string, type_of_lead);
 	string path_full;

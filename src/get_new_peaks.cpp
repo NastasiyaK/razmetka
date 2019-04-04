@@ -198,7 +198,14 @@ void leadII_V::get_new_peaks()
 						if (res_e)
 							type_sample_des.second = E;
 
-                        	clean_peaks.push_back(type_sample_des);
+						//R_peak_for_fibr
+						if ( type_sample_des.second == N_b &&
+								clean_peaks.size() > 1  &&  (clean_peaks.end() - 1)->second == N_b ){
+
+							push_el(R_peak_for_fibr,(type_sample_des.first -  (clean_peaks.end() - 1)->first), n_peaks);
+						}
+
+						push_el(clean_peaks, type_sample_des,n_peaks);
 
 
 
@@ -210,9 +217,10 @@ void leadII_V::get_new_peaks()
                             else
                                 len_R = RR.middle * Fs;
 
-                            R_s.push_back(type_sample_des.first);
+                            push_el(R_s,type_sample_des.first,n_peaks);
                         }
                         set_pathology(*(clean_peaks.end() - 1), R_s);
+
                     }
                 }
 			}

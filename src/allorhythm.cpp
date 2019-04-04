@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "leads.h"
+#include "LeadII_V.h"
+
 /*if peaks are dense it is tach,otherwise it can be some iextrasystoles 
  * in the long distance. 
  * Also some points can be duplicated*/
@@ -9,7 +11,45 @@
  * if number >0  cheking for alothythmia
  * For this checking valuable class_of_sys - it memorized classof extrasystole*/
 
+void leadII_V::allorhythm_lead(vector_pair & peaks, pair<int, pat_name> & new_pair) {
 
+if (peaks.size() > 1){
+    if ((peaks.end()-2)->second == new_pair.second ){
+        if (new_pair.second == V_b)
+            path_mathods.insert(pathologies, new_pair.first, V_B, n_peaks);
+
+        if (new_pair.second == A_b)
+            path_mathods.insert(pathologies, new_pair.first, A_B, n_peaks);
+
+        if (new_pair.second == SV_b)
+            path_mathods.insert(pathologies, new_pair.first, SV_B, n_peaks);
+
+    }
+
+}
+    if (peaks.size() > 2){
+        if ((peaks.end()-3)->second == new_pair.second ){
+            if (new_pair.second == V_b)
+                path_mathods.insert(pathologies, new_pair.first, V_B, n_peaks);
+
+            if (new_pair.second == A_b)
+                path_mathods.insert(pathologies, new_pair.first, A_B, n_peaks);
+
+            if (new_pair.second == SV_b)
+                path_mathods.insert(pathologies, new_pair.first, SV_B, n_peaks);
+
+        }
+
+    }
+
+
+
+}
+
+
+
+
+/*
 void Leads_Info::allorhythm_lead( vector<int>& array_of_peak_R, const int extrasys,  pat_name class_of_sys)
 {
 
@@ -57,3 +97,4 @@ void Leads_Info::allorhythm_lead( vector<int>& array_of_peak_R, const int extras
 		old_class_of_sys = class_of_sys;
 	}
 };
+*/

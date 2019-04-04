@@ -21,8 +21,23 @@ array_of_peak_R.erase(array_of_peak_R.end() - 2); \
 void one_lead::testing_of_SS()
 {
 
-	if (type_of_lead == aVR || type_of_lead == aVL)
+	if (main_peak_in_interval == 'S')
 	{
+		if (array_of_peak_R.size() > 1)
+		{
+			if (abs(*(array_of_peak_R.end() - 2) - *(array_of_peak_R.end() - 1)) < Fs * (length.T_middle + length.ST_seg) )
+			{
+				int _first = set_indices(*(array_of_peak_R.end() - 2), count_iter, mem, mem_sdvig);
+
+				if (abs(filter_signal.at(_first)) < QRS_hight_min * 1.5)
+					array_of_peak_R.erase(array_of_peak_R.end()-2);
+				else
+					array_of_peak_R.erase(array_of_peak_R.end()-1);
+
+			}
+
+		}
+
 		if (array_of_peak_R.size() > 2)
 		{
 			//if peaks aren't in order
@@ -30,16 +45,16 @@ void one_lead::testing_of_SS()
 				 swap(*(array_of_peak_R.end() - 2), *(array_of_peak_R.end() - 3));
 
 			//going to original signal and checking those peaks
-			int peak2 = set_indices(*(array_of_peak_R.end() - 2), count_iter, mem, mem_sdvig);
-			auto i =  min_element(signal.begin() + peak2 - (int)(Fs*QRS.height), signal.begin() + peak2);
+			//int peak2 = set_indices(*(array_of_peak_R.end() - 2), count_iter, mem, mem_sdvig);
+			/*auto i =  min_element(signal.begin() + peak2 - (int)(Fs*QRS.height), signal.begin() + peak2);
 			int ind_min_tem = static_cast<int>( distance(signal.begin() + peak2, i));
 			if (signal.at(peak2 + ind_min_tem) < signal.at(peak2)) {
 				*(array_of_peak_R.end() - 2) = ind_min_tem + peak2;
 			}
-
+*/
 			//for camfortable using
 			int peak1 = *(array_of_peak_R.end() - 1);
-			peak2 = *(array_of_peak_R.end() - 2);
+			int peak2 = *(array_of_peak_R.end() - 2);
 			int peak3 = *(array_of_peak_R.end() - 3);
 
 
@@ -53,7 +68,7 @@ void one_lead::testing_of_SS()
 					peak3 = *(array_of_peak_R.end() - 4);
 				}
 			}
-			//�������� �������������� �����
+
 			int count_cur = 0;
 			if (ind_of_last_extrasystole < peak3)
 			{
@@ -102,7 +117,7 @@ void one_lead::testing_of_SS()
 				array_of_peak_R.erase(array_of_peak_R.end() - 2);
 				peak2 = 0;
 			}
-			if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
+			/*if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
 			{
 				if (static_cast<double>((peak2 - peak3) / (peak1 - peak2) < 1.2 &&
 					static_cast<double>((peak2 - peak3) / (peak1 - peak2) > 0.8) && ind_of_last_extrasystole < peak3))
@@ -112,42 +127,8 @@ void one_lead::testing_of_SS()
 				else {
 					ADD_EXRASYS(SV_b);
 				}
-			}
-			/*
-			if (extrasystoles.size() > 2)
-			{
-				bool n1 = ( abs(ind_of_last_extrasystole - *(extrasystoles.end() - 2)) < 3 * QRS.height*Fs);
+			}*/
 
-				bool n2 = ( abs(ind_of_last_extrasystole - *(extrasystoles.end() - 3)) < 3 * QRS.height*Fs);
-				if (n1 || n2)
-				{
-					 vector<double>bufer;
-					int ind, ind2, ind_vn;
-					if (n1)
-						ind = *(extrasystoles.end() - 2);
-					else
-						ind = *(extrasystoles.end() - 3);
-					ind2 = ind_of_last_extrasystole;
-					if (ind > ind2)
-						 swap(ind, ind2);
-					set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
-					copy(begin(signal) + ind, begin(signal) + ind2, back_inserter(bufer));
-
-					if (ind > 0 && ind2 > ind)
-					{
-						auto temp =  min_element(bufer.begin(), bufer.end());
-						size_t temp_d =  distance(bufer.begin(), temp);
-						if (temp_d > 0 && bufer.at(temp_d) - isolinia < -0.25*QRS_height &&
-							signal.at(ind + static_cast<int>(Fs*QRS.height)) < 0.6) {
-							extrasystoles.erase(extrasystoles.end() - 1);
-						}
-						if (temp_d >= 0 && temp_d < bufer.size() / 3) {
-							extrasystoles.erase(extrasystoles.end() - 1);
-						}
-					}
-				}
-			}
-			*/
 		}
 	}
 }

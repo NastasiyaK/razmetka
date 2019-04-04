@@ -33,17 +33,28 @@ bool one_lead::check_ventr_extrasys(vector<double>*signal, const int& peak1, int
 				double diff2 = signal->at(dist) - *min_element(signal->begin() + dist, signal->begin() + dist + static_cast<int>(Fs*QRS.height) / 2);
 				int start_int = start_peak(peak2, &filter_signal);
                 int stop_int = stop_peak(peak2, &filter_signal);
-				if ((diff < QRS_filtered_min) || (diff2 < QRS_filtered_min)  || ((stop_int - start_int) > Fs*QRS.height ))
+
+				int st_tem = set_indices(start_int, count_iter, mem, mem_sdvig);
+				int st_tem2 = set_indices(stop_int, count_iter, mem, mem_sdvig);
+
+				if (st_tem2 < filter_signal.size() && st_tem > 0  && st_tem < filter_signal.size()
+				&& abs(filter_signal.at(dist) - filter_signal.at(st_tem)) < 0.9 * QRS_filtered_min &&
+								abs(filter_signal.at(dist) - filter_signal.at(st_tem2)) < 0.9 * QRS_filtered_min)
 				{
-					if ((diff < QRS_filtered_min) && (diff2 < QRS_filtered_min)) {
-						array_of_peak_R.erase(array_of_peak_R.end() - 2);
-						peak2 = 0;
-					}else
-
-
-
+					peak2 = 0;
 					ADD_EXRASYS(V_b);
 					return true;
+				}
+				if ((diff < QRS_filtered_min) || (diff2 < QRS_filtered_min)  || ((stop_int - start_int) > Fs*QRS.height ))
+				{
+					if ((diff < QRS_filtered_min) && (diff2 < QRS_filtered_min )) {
+						array_of_peak_R.erase(array_of_peak_R.end() - 2);
+						peak2 = 0;
+					}else {
+						peak2 = 0;
+						ADD_EXRASYS(V_b);
+						return true;
+					}
 				}
 
 			}
@@ -86,21 +97,22 @@ void one_lead::testing_of_RR()
 		if (*(array_of_peak_R.end() - 2) < *(array_of_peak_R.end() - 3))
 			 swap(*(array_of_peak_R.end() - 2), *(array_of_peak_R.end() - 3));
 
-		
+		if (type_of_lead == II)
+		    int a = 1;
 
 		//for camfortable using
 		int peak1 = *(array_of_peak_R.end() - 1);
 		int peak2 = *(array_of_peak_R.end() - 2);
 		int peak3 = *(array_of_peak_R.end() - 3);
 
-		if (type_of_lead == II)
-		    int a = 1;
+
 		//Sometimes it can be other outlers,not a useful peak. this outlier can be noise or arthefact. 
 		//So this amplitude isn't similiar to adjusted amplitudes;
 		if (!(check_peak_amplitudes_max(peak1, peak2, peak3, 1)))
 		{
-			array_of_peak_R.erase(array_of_peak_R.end() - 2);
-			peak2 = 0;
+			//array_of_peak_R.erase(array_of_peak_R.end() - 2);
+			//peak2 = 0;
+			ADD_EXRASYS(V_b);
 		}
 		if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
 		{
@@ -115,6 +127,7 @@ void one_lead::testing_of_RR()
 
 		bool res1 = check_last_four_peaks(array_of_peak_R, average_R);
 		bool res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
+
 
 		//going to original signal and checking those peaks
 		if (peak2 != 0)
@@ -168,8 +181,7 @@ void one_lead::testing_of_RR()
 			}
 		}
 		res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
-		if (type_of_lead == II)
-			int a = 1;
+
 		if (extrasystoles.size() > 2)
 		{
 			bool n1 = ( abs(ind_of_last_extrasystole - *(extrasystoles.end() - 2)) < 3 * QRS.height*Fs);

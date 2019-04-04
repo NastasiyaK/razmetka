@@ -13,7 +13,9 @@
 #include "lead_checks.h"
 
 using namespace std;
-
+/* All these structs contain info about parameters of
+ * ECG, (templates of peaks, intervals)
+ */
 struct qrs
 {
 //length
@@ -39,7 +41,13 @@ double PQ_int = 0.22,
 	   ST_seg = 0.1,
 	   PQ_seg = 0.1;
 };
-
+/*
+ * The class is used for the additional info.
+ * The fields of the class contain info to find R,
+ * filter,several windows, the functions that are used in
+ * inheritors.
+ *
+ */
 class Leads_Info
 {
 private:
@@ -54,8 +62,8 @@ protected:
 	
 	 vector <  pair<int,  string >> all_peaks_in_lead;
 
-	//for new algorythm
-	
+
+	//to find R
 	 vector<double> derivatived_signal;
 	 vector<double>* ptr_signal;
 
@@ -76,7 +84,7 @@ protected:
 	static size_t window, mem;
 	static double Fs;
 	char main_peak_in_interval;
-	const double T_length = 0.2;
+	//const double T_length = 0.2;
 
 	
 	//variables for providing the analysis
