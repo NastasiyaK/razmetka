@@ -1,6 +1,6 @@
 
 
-#include "stdafx.h"
+
 #include "one lead.h"
 
 #define ADD_EXRASYS(type);\

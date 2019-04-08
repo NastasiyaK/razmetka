@@ -2,7 +2,7 @@
  *this function to check new peak is it extrsystole and 
  * push into array of them for further analysis
  */
-#include "stdafx.h"
+
 #include "one lead.h"
 
 bool one_lead::set_extrasystole(const int& probably_extrasystole,const int& peak_for_analysis)

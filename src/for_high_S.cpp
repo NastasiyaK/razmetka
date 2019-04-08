@@ -1,5 +1,5 @@
 
-#include "stdafx.h"
+
 #include "one lead.h"
 
 /*If the distance between adjacent R is more

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "one lead.h"
 
 bool one_lead::finding_of_R() {

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "lead_checks.h"
 
 void average_value::set(double new_value)

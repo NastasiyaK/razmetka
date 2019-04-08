@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include  "leads.h"
 #include "functions.h"
 /*We're finfding start of probable VFL - 

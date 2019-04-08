@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "LeadII_V.h"
 
 leadII_V::leadII_V(leads_name type, info_for_new_peak* ptr_info_new_peak, int N_leads, vector<double>* ptr_signal, one_lead* ptr_leadV)

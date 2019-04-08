@@ -1,5 +1,5 @@
 
-#include "stdafx.h"
+
 #include "LeadII_V.h"
 
 bool leadII_V::check_VT()

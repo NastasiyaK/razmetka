@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-#include "stdafx.h"
+
 //methodss for interactions with storage of pathologis  
 #include "pat_storage.h"
 

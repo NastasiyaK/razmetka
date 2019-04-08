@@ -6,7 +6,6 @@
  * The thereholds in article:
  * https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7411055 
  */
-#include "stdafx.h"
 #include <algorithm>
 #include <numeric>
 #include "functions.h"

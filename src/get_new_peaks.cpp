@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include <deque>
 #include "leads.h"
 #include "All_leads.h"

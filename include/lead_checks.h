@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.h"
+#include "add_structs.h"
 
 /*This additional class saves average values of variables and
  * calculates average value

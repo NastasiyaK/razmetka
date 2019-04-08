@@ -1,5 +1,5 @@
 
-#include "stdafx.h"
+
 #include "All_leads.h"
 
 

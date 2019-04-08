@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "one lead.h"
 #include "LeadII_V.h"
 

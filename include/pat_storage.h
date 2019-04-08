@@ -4,7 +4,7 @@
  * and providing some functions for comfortable work
  * with map
  */
-#include "stdafx.h"
+
 #include "functions.h"
 #include <iostream>
 #include <fstream>

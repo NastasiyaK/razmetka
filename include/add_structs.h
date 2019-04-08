@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+
 #include <string>
 #include <vector>
 #include <map>
@@ -148,4 +148,4 @@ if (des == "N")\
                 patho = A_b; \
 
 
-char* pat_to_string( pat_name );
+string pat_to_string( pat_name );

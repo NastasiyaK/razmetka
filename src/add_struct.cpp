@@ -1,4 +1,4 @@
-#include  "stdafx.h"
+//#include  "stdafx.h"
 
 #include "add_structs.h"
 #include <iostream>
@@ -53,7 +53,7 @@ void  info_for_new_peak::set_collect(bool collect)
 	COLLECT = collect;
 }
 
-char* pat_to_string(pat_name pat)
+string pat_to_string(pat_name pat)
 {
 	switch (pat) {
 		case N_b:
@@ -86,6 +86,16 @@ char* pat_to_string(pat_name pat)
 			return "AS";
 		case VFIBR:
 			return "VFIBR";
+		case SV_T:
+			return "SV_T";
+		case SV_B:
+			return "SV_B";
+		case A_T:
+			return "A_T";
+		case A_B:
+			return "A_B";
+		default:
+			return "No";
 	}
 
 

@@ -1,6 +1,6 @@
 
 
-#include "stdafx.h"
+
 #include "leads.h"
 
 #define COMPARE(sample, type);\

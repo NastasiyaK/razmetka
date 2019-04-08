@@ -1,5 +1,5 @@
 
-#include "stdafx.h"
+
 #include "one lead.h"
 
 one_lead::one_lead(leads_name type, int N_lead, info_for_new_peak* ptr_info_new_peak)

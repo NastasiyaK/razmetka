@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include <algorithm>
 #include "one lead.h"
 #include "Leads_info.h"

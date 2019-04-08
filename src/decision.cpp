@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Afib.h"
 
 bool AFibr::decision(const float& se,const float& rmssd){  

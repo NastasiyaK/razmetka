@@ -1,5 +1,5 @@
 
-#include "stdafx.h"
+
 #include "leads.h"
 #include "Afib.h"
 #include "Leads_info.h"

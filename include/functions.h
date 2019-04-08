@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.h"
+
 #include <algorithm>
 #include "add_structs.h"
 
