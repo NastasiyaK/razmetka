@@ -11,71 +11,167 @@
 
 //using namespace std;
 
-//one lead is class to first analysis of signals - to find peaks R or extrasystoles
+/*! @brief The class provide first analysis of signals  -  finding of peaks.
+ *
+ */
+
 class one_lead: protected Leads_Info
 {
 public:
+	/**
+	 * @param type  - type of lead (I, II, III, aVR, ...
+	 * @param N_leads  - number of leads
+	 * @param ptr_info_new_peak pount out to object that saves info about currrent new peak
+	 */
 	one_lead(leads_name type, int N_lead, info_for_new_peak* ptr_info_new_peak);
+
 	virtual ~one_lead() {};
 
 	info_for_new_peak* ptr_info_new_peak;
-	//for new algorythm
-	void new_processing(double);
+
+
+	//void new_processing(double);
 	
-	
+	/**
+	 * @param peak - type of peaks that is required
+	 * @return - a vector with indexes and types of beats (V, N, SV, A)
+	 */
 	vector< pair<int,  pat_name > >* get_peaks(const char* peak);
+	/**
+	 *
+	 * @param peak  - type of peaks that is required
+	 * @return - a vector of required peaks
+	 */
 	vector<int>* get_peaks(char peak);
+	/**
+	 *
+	 * @param type_signal  - filtered signal or ofigin
+	 * @return returns required signal
+	 */
 	vector<double>* get_signal(char* type_signal);
-	int get_VT(char* type_signal);
-	
+	/**
+	 *
+	 * @return Returns start of ventricular pathologies or
+	 * 0, when pathology doesn't exist
+	 */
+	int get_VT(char* );
+
+    /** Provides processing of signals:
+     *  - finding of peaks
+     *  - analysis of peak's type
+     *  - set info about current new peak
+     */
 	bool& processing_lead(double& sam, bool&);
+	/**
+	 *
+	 * @return a current index of analysing signal
+	 */
 	const int get_count() const;
+
+	/**
+	 * @return Returns name of current lead (I, II, III, aVF, ...)
+	 */
     const leads_name get_lead_name() const;
-	int stop_peak(const int , vector<double>*);
+
+
 private:
-	int start_peak(const int & , vector<double> * );
+    /**
+     * @param peak index of the peak which is required to analyze
+     * @param signal points out to signal
+     * @return an index of a finish of the peak
+     */
+    int stop_peak(const int peak, vector<double>* signal);
+	/**
+     * @param peak index of the peak which is required to analyze
+     * @param signal points out to signal
+     * @return an index of a start of the peak
+     */
+	int start_peak(const int& peak, vector<double>* signal );
+
+	/**
+	 * @brief Finds a ventricular extrasystole between last 3 pealk
+	 * @return False, if ventricular extrasystole doesn't exist and true
+	 * in another case.
+	 */
 	bool check_ventr_extrasys( vector<double>*, const int&, int&, const int&);
 
-	 vector< pair<int, pat_name>> peaks_with_types;
 
-	bool check_last_four_peaks( vector< int > &, const int& );
-	void initialization( leads_name );
+
+	//bool check_last_four_peaks( vector< int > &, const int& );
+
+	/**
+	 * @brief Sets the initial value of parameters of ECG leads. These values depend on a type of lead
+	 * @param leads_name  - type of lead (I,II,III, aVF, ...)
+	 *
+	 */
+	void initialization( leads_name name);
+	/**
+	 *
+	 * @param probably_extrasystole  - index of possible extrasytole
+	 * @param peak_for_analysis - last found peak
+	 * @return  - decision about an extrasystole
+	 */
 	bool set_extrasystole( const int& probably_extrasystole, const int & peak_for_analysis);
+
+	/**
+	 * @brief This main function contained the algorithm that finds a new_peak
+	 * @return true, if a new peak  exists
+	 */
 	bool finding_of_R(); //true - new peak, false - no new peak;
+
 
 	void finding_of_P(const int& peak);
 	double start_P( vector<double>& bufer, int& ind_start);
+	/**
+	 * Takes current RR - intervals and checks it.
+	 * @param array_of_extrasys  - extrasystoles which stored during finding of R
+	 */
 	void first_check_of_anormal_RR( vector<int>& array_of_extrasys);
 
 	//variables and functions for  finding R
-	const float limit = 0.0002f;//const float limit = 0.05f * 360.0f/Fs;//= 0.25*360/Fs;//sampling frequency //5000 *10   360 *10 no QRS.height,
-	 vector <double>  after_diff_signal; 
-	int st = 0;
-	 vector<double> array_of_pol, vect_of_2part;
-	 vector<double>after_filter, in_ECG, filter_signal_pol;
+	 const float limit = 0.0002f;
+	//contains signal after differentiation
+	 vector <double>  after_diff_signal;
+
+	 //these vectors storage some values for R-detection algorithm
+	 vector<double> array_of_pol, vect_of_2part,filter_signal_pol;
+     int st = 0;
+	 //vector<double>after_filter, in_ECG,
+
+	//Provides such operations as derivatig and filtering
 	void deriv_of_signal(double&);
 	void filter( vector<double>&,  vector<double>&, int);
 
 	//additional vector for filtering
 	 vector<double>z;
 
-	//this functions for cheking of supposed peaks
-	bool first_check_peak_S();
-	void testing_of_RR();
-	bool check_peak();
-	void testing_of_SS();
-	 vector<int>extrasystoles; //for all extrasystoles of lead
 
-	//finding
+	vector< pair<int, pat_name>> peaks_with_types; //Contains peaks with types (N, V and so on)
+	vector<int>extrasystoles; 					   //for all extrasystoles of lead
+	//provide finding R(S) peaks to future analysis
+	bool first_check_peak_S();
+	bool check_peak();
+
+	//provide analysis of the type current new peak (N,V ...)
+	void testing_of_RR();
+	void testing_of_SS();
+
+
 
 	/*some_sometimes there'ra different type of wave P - it can be as usual, in
-	can be inverted or absented - 1,-1 or 0.
-	*/
+	can be inverted or absented - 1,-1 or 0 */
 	int type_of_P(int start_peak);
+
+
+
+	/*for ventricular flutter.
+	 * The function provides finding of R;
+	 * vectors storage list of peaks and their amplitudes
+	 * Variable start_vf saves index of start current episode of ventricular flutter or nothing (0)
+	 */
 	bool ventr_flutter(size_t st_f, const int& len_st);
-	//for ventricular flutter
-	 vector<int>list_extrasys;
-	 vector<double>list_ampl;
+	vector<int>list_extrasys;
+	vector<double>list_ampl;
 	int start_vf = 0;
 
 };

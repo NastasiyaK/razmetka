@@ -3,9 +3,9 @@
 
 
 
-leads::leads(char Type = 'S')
+leads::leads()
 {
-	type = Type;
+
 	average_R = RR.middle*Fs;
 };
 

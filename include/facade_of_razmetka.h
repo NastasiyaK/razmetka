@@ -1,9 +1,4 @@
-//
-// Created by amantayr on 20.03.19.
-//
-
-#ifndef RAZMETKA_FACADE_OF_RAZMETKA_H
-#define RAZMETKA_FACADE_OF_RAZMETKA_H
+#pragma once
 #include "one lead.h"
 #include "Leads_info.h"
 #include "add_structs.h"
@@ -36,6 +31,3 @@ protected:
     bool razmetka_is_on = false;
     int N_leads;
 };
-
-
-#endif //RAZMETKA_FACADE_OF_RAZMETKA_H

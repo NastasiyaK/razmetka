@@ -11,7 +11,7 @@ bool Leads_Info::fibr( vector<int>&reshaped)
 	detect_fibr.set_RR_int(reshaped);
 	detect_fibr.turningPointRatio(reshaped, win_fibr);
 	float se = detect_fibr.shannonEntropy(reshaped, win_fibr);
-	float rmssd = detect_fibr.rootMeanSquareSuccessiveDifferences(reshaped, win_fibr);
+	float rmssd = detect_fibr.rootMeanSquareSuccessiveDifferences(reshaped);
 	bool dec = detect_fibr.decision(se, rmssd);
 	return dec;
 }

@@ -4,7 +4,7 @@
 #include "one lead.h"
 #include "LeadII_V.h"
 
-
+/*
 bool one_lead::check_last_four_peaks( vector< int > & peaks, const int& average_interval)
 
 {
@@ -48,6 +48,7 @@ bool leadII_V::check_last_four_peaks( vector<pair<int,pat_name > > & peaks, cons
 
 return result;
 }
+*/
 
 bool leadII_V::check_SV_A_extrasustole( vector<pair<int,pat_name > > & peaks, const int& average_interval)
 
@@ -59,7 +60,7 @@ bool leadII_V::check_SV_A_extrasustole( vector<pair<int,pat_name > > & peaks, co
         int peak3 = (peaks.end() - 3)->first;
         //int peak4 = (peaks.end() - 4)->first;
 
-        int count_cur = 0;
+        size_t count_cur = 0;
         if ((peaks.end() - 2)->second == N_b && (peaks.end() - 1)->second == N_b &&
             (peaks.end() - 3)->second == N_b)
             while (peak2 != 0 && peak3 != 0 && abs(peak2 - peak3) < average_R && (peak1 - peak2) > 0.95 * average_R

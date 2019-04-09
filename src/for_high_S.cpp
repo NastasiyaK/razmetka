@@ -36,7 +36,7 @@ array_of_peak_R.erase(array_of_peak_R.end() - 2); \
 bool one_lead::first_check_peak_S()
 {
 
-	bool R_is = 0, lost_R_is = 0;
+	bool R_is = 0;//, lost_R_is = 0;
 	int dist = set_indices(new_peak, count_iter, mem, mem_sdvig);
 
 	//start of RR sometimes isn't correct,with diff extra test of R peak

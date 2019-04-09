@@ -73,9 +73,10 @@ void test_leadII()
 
 
 	info_for_new_peak* info_new_peak = new info_for_new_peak;
-	leads Leads_control('S');
-
 	All_Leads array_of_leads(info_new_peak,N_leads);
+
+
+	leads Leads_control;
 	Leads_control.set_new_peak_info(info_new_peak);
 	Leads_control.set_all_leads(array_of_leads);
 
@@ -94,10 +95,10 @@ void test_leadII()
               if (i == 2)
                   int a = 1;
                 array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k), res);
-               //cout << i << endl;
+               cout << i << endl;
             }
 
-            //cout << k << endl;
+            cout << k << endl;
 
             lead2.get_new_peaks();
         }

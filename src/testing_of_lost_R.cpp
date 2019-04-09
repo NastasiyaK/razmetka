@@ -22,12 +22,12 @@ if (array_of_peak_R.size()>=2){
 return false;
 };
 
-
+/*
 bool Leads_Info::check_peak_R(const int& new_peak){
  
 /*checking of new peak. There is so number "if", becase sometime
  * signal is bad, and different mistakes occured. 
- */
+
 	if (amplitude_old_peak != 0 && amplitude_new_peak < 0.3*amplitude_old_peak)
 		return false;
 	int peak1 = *(array_of_peak_R.end() - 1), 
@@ -78,12 +78,12 @@ if (ind_of_last_extrasystole == peak2 && new_peak - peak1 > average_R*0.8 &&
  	return true;
     
 return false;
-};
+};*/
 /*
 this two fuctions to compare last peaks; if one of them isn't similar, 
 it can be mistake (function 1) or extrasystole (function 2)
 */
-bool Leads_Info::check_peak_amplitudes_max(int&first_peak, int&second_peak, int&third_peak,int type)
+bool Leads_Info::check_peak_amplitudes_max(int& first_peak, int& second_peak, int& third_peak)
 {
 
 	int first = set_indices(first_peak, count_iter, mem, mem_sdvig);

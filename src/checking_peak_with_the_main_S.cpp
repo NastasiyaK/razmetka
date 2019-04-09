@@ -69,7 +69,7 @@ void one_lead::testing_of_SS()
 				}
 			}
 
-			int count_cur = 0;
+			size_t count_cur = 0;
 			if (ind_of_last_extrasystole < peak3)
 			{
 				while (peak2 != 0 && peak3 != 0 &&  abs(peak2 - peak3) < average_R && (peak1 - peak2) > average_R
@@ -112,7 +112,7 @@ void one_lead::testing_of_SS()
 			}
 			//Sometimes it can be other outlers,not a useful peak. this outlier can be noise or arthefact. 
 			//So this amplitude isn't similiar to adjusted amplitudes;
-			if (!(check_peak_amplitudes_max(peak1, peak2, peak3, 1)))
+			if (!(check_peak_amplitudes_max(peak1, peak2, peak3)))
 			{
 				array_of_peak_R.erase(array_of_peak_R.end() - 2);
 				peak2 = 0;

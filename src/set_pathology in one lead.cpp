@@ -27,7 +27,7 @@ void leadII_V::check_BlockII( vector<int>& array_of_peak_R, int ind_of_last_extr
 
 		vector_pair* ptr_vector_new_peaks = ptr_all_leads->temp_leads.at(1)->get_peaks("all peaks");
 
-		int _ind = 1;
+		size_t _ind = 1;
 		while (_ind < ptr_vector_new_peaks->size() &&
 		(ptr_vector_new_peaks->end()-_ind)->first >= *(array_of_peak_R.end() - 2)  && _ind < 4  )
 		{

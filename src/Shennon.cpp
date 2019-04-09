@@ -9,7 +9,7 @@
 #include <math.h>
 
  map<float,int> hist(const  vector<float>&, const int&);
-float AFibr::shannonEntropy( vector<int>signal,const int& window_size){
+float AFibr::shannonEntropy( vector<int>& signal,const int& window_size){
     
     //Set constant calculation parameters
     int bin_size = 16;
@@ -70,7 +70,7 @@ for (int i = 0;i<bin_size;i++){
     d+=duration;
 }
 
-for (int i = 0;i< signal_minus_outliers.size();i++){
+for (size_t i = 0;i< signal_minus_outliers.size();i++){
     for ( pair<float,int>j:hist){
         //if (signal_minus_outliers.at(i)==*max)
         if (j.first+duration/1.7>=signal_minus_outliers.at(i) && 

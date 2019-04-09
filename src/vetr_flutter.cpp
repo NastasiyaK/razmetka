@@ -89,7 +89,7 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 	else
 		d1 = max_el + d1;
 
-	auto min2 =  min_element(filter_signal.begin() + max_el, filter_signal.begin() + d1);
+	//auto min2 =  min_element(filter_signal.begin() + max_el, filter_signal.begin() + d1);
 
 	max_el = (count_iter == 0) ? (max_el) : (max_el + (count_iter - 1)*(mem)+mem_sdvig);
 
@@ -106,8 +106,7 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 			push_el(list_extrasys, max_el, n_peaks);
 			push_el(list_ampl, max_ampl, n_peaks);
 
-			if ( type_of_lead == II && max_el >1140 )
-				int a = 1;
+
 			if (list_extrasys.size() > 1)
 			{
 				int ind = set_indices(*(list_extrasys.end() - 2), count_iter, mem, mem_sdvig);
@@ -232,5 +231,5 @@ int start_severe_distortion(vector<int> *extrasystoles, vector<int> *R_peaks, co
 	}
 	if (extrasystoles->size() >1 && abs(*(extrasystoles->end() - 2) - *(extrasystoles->end() - 1)) < average_interval/3)
 		start = start_VF;
-	return start_VF;
+	return start;
 }

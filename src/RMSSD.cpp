@@ -6,7 +6,7 @@
 
 #include "Afib.h"
 
-float AFibr::rootMeanSquareSuccessiveDifferences(const  vector<int>& signal_part,const int& win){
+float AFibr::rootMeanSquareSuccessiveDifferences(const  vector<int>& signal_part){
  vector<float>signal_minus_outliers;
 //Find length of signal
 for (auto i:signal_part)

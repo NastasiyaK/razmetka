@@ -1,9 +1,10 @@
 #pragma once
-/*
- * The class is for detection of atrial flutter.
- * If parameters are higher threshold, it will be pathology. statistic methods
- * :RMMSD,Shennon entropy  and turning point ratio.
- * The thereholds in article:
+/*!
+ * @brief The class is for detection of atrial flutter.
+ *
+ * @details If parameters are higher than thresholds, the pathology exists.
+ * Statistic methods: RMMSD,Shennon entropy  and turning point ratio.
+ * The thereholds are in article:
  * https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7411055 
  */
 #include <algorithm>
@@ -15,27 +16,52 @@
 class AFibr
 {
 private:
-    //these variables are calculating values of parameters
+///these variables are calculating values of parameters
   float u_tp_expected, u_tp_actual, sigma_tp_expected, sigma_tp_real,thr_tpr,thr_se,thr_rmssd;
- vector<int>RR_len;
+
+//Container cantains current RR intervals
+ vector<int> RR_len;
 
 public:
     AFibr(){};
     ~AFibr(){};
-    /*The fuctions calculate values of Shennon entropy,  turning point Entropy and
-     * root Mean Square Successive Differences
+    /*!
+     * The fuction calculates values of Shennon entropy.
+     * @param signal is a number of RR-intervals
+     * @param window is a window of RR-intervals
+     * @return it returns a value of the parameter.
      */
-  float shannonEntropy( vector<int>signal,const int& win);
 
-  void turningPointRatio( vector<int>&,const int& window);
+  float shannonEntropy(vector<int>& signal, const int& window);
+    /*!
+       * The fuction calculate values of turning point Entropy
+       * @param signal is a number of RR-intervals
+       * @param window is a window of RR-intervals
+       * @return it returns a value of the parameter.
+       */
 
-  float rootMeanSquareSuccessiveDifferences(const  vector<int>&,const int&);
+  void turningPointRatio(vector<int>& signal, const int& window);
 
-  //here we decide there's the pathology or not
-  bool decision(const float&,const float&);
-  //to set intervals for the analysis
-  void set_RR_int( vector<int>& intervals){
-  RR_len = intervals;  
+    /*!
+       * The fuction calculates values of root Mean Square Successive Differences
+       * @param signal is a number of RR-intervals
+       * @param window is a window of RR-intervals
+       * @return it returns a value of the parameter.
+       */
+    float rootMeanSquareSuccessiveDifferences(const vector<int>& signal);
+  //float rootMeanSquareSuccessiveDifferences(const vector<int>& signal, const int& window);
+
+  ///the function decides there is fibrillation or not
+  /**
+   * @param se  - the value of Shennon Entropy
+   * @param rmssd - the value of root Mean Square Successive Differences
+   * @return False - there is not the pathlogy, True - the pathology exists
+   */
+  bool decision(const float &se,const float& rmssd);
+
+  ///to set intervals for the analysis. Lengths of RR are in indexes, not time.
+  void set_RR_int(vector<int> & intervals){
+    RR_len = intervals;
   };
     
 };

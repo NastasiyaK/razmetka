@@ -108,7 +108,7 @@ void one_lead::testing_of_RR()
 
 		//Sometimes it can be other outlers,not a useful peak. this outlier can be noise or arthefact. 
 		//So this amplitude isn't similiar to adjusted amplitudes;
-		if (!(check_peak_amplitudes_max(peak1, peak2, peak3, 1)))
+		if (!(check_peak_amplitudes_max(peak1, peak2, peak3)))
 		{
 			//array_of_peak_R.erase(array_of_peak_R.end() - 2);
 			//peak2 = 0;
@@ -125,7 +125,7 @@ void one_lead::testing_of_RR()
 
 		}
 
-		bool res1 = check_last_four_peaks(array_of_peak_R, average_R);
+		//bool res1 = check_last_four_peaks(array_of_peak_R, average_R);
 		bool res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
 
 

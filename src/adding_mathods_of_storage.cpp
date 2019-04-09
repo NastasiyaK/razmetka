@@ -9,7 +9,7 @@ void erase_in_range( vector<wave>& v, const int a, const int b) {
 	{
 		int shift = 0;
 		 vector<wave>::iterator a1 = v.begin(), b1 = v.begin();
-		for (int i = 0; i<v.size() - 1; i++) 
+		for (size_t i = 0; i<v.size() - 1; i++)
 		{
 			if (v.at(i).peak > a)
 			{
@@ -55,7 +55,7 @@ void erase_in_range( vector<T>& v, const T a, const T b) {
 		v.erase(a1, b1);
 	}
 }
-
+/*
 void Leads_Info::erase_add(const int a, const int b,  pat_name pat,  pat_name pat2) {
 	erase_in_range(array_of_peak_R, a, b);
 	erase_in_range(R_v, a, b);
@@ -69,4 +69,4 @@ void Leads_Info::erase_add(const int a, const int b,  pat_name pat,  pat_name pa
 	path_mathods.erase(pathologies,a, b, pat, pat2);
 
 
-}
+}*/

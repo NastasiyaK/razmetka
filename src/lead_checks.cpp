@@ -1,7 +1,7 @@
 
 #include "lead_checks.h"
 
-void average_value::set(double new_value)
+void average_value::set(float new_value)
 {
 	list_value[place] = new_value;
 	place++;
@@ -16,12 +16,12 @@ void average_value::set(double new_value)
 
 }
 
-double average_value::get()
+float average_value::get()
 {
 	return sum;
 }
 
-void average_value::set_start_value(double start_value)
+void average_value::set_start_value(float start_value)
 {
 	sum = start_value;
 }

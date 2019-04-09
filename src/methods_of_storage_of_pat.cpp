@@ -74,7 +74,7 @@ void storage_of_pathology::erase(my_map& pathology, const int a, const int b, pa
 {
 
 	my_map::iterator a1 = pathology.begin(), b1 = pathology.end();
-	if (pathology.size() >= 0) {
+	//if (pathology.size() >= 0) {
 
 		ind_f_VF = pathology.end();
 		for (auto it = pathology.begin(); it != (pathology.end()); it++)
@@ -113,7 +113,7 @@ void storage_of_pathology::erase(my_map& pathology, const int a, const int b, pa
 				a1 = pathology.end();
 		}
 		//int nj = pathology.size();
-		auto ab = distance(a1, b1);
+		//auto ab = distance(a1, b1);
 		pathology.erase(a1, b1);
 		if (pathology.size() > 2)
 			b1 = prev(prev(pathology.end()));
@@ -122,7 +122,7 @@ void storage_of_pathology::erase(my_map& pathology, const int a, const int b, pa
 			pathology.erase(b1);
 			b1 = prev(prev(pathology.end()));
 		}
-	}
+	//}
 }
 
 void erase(vector<wave>* dirty_vector, const int start_clean)

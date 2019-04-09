@@ -36,7 +36,7 @@ void one_lead::initialization(leads_name type) {
 		ampl_P_threshold = 0.05f;
 		QRS_hight_min = 0.3f;
 		QRS_filtered_min = 0.25f;
-		ampl_P_threshold - 0.1;
+		ampl_P_threshold = 0.1;
 	}
 
 	if (type == v1 || type == v2 )

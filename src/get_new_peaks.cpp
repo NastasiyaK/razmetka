@@ -24,18 +24,19 @@ switch (type) \
 {\
     case N_b: \
         type_of_beats.N++;\
+        break;\
     case V_b: \
         type_of_beats.V++; \
+        break;\
     case SV_b: \
-    type_of_beats.SV++; \
+        type_of_beats.SV++; \
+        break;\
     case A_b: \
-    type_of_beats.A++; \
+        type_of_beats.A++; \
+        break;\
 } \
 
-//{/*CHECK_FIELDS(V,type) ; \
-CHECK_FIELDS(SV,type) ; \
-CHECK_FIELDS(N,type) ; \
-CHECK_FIELDS(A,type) ;} \*/
+
 
 
 #define CHECK_MAX_TYPES(des) \
@@ -52,7 +53,7 @@ des = #T1; \
 
 
 
-inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>& array_of_new_peaks, int sample_for_window,const int& Fs,int N_leads,double fusion_window_sec)
+inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>& array_of_new_peaks,const int& Fs,int N_leads,double fusion_window_sec)
 {
     int NUM_PEAKS = 0;
 	int _num_of_leads = 0;
@@ -173,7 +174,7 @@ void leadII_V::get_new_peaks()
 			{
 
 				count_while++;
-				auto type_sample_des = in_window(new_peaks_of_all_leads, _sample_of_new_iteration, Fs, N_leads, ptr_info_new_peak->fusion_window_sec);
+				auto type_sample_des = in_window(new_peaks_of_all_leads, Fs, N_leads, ptr_info_new_peak->fusion_window_sec);
 
 
 				if (clean_peaks.empty() ||
