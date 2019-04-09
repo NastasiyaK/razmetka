@@ -46,11 +46,11 @@ protected:
 
 	 vector<int> peaks_R;
 	 vector<int> extrasystoles;
-	 double average_R;
+	 float average_R;
 	info_for_new_peak* ptr_info_new_peak;
 
 	//vector< pair<int, char*> > checked_all_peaks;
-	//double temporal_rhythm,
+	//float temporal_rhythm,
 
 
 };

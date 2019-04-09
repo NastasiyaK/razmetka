@@ -3,7 +3,7 @@
 
 bool one_lead::finding_of_R() {
 	bool result = 0;
-	 vector <double> array_temp;
+	 vector <float> array_temp;
 	int temp_d;
 	size_t Npol_P, min_zde;
 	//duration for finding
@@ -47,9 +47,9 @@ bool one_lead::finding_of_R() {
 		array_temp.push_back(* max_element(array_of_pol.begin(), array_of_pol.end()) - * min_element(vect_of_2part.begin(), vect_of_2part.end()));
 		vect_of_2part.clear();
 		//temple array for finding for max value
-		 vector <double>abs_temp = abs(array_temp);
+		 vector <float>abs_temp = abs(array_temp);
 
-		double m = * max_element(abs_temp.begin(), abs_temp.end());
+		float m = * max_element(abs_temp.begin(), abs_temp.end());
 
 		if (* max_element(abs_temp.begin(), abs_temp.end()) < limit) {
 			array_of_pol.clear();
@@ -58,7 +58,7 @@ bool one_lead::finding_of_R() {
 		//st save thestrart of peak;
 		st = after_diff_signal.size() - sdvig - 1 - n;
 		
-		double up_limit = * max_element(abs_temp.begin(), abs_temp.end());
+		float up_limit = * max_element(abs_temp.begin(), abs_temp.end());
 		//cout<<up_limit<<endl;
 		if (st> 0 && * max_element(abs_temp.begin(), abs_temp.end()) >= limit) {
 			ventr_flutter(st, len_st);
@@ -72,7 +72,7 @@ bool one_lead::finding_of_R() {
 						(after_diff_signal.at(k) - array_of_pol.at(array_of_pol.size() - count_temp));
 				}
 				array_of_pol.clear();
-				 vector <double>vect0;
+				 vector <float>vect0;
 				//finding of real max value of signal  
 				st = (filter_signal.size() >= st) ? st - len_st / 4 : filter_signal.size() - len_st / 4;
 				st = (0 >= st) ? 1 : st;

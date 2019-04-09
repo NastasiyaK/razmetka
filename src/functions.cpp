@@ -41,10 +41,10 @@ void push_el( vector <  pair< int, pat_name >> &v, int sample, pat_name type, co
 	}
 	return checked_peaks;
 }
- vector<double> start_value( vector <double>&a,  vector <double>&b,  vector<double>&in_ECG,const int& n) {
+ vector<float> start_value( vector <float>&a,  vector <float>&b,  vector<float>&in_ECG,const int& n) {
 	//start values for bufer for filter
-	 vector<double> after_filter1;
-	double zn1, zn2;
+	 vector<float> after_filter1;
+	float zn1, zn2;
 	in_ECG.emplace(in_ECG.begin(), 0);
 	for (int count = 0; count <= n; count++) {
 		zn1 = 0;
@@ -95,7 +95,7 @@ int set_indices(int ind, const int& count_iter, size_t& mem, const size_t& mem_s
 }
 
 
-void change_type_in_all_peak( vector <  pair<int, pat_name >>& changing_vector, pat_name new_type, const int& sample, const double fusion_window)
+void change_type_in_all_peak( vector <  pair<int, pat_name >>& changing_vector, pat_name new_type, const int& sample, const float fusion_window)
 {
 	int i = 1;
 	while (i != changing_vector.size() )

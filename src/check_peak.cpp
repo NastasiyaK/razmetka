@@ -45,7 +45,7 @@ bool one_lead::check_peak()
 	int dist = set_indices(new_peak, count_iter, mem, mem_sdvig);
 	
 	//start of RR sometimes isn't correct,with diff extra test of R peak
-	double diff = 0;
+	float diff = 0;
 	if (dist - (int)(3*Fs*QRS.low/2) > 0) {
 		diff = filter_signal.at(dist) - *min_element(filter_signal.begin() + (dist - static_cast<int>(Fs*QRS.low / 2)),  filter_signal.begin() + dist);
 	}
@@ -76,7 +76,7 @@ bool one_lead::check_peak()
 
 			if (dist - (int)(Fs*QRS.low / 2) > 0)
 			{
-				double original_hight_peak = signal.at(dist) - * min_element(signal.begin() + dist - (int)(Fs*QRS.low / 2), signal.begin() + dist);
+				float original_hight_peak = signal.at(dist) - * min_element(signal.begin() + dist - (int)(Fs*QRS.low / 2), signal.begin() + dist);
 
 				//Sometimes filtered signal isn't as original,so added check is useful
 

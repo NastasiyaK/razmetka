@@ -5,11 +5,12 @@
 #include "All_leads.h"
 #include "LeadII_V.h"
 
-//extern double fusion_window_sec;
+//extern float fusion_window_sec;
 
-bool& one_lead::processing_lead(double& sam, bool& signal_new_peak) 
+bool& one_lead::processing_lead(float& sam, bool& signal_new_peak) 
 {
-	
+	if (count == 1664)
+		int a = 1;
 	static int N = 0;
 	if (N_leads == N) 
 	{N = 0;

@@ -4,8 +4,8 @@
 
 bool leadII_V::finding_of_P(bool& lost_R_is,const int& peak){
 
- vector <double> bufer;
- vector<double>::iterator it = bufer.begin();
+ vector <float> bufer;
+ vector<float>::iterator it = bufer.begin();
 int ind,ind2,ind_vn,otstup;
 
 
@@ -46,8 +46,8 @@ int one_lead::type_of_P(int start_peak)
 {
 
 	int decision = 1;
-	 vector <double> bufer;
-	 vector<double>::iterator it = bufer.begin();
+	 vector <float> bufer;
+	 vector<float>::iterator it = bufer.begin();
 	int ind, ind2, ind_vn;
 
 	ind = start_peak - static_cast<int>(length.PQ_int*Fs + (Fs*QRS.low) / 2);
@@ -55,7 +55,7 @@ int one_lead::type_of_P(int start_peak)
 
 	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
 	copy(begin(signal) + ind, begin(signal) + ind2, back_inserter(bufer));
-	 vector<double>temp_new;
+	 vector<float>temp_new;
 
 	temp_new = abs(bufer);
 	auto it_max =  max_element(temp_new.begin(), temp_new.end() - 1);
@@ -76,8 +76,8 @@ int one_lead::type_of_P(int start_peak)
 void one_lead::finding_of_P(const int& peak) 
 {
 
-	 vector <double> bufer;
-	 vector<double>::iterator it = bufer.begin();
+	 vector <float> bufer;
+	 vector<float>::iterator it = bufer.begin();
 	int ind, ind2, ind_vn;
 
 
@@ -97,12 +97,12 @@ void one_lead::finding_of_P(const int& peak)
 	
 }
 
-double one_lead::start_P( vector<double>& bufer, int& ind_start)
+float one_lead::start_P( vector<float>& bufer, int& ind_start)
 {
-	double original_isolinia = 0;
-	 vector<double> diff_bufer;
+	float original_isolinia = 0;
+	 vector<float> diff_bufer;
 	size_t start_z = 0;
-	double max_del, limit_pq;
+	float max_del, limit_pq;
 	//finding of peak, its index
 
 	int peak =  max_element(bufer.begin(), bufer.end()) - bufer.begin();
@@ -110,12 +110,12 @@ double one_lead::start_P( vector<double>& bufer, int& ind_start)
 	{
 
 		//find of start (the derivative will be 0.7 of the maximum)
-		 vector<double> diff_bufer;
+		 vector<float> diff_bufer;
 		for (int i = 1; i < bufer.size(); i++) 
 		{
 			diff_bufer.push_back((bufer.at(i) - bufer.at(0)) / i);
 		}
-		 vector<double>::iterator it =  max_element(diff_bufer.begin(), diff_bufer.end());
+		 vector<float>::iterator it =  max_element(diff_bufer.begin(), diff_bufer.end());
 		max_del = *it;
 		limit_pq = 0.1*max_del;
 		//left bound

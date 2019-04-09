@@ -20,21 +20,21 @@ using namespace std;
 struct qrs
 {
 
-const double low = 0.11;	//100 mc length of QRS
-const double height = 0.074;	
+const float low = 0.11;	//100 mc length of QRS
+const float height = 0.074;	
 
 };
 
 struct rr
 {
-	const double low = 1.1;	// 55 low length of RR
-	const double height = 0.7;// 80 high length of RR
-	const double middle = (low + height) / 2;
+	const float low = 1.1;	// 55 low length of RR
+	const float height = 0.7;// 80 high length of RR
+	const float middle = (low + height) / 2;
 };
 
 struct Lengths 
 {
-double PQ_int = 0.22,
+float PQ_int = 0.22,
 	   QT_perc = 0.5,
 	   P = 0.12,
 	   T_middle = 0.2,
@@ -61,8 +61,8 @@ public:
 
 	
 protected:
-	//vector<double> derivatived_signal;
-    //const double T_length = 0.2;
+	//vector<float> derivatived_signal;
+    //const float T_length = 0.2;
     //void allorhythm_lead( vector<int>& ,const int,  pat_name);
     //bool check_peak_R(const int&);
     //void erase_add(const int a, const int b,  pat_name pat,  pat_name pat2);
@@ -71,7 +71,7 @@ protected:
 
 
 	 //Point out vector of original ECG signal
-	 vector<double>* ptr_signal;
+	 vector<float>* ptr_signal;
 
 
 
@@ -85,7 +85,7 @@ protected:
 	const size_t win_fibr = 96; 		// length of window for atrial flutter
 	static int N_leads;
 	static size_t window, mem;			//window - for ventricular flutter, mem is a number of saving sample of signal
-	static double Fs;					//sampling frequency
+	static float Fs;					//sampling frequency
 	char main_peak_in_interval;			//defines the highest peak (module)during cardioibterval - R or S
 
 	//Standart values for an analysis
@@ -93,20 +93,20 @@ protected:
 	rr RR; 
 	Lengths length;
 
-	double QRS_hight_min, QRS_height, ampl_P_threshold = 0.1,
+	float QRS_hight_min, QRS_height, ampl_P_threshold = 0.1,
 		ampl_P_standart, ampl_T_standart, QRS_filtered_min;
 	average_value average_amplitude;    //average amplitude of QRS peaks
 
     //tracking of points
-    double  isolinia, amplitude_new_peak, amplitude_old_peak, original_isolinia;
+    float  isolinia, amplitude_new_peak, amplitude_old_peak, original_isolinia;
     int last_peak = 0, average_R, ind_of_last_extrasystole = 0;
 
-    vector <double> filter_signal, signal;// vectors with signals
+    vector <float> filter_signal, signal;// vectors with signals
     size_t mem_sdvig = 0;
     int count_iter = 0, sdvig = 0, count; //awful variable of awful tracking of signal' data
     int N_count = 0;//number of intervals
     int new_peak, len_R, minutes;
-    double amplitude_extrasys;
+    float amplitude_extrasys;
     vector<int> array_of_peak_R;
 
 
@@ -115,7 +115,7 @@ protected:
     vector<int>last_points;
     int N_last_points;
     int last_peak_for_rhythm;
-    double current_rhythm;
+    float current_rhythm;
 
     string class_of_sys;
 
@@ -135,18 +135,18 @@ protected:
 
     //functions for analysing
 
-	int  start_of_peak( vector<double>&, const int&, const  string&);
-	int stop_of_peak( vector<double>& bufer, const int& start_in_sig, const  string& name);
+	int  start_of_peak( vector<float>&, const int&, const  string&);
+	int stop_of_peak( vector<float>& bufer, const int& start_in_sig, const  string& name);
 
-    void start_P( vector<double>&, int&, bool&);
-    virtual int start_of_R(const int &, double, bool, vector<double> *use_signal);
+    void start_P( vector<float>&, int&, bool&);
+    virtual int start_of_R(const int &, float, bool, vector<float> *use_signal);
     virtual int stop_of_R(const int peak, bool type);
 
     //pathologies
 	my_map pathologies;
 	storage_of_pathology path_mathods;
 	bool fibr( vector<int>&);
-	bool flutter(const vector<int>&,const vector<double>* );
+	bool flutter(const vector<int>&,const vector<float>* );
 	Signal pathology_signal;
 
 
@@ -180,7 +180,7 @@ protected:
 		output << value <<  '\n';
 	}
 
-	void print(int,  string, double,  string);
+	void print(int,  string, float,  string);
 
 	template <typename T, typename T2>
 	void print(T& value, T2& second_value,  string paths) 

@@ -6,30 +6,30 @@
 
 
 
-int one_lead::start_peak(const int &peak, vector<double> *ptr_signal) {
+int one_lead::start_peak(const int &peak, vector<float> *ptr_signal) {
 
-    vector<double> bufer;
+    vector<float> bufer;
     int ind, ind2, ind_vn;
     ind = peak - static_cast<int>(2 * QRS.height * Fs / 3);
     ind2 = peak;
     int start_R = 0;
     set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
-    vector<double>::iterator min_point;
+    vector<float>::iterator min_point;
     //int type_of_finding = 1; // if main_peak S it's necessary to reverse our_signal;
 
     if (ind >= 0 && ind2 > 0 && ptr_signal->size() > ind2) {
-        double isolinia_here = isolinia;
+        float isolinia_here = isolinia;
         if ( abs(isolinia_here) > QRS_filtered_min)
             isolinia_here = 0;
         copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
-        double current_amplitude = ptr_signal->at(ind2);
+        float current_amplitude = ptr_signal->at(ind2);
 
 
         min_point = min_element(bufer.begin(), bufer.begin() + bufer.size() / 2);
         int min_point_ind = static_cast<int>( distance(bufer.begin(), min_point) + ind_vn);
-        double k = (current_amplitude - *min_point) / (peak - min_point_ind);
-        double b = current_amplitude - k * (peak);
-        double x = (isolinia_here - b) / k;
+        float k = (current_amplitude - *min_point) / (peak - min_point_ind);
+        float b = current_amplitude - k * (peak);
+        float x = (isolinia_here - b) / k;
 
         start_R = static_cast<int>(round(x));
         int start = 0;
@@ -80,11 +80,11 @@ int one_lead::start_peak(const int &peak, vector<double> *ptr_signal) {
 }
 
 
-int one_lead::stop_peak(const int peak, vector<double>* ptr_signal)
+int one_lead::stop_peak(const int peak, vector<float>* ptr_signal)
 {
 
-    vector<double>bufer;
-    vector<double>::iterator min_point;
+    vector<float>bufer;
+    vector<float>::iterator min_point;
     int stop_R = 0;
     int ind,ind2,ind_vn;
     ind = peak;
@@ -96,11 +96,11 @@ int one_lead::stop_peak(const int peak, vector<double>* ptr_signal)
 
         copy(begin(*ptr_signal)+ind,begin(*ptr_signal)+ind2,back_inserter(bufer));
 
-        double isolinia_here = isolinia;
+        float isolinia_here = isolinia;
         if ( abs(isolinia_here) > QRS_filtered_min)
             isolinia_here = 0;
         copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
-        double current_amplitude = ptr_signal->at(ind);
+        float current_amplitude = ptr_signal->at(ind);
 
 
         min_point =  min_element(bufer.begin(),bufer.begin() + static_cast<int>(Fs*(QRS.height)/2));
@@ -112,9 +112,9 @@ int one_lead::stop_peak(const int peak, vector<double>* ptr_signal)
         int min_point_ind = static_cast<int>( distance(bufer.begin(),min_point)+ind_vn);
         if (peak == min_point_ind)
             min_point_ind = ind2+3;
-        double k = (current_amplitude-*min_point)/(peak - min_point_ind);
-        double b = current_amplitude - k*(peak);
-        double x = (isolinia_here-b)/k;
+        float k = (current_amplitude-*min_point)/(peak - min_point_ind);
+        float b = current_amplitude - k*(peak);
+        float x = (isolinia_here-b)/k;
         stop_R =static_cast<int>(round(x));
         stop_R = (stop_R > 0) ? stop_R : ind2;
         stop_R = (stop_R > min_point_ind) ? min_point_ind - 1 : stop_R;

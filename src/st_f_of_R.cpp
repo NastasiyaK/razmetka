@@ -31,22 +31,22 @@ signal to not make new method
 
 It depends from variable main peak. It can be S or R. Signal is reversed or not.
 */
-int Leads_Info::start_of_R(const int &peak, double otstup, bool type, vector<double> *use_signal)
+int Leads_Info::start_of_R(const int &peak, float otstup, bool type, vector<float> *use_signal)
 {
 ptr_signal = &signal;
- vector<double>bufer;
+ vector<float>bufer;
 int ind,ind2,ind_vn;
 ind = peak - static_cast<int>(QRS.height*Fs/2);
 ind2 = peak;
 int start_R = 0;
 set_indices(ind_vn,ind,ind2,count_iter,mem,mem_sdvig); 
- vector<double>::iterator min_point;
+ vector<float>::iterator min_point;
 int type_of_finding = 1; // if main_peak S it's necessary to reverse our_signal;
-double current_amplitude = filter_signal.at(ind2);
+float current_amplitude = filter_signal.at(ind2);
 
 if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
 {
-	double isolinia_here;
+	float isolinia_here;
 	if (!type) 
 	{
 		isolinia_here = original_isolinia;
@@ -64,9 +64,9 @@ if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
 	
     min_point =  min_element(bufer.begin(),bufer.begin()+bufer.size()/2);
     int min_point_ind = static_cast<int>( distance(bufer.begin(),min_point)+ind_vn);
-    double k = (current_amplitude -*min_point)/(peak - min_point_ind);
-    double b = current_amplitude - k*(peak);
-	double x = (isolinia_here-b)/k;
+    float k = (current_amplitude -*min_point)/(peak - min_point_ind);
+    float b = current_amplitude - k*(peak);
+	float x = (isolinia_here-b)/k;
  
  start_R =static_cast<int>(round(x));
  int start = 0;
@@ -87,7 +87,7 @@ if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
  }
  else 
  {
-	  vector<double>* ptr_filter = &filter_signal;
+	  vector<float>* ptr_filter = &filter_signal;
 	 SHIFT_POINT(ptr_filter);
  }
  
@@ -107,8 +107,8 @@ return start_R;
 int Leads_Info::stop_of_R(const int peak, bool type)
 {
 
-	 vector<double>bufer;
-	 vector<double>::iterator min_point;
+	 vector<float>bufer;
+	 vector<float>::iterator min_point;
 	int stop_R = 0;
 	int ind, ind2, ind_vn;
 	ind = peak;
@@ -116,8 +116,8 @@ int Leads_Info::stop_of_R(const int peak, bool type)
 	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
 	int type_of_finding = 1;
 	if (ind >= 0 && ind2 >0 && signal.size()>ind2) {
-		double amplitude = ptr_signal->at(ind);
-		double isolinia_here, current_amplitude = filter_signal.at(ind);
+		float amplitude = ptr_signal->at(ind);
+		float isolinia_here, current_amplitude = filter_signal.at(ind);
 		copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
 		if (!type)
 		{
@@ -147,9 +147,9 @@ int Leads_Info::stop_of_R(const int peak, bool type)
 		int min_point_ind = static_cast<int>( distance(bufer.begin(), min_point) + ind_vn);
 		if (peak == min_point_ind)
 			min_point_ind = ind2 + 3;
-		double k = (current_amplitude - *min_point) / (peak - min_point_ind);
-		double b = current_amplitude - k*(peak);
-		double x = (isolinia_here - b) / k;
+		float k = (current_amplitude - *min_point) / (peak - min_point_ind);
+		float b = current_amplitude - k*(peak);
+		float x = (isolinia_here - b) / k;
 		stop_R = static_cast<int>(round(x));
 		stop_R = (stop_R>0) ? stop_R : ind2;
 		stop_R = (stop_R>min_point_ind) ? min_point_ind - 1 : stop_R;
@@ -182,8 +182,8 @@ int Leads_Info::stop_of_R(const int peak, bool type)
 int leadII_V::stop_of_R(const int peak,bool type)
 {
 
- vector<double>bufer;
- vector<double>::iterator min_point;
+ vector<float>bufer;
+ vector<float>::iterator min_point;
 int stop_R = 0;
 int ind,ind2,ind_vn;
 ind = peak;
@@ -195,9 +195,9 @@ if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
     
     copy(begin(*ptr_signal)+ind,begin(*ptr_signal)+ind2,back_inserter(bufer));
 	
-	double isolinia_here = original_isolinia;
+	float isolinia_here = original_isolinia;
 	copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
-	double current_amplitude = ptr_signal->at(ind);
+	float current_amplitude = ptr_signal->at(ind);
 	
 	
     min_point =  min_element(bufer.begin(),bufer.begin() + static_cast<int>(Fs*(QRS.height)/2));
@@ -209,9 +209,9 @@ if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
     int min_point_ind = static_cast<int>( distance(bufer.begin(),min_point)+ind_vn);
     if (peak == min_point_ind)
         min_point_ind = ind2+3;
-    double k = (current_amplitude-*min_point)/(peak - min_point_ind);
-    double b = current_amplitude - k*(peak);
-    double x = (isolinia_here-b)/k;
+    float k = (current_amplitude-*min_point)/(peak - min_point_ind);
+    float b = current_amplitude - k*(peak);
+    float x = (isolinia_here-b)/k;
     stop_R =static_cast<int>(round(x));
     stop_R = (stop_R>0)?stop_R:ind2;
     stop_R = (stop_R>min_point_ind)?min_point_ind-1:stop_R;
@@ -240,30 +240,30 @@ return stop_R;
 }
 
 
-int leadII_V::start_of_R(const int &peak, double otstup, bool type)
+int leadII_V::start_of_R(const int &peak, float otstup, bool type)
 {
 
-	 vector<double>bufer;
+	 vector<float>bufer;
 	int ind, ind2, ind_vn;
 	ind = peak - static_cast<int>(QRS.height*Fs / 2);
 	ind2 = peak;
 	int start_R = 0;
 	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
-	 vector<double>::iterator min_point;
+	 vector<float>::iterator min_point;
 	//int type_of_finding = 1; // if main_peak S it's necessary to reverse our_signal;
 	
 	if (ind >= 0 && ind2 >0 && ptr_signal->size()>ind2)
 	{
-		double isolinia_here = original_isolinia;
+		float isolinia_here = original_isolinia;
 		copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
-		double current_amplitude = ptr_signal->at(ind2);
+		float current_amplitude = ptr_signal->at(ind2);
 
 
 		min_point =  min_element(bufer.begin(), bufer.begin() + bufer.size() / 2);
 		int min_point_ind = static_cast<int>( distance(bufer.begin(), min_point) + ind_vn);
-		double k = (current_amplitude - *min_point) / (peak - min_point_ind);
-		double b = current_amplitude - k*(peak);
-		double x = (isolinia_here - b) / k;
+		float k = (current_amplitude - *min_point) / (peak - min_point_ind);
+		float b = current_amplitude - k*(peak);
+		float x = (isolinia_here - b) / k;
 
 		start_R = static_cast<int>(round(x));
 		int start = 0;

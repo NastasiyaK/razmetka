@@ -21,7 +21,7 @@ class leadII_V : public Leads_Info
 {
 public:
 
-    //bool& processing_lead(double& sam, bool&);
+    //bool& processing_lead(float& sam, bool&);
     //bool check_last_four_peaks( vector<pair<int,pat_name > > & , const int& );
 	//void initialization(char*);
     //bool check_last_four_peaks( vector<pair<int,pat_name > > &, const int& );
@@ -44,7 +44,7 @@ public:
 	 * @param ptr_leadV - points out to signal of lead v5
 	 * @param type - defines a name of main lead (v5 - for ventricular pathlogies and II  - for atrial)
 	 */
-	leadII_V(leads_name type, info_for_new_peak* ptr_info_new_peak, int N_leads, vector<double>* ptr_signal, one_lead* ptr_leadV);
+	leadII_V(leads_name type, info_for_new_peak* ptr_info_new_peak, int N_leads, vector<float>* ptr_signal, one_lead* ptr_leadV);
 	virtual ~leadII_V();
 
 	/// The functions print data into file.txt
@@ -90,7 +90,7 @@ private:
 	///vector of R peaks only
 	vector<int>R_s;
 	///to main filtered signal, usual lead II
-	vector<double>* ptr_signal;
+	vector<float>* ptr_signal;
 	///variables for atrial fibrillation finding
 	vector<bool> afibr_decision_memory;
 
@@ -100,7 +100,7 @@ private:
 	one_lead* leadV;
 	///for ventricular flutter list of peaks and the amplitudes
 	vector<int>list_extrasys;
-	vector<double>list_ampl;
+	vector<float>list_ampl;
 	//the point of sart of pathlogies
 	int start_vf;
     vector<int> R_peak_for_fibr;
@@ -115,7 +115,7 @@ private:
 	bool check_SV_A_extrasustole( vector<pair<int,pat_name > > & peaks, const int& );
 
     //to find a start and a stop of peak
-	int start_of_R(const int &peak, double otstup, bool type);
+	int start_of_R(const int &peak, float otstup, bool type);
     int stop_of_R(const int, bool type);
 
 	/**
@@ -147,9 +147,9 @@ private:
 	//These functions to find points of cardiointerval
 	void finding_of_ST(const int&);
 	///Finds a slope of ST segment
-	void slope( vector<double>& signal, int& start_of_ST);
+	void slope( vector<float>& signal, int& start_of_ST);
 	///Finds a level of ST
-	void level_of_segment( vector<double>& signal, const int& start_of_ST);
+	void level_of_segment( vector<float>& signal, const int& start_of_ST);
     ///Finds peak Q  for peak R (peak)
 	int  finding_of_Q(const int& peak);
 	///Finds peak P  for peak R (peak) or if otstup is true, finds wave p for absent peak
@@ -159,7 +159,7 @@ private:
 	///Finds peak T  for peak R (peak)
 	int finding_of_T(const int& peak);
 	///Finds start of wave T for peak R (peak) with the point of possible start of peak
-    void start_T( vector<double>& peak, int& start_of_peak);
+    void start_T( vector<float>& peak, int& start_of_peak);
 
 
 	/**Obtaines a new point and calculates

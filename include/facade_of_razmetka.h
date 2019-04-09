@@ -14,7 +14,7 @@ public:
     facade_of_razmetka(){};
     ~facade_of_razmetka();
     void set_init_values(int );
-    void set_new_signal(double* );
+    void set_new_signal(float* );
 
     template <typename T>
     vector<T>* get_peaks(char* type) {

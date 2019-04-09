@@ -11,10 +11,10 @@
 
 int leadII_V::finding_of_T(const int& peak){
 
- vector <double> bufer;
+ vector <float> bufer;
 // string operation = "T";
 int g1,g2,ind_vn,otstup,start_of_T =0;
-double ampl_st_of_T; 
+float ampl_st_of_T; 
 //isolinia here because of there is R beat
 
 
@@ -33,7 +33,7 @@ if (g1>0 && g2<ptr_signal->size())
 {
 	
     copy(begin(*ptr_signal)+g1,begin(*ptr_signal)+g2,back_inserter(bufer));
-     vector<double>temp_new;
+     vector<float>temp_new;
 
 	temp_new = abs(bufer);
     auto it =  max_element(temp_new.begin(),temp_new.end()-1);
@@ -43,7 +43,7 @@ if (g1>0 && g2<ptr_signal->size())
 	
 		if ( bufer.at(it_ind)-isolinia<0)
 		{
-		 for_each(bufer.begin(), bufer.end(), [](double &n) { n = n*(-1); });
+		 for_each(bufer.begin(), bufer.end(), [](float &n) { n = n*(-1); });
 		reversing= "yes";
     }
     T.peak = it_ind+ind_vn;
@@ -56,14 +56,14 @@ if (g1>0 && g2<ptr_signal->size())
     //amplitude(bufer,ind_vn,operation,reversing);
 
 	// stop_T
-	double iso = isolinia;
+	float iso = isolinia;
 	if (reversing == "yes")
 		iso *=(-1);
 	
-	 vector <double> temp_ar;
+	 vector <float> temp_ar;
 	
 	int ind_naim = bufer.size() - 1;
-	double naim =  abs(iso - *(bufer.end()- 1));
+	float naim =  abs(iso - *(bufer.end()- 1));
 	int count_t = 0;
 	
 	for (int j = bufer.size() - 2; j > peak; j--) {
@@ -90,7 +90,7 @@ return start_of_T;
  * second - not, St - curve, otherwise ST -line end we find incline
  */
 void leadII_V::finding_of_ST(const int& peak){
- vector <double> bufer;
+ vector <float> bufer;
 int g1,g2,ind_vn;
 //finding of parameters of T 
 g1 = peak + static_cast<int>(Fs*(QRS.height/2));
@@ -102,7 +102,7 @@ if (g1 >=0 && g2>g1){
         copy(begin(*ptr_signal)+g1,begin(*ptr_signal)+min_zde ,back_inserter(bufer));
         level_of_segment(bufer,ind_vn);
         //segment isn't linear - no slope    
-        double del1,del2,del3;
+        float del1,del2,del3;
         del1 = bufer.at(0);
         del2 =bufer.at(bufer.size()/2);
         del3 = bufer.at(bufer.size()-1);

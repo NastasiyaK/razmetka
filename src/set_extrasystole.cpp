@@ -11,7 +11,7 @@ bool one_lead::set_extrasystole(const int& probably_extrasystole,const int& peak
 	bool result = false;
     //for analisys new peak  - if it isn'tsimiliar R
     int dist  = set_indices(probably_extrasystole,count_iter,mem,mem_sdvig);
-    double diff = 1;
+    float diff = 1;
 
 	if (dist - (int)(2 * Fs*QRS.low) > 0)
 	{

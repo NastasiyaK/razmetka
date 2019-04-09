@@ -6,7 +6,7 @@
 /*
 int All_Leads::count_leads = 0;
 int Leads_Info::N_leads = 1;
-double Leads_Info::Fs = 257;
+float Leads_Info::Fs = 257;
 size_t Leads_Info::window = static_cast<size_t>(30 * Fs);
 size_t Leads_Info::mem = static_cast<size_t>(Fs * 8 * 60);
 */
@@ -40,7 +40,7 @@ facade_of_razmetka::~facade_of_razmetka()
     delete lead2;
 }
 
-void facade_of_razmetka::set_new_signal(double* new_data){
+void facade_of_razmetka::set_new_signal(float* new_data){
 
     for (int i  = 1;i < N_leads; i++)
     {

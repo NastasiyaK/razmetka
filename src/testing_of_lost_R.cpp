@@ -68,7 +68,7 @@ if (ind_of_last_extrasystole == peak2 && new_peak - peak1 > average_R*0.8 &&
 	return true;
 	//the case when intervals are wright;
 
- if (( abs((double)(new_peak-peak1)/(peak1-peak2))<1.4 &&  abs((double)(new_peak-peak1)/(peak1-peak2))>0.6)
+ if (( abs((float)(new_peak-peak1)/(peak1-peak2))<1.4 &&  abs((float)(new_peak-peak1)/(peak1-peak2))>0.6)
 	 && ((peak1 - peak2) >0.9*average_R || new_peak - peak2<2*average_R ))
         return true;
  if ((new_peak-peak1)> RR.middle*Fs*0.9)

@@ -35,7 +35,7 @@ int start_severe_distortion(vector<int> *extrasystoles, vector<int> *R_peaks, co
 bool value_ok(const int& ind,const int&);
 
 ///The additional function changes type of beat in the vector of beats.
-void change_type_in_all_peak( vector<  pair<int, pat_name> >&, pat_name, const int&, const double);
+void change_type_in_all_peak( vector<  pair<int, pat_name> >&, pat_name, const int&, const float);
 
 
 ///These functions erase wrong data from index to end

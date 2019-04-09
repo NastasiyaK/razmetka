@@ -30,7 +30,7 @@ public:
 	info_for_new_peak* ptr_info_new_peak;
 
 
-	//void new_processing(double);
+	//void new_processing(float);
 	
 	/**
 	 * @param peak - type of peaks that is required
@@ -48,7 +48,7 @@ public:
 	 * @param type_signal  - filtered signal or ofigin
 	 * @return returns required signal
 	 */
-	vector<double>* get_signal(char* type_signal);
+	vector<float>* get_signal(char* type_signal);
 	/**
 	 *
 	 * @return Returns start of ventricular pathologies or
@@ -61,7 +61,7 @@ public:
      *  - analysis of peak's type
      *  - set info about current new peak
      */
-	bool& processing_lead(double& sam, bool&);
+	bool& processing_lead(float& sam, bool&);
 	/**
 	 *
 	 * @return a current index of analysing signal
@@ -80,20 +80,20 @@ private:
      * @param signal points out to signal
      * @return an index of a finish of the peak
      */
-    int stop_peak(const int peak, vector<double>* signal);
+    int stop_peak(const int peak, vector<float>* signal);
 	/**
      * @param peak index of the peak which is required to analyze
      * @param signal points out to signal
      * @return an index of a start of the peak
      */
-	int start_peak(const int& peak, vector<double>* signal );
+	int start_peak(const int& peak, vector<float>* signal );
 
 	/**
 	 * @brief Finds a ventricular extrasystole between last 3 pealk
 	 * @return False, if ventricular extrasystole doesn't exist and true
 	 * in another case.
 	 */
-	bool check_ventr_extrasys( vector<double>*, const int&, int&, const int&);
+	bool check_ventr_extrasys( vector<float>*, const int&, int&, const int&);
 
 
 
@@ -121,7 +121,7 @@ private:
 
 
 	void finding_of_P(const int& peak);
-	double start_P( vector<double>& bufer, int& ind_start);
+	float start_P( vector<float>& bufer, int& ind_start);
 	/**
 	 * Takes current RR - intervals and checks it.
 	 * @param array_of_extrasys  - extrasystoles which stored during finding of R
@@ -131,19 +131,19 @@ private:
 	//variables and functions for  finding R
 	 const float limit = 0.0002f;
 	//contains signal after differentiation
-	 vector <double>  after_diff_signal;
+	 vector <float>  after_diff_signal;
 
 	 //these vectors storage some values for R-detection algorithm
-	 vector<double> array_of_pol, vect_of_2part,filter_signal_pol;
+	 vector<float> array_of_pol, vect_of_2part,filter_signal_pol;
      int st = 0;
-	 //vector<double>after_filter, in_ECG,
+	 //vector<float>after_filter, in_ECG,
 
 	//Provides such operations as derivatig and filtering
-	void deriv_of_signal(double&);
-	void filter( vector<double>&,  vector<double>&, int);
+	void deriv_of_signal(float&);
+	void filter( vector<float>&,  vector<float>&, int);
 
 	//additional vector for filtering
-	 vector<double>z;
+	 vector<float>z;
 
 
 	vector< pair<int, pat_name>> peaks_with_types; //Contains peaks with types (N, V and so on)
@@ -171,7 +171,7 @@ private:
 	 */
 	bool ventr_flutter(size_t st_f, const int& len_st);
 	vector<int>list_extrasys;
-	vector<double>list_ampl;
+	vector<float>list_ampl;
 	int start_vf = 0;
 
 };

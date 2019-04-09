@@ -18,7 +18,7 @@
 //int All_Leads::count_leads = 0;
 int All_Leads::count_leads = 0;
 int Leads_Info::N_leads = 1;
-double Leads_Info::Fs = 257;
+float Leads_Info::Fs = 257;
 size_t Leads_Info::window = static_cast<size_t>(30 * Fs);
 size_t Leads_Info::mem = static_cast<size_t>(Fs * 8 * 60);
 
@@ -27,7 +27,7 @@ int n = 100000;
  //string input_path = "C:\\Users\\Amantayr\\Documents\\Visual Studio 2015\\Projects\\razmetka\\razmetka\\signals for project\\";
  string input_path = "/home/amantayr/signals for projects/";
 
- vector<double> get_signal( ifstream &,int);
+ vector<float> get_signal( ifstream &,int);
  void test_leadII();
 
 
@@ -47,9 +47,9 @@ void test_leadII()
 	//ofstream output("new_.txt");
 	//output << "fdf"  << endl;
 	ifstream input("I21.txt");
-	vector<vector<double>> leads_samples(13);
+	vector<vector<float>> leads_samples(13);
 
-	double sam = 0;
+	float sam = 0;
 	if (input)
 	{
 		std::string line{};
@@ -84,11 +84,11 @@ void test_leadII()
 
 	leadII_V lead2(II, info_new_peak, N_leads, array_of_leads.At(1)->get_signal("O"), array_of_leads.At(6));
 	lead2.set_all_leads(&array_of_leads);
-	double c = 0;
+	float c = 0;
 	bool res;
 	if (N_leads ==12) {
         for (int k = 0; k < n; k++) {
-           if (k == 1300)
+           if (k == 1666)
              int a = 1;
 
             for (int i = 0; i < 12; i++) {
@@ -127,12 +127,12 @@ void test_leadII()
 
 
 
- vector<double> get_signal( ifstream &input,int n)
+ vector<float> get_signal( ifstream &input,int n)
  {
-	 vector<double> signal_of_lead;
+	 vector<float> signal_of_lead;
 
 	// ifstream input(signal);
-	double sam = 0;
+	float sam = 0;
 	if (input) 
 	{
 		for (int h = 0; h<n; h++)

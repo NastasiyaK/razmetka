@@ -19,7 +19,7 @@ void info_for_new_peak::set_sample(int sample)
 }
 
 
-void info_for_new_peak::increment_time(const double& Fs)
+void info_for_new_peak::increment_time(const float& Fs)
 {
 	this->Fs = Fs;
 

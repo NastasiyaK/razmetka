@@ -37,7 +37,7 @@ private:
 	bool variable_for_new_peak = 0;
 	bool COLLECT = false;
 	int time;
-	double Fs = 0;
+	float Fs = 0;
 	
 
 public:
@@ -54,7 +54,7 @@ public:
 	/// The function incrementes time that runs form last peak. When the time is equal to
 	///window, the function can find next peak.
 	/// @param Fs - sampling frequency of ECG
-	void increment_time(const double & Fs);
+	void increment_time(const float & Fs);
 
 	/// The function returns index of new peak
 	int get_sample();
@@ -66,7 +66,7 @@ public:
 	/// The function changes variable which permits read info
 	void set_collect(bool collect);
 	//it is length of window, where the scun of new peaks is in different leads.
-    const double fusion_window_sec = 0.3;
+    const float fusion_window_sec = 0.3;
 };
 
 
@@ -103,7 +103,7 @@ struct wave
 	int peak = 0;
 	int start = 0;
 	int stop = 0;
-	double amplitude = 0;
+	float amplitude = 0;
 	
 };
 

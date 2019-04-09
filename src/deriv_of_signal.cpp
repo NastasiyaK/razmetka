@@ -8,7 +8,7 @@
 
 
 
-void one_lead::deriv_of_signal(double& new_sample) {
+void one_lead::deriv_of_signal(float& new_sample) {
 
 	mem_sdvig++;
 	//saving signal:new sample - sample of original signal
@@ -28,17 +28,17 @@ void one_lead::deriv_of_signal(double& new_sample) {
 
 	filter(signal, filter_signal, n);
 
-	double dif = 0;
+	float dif = 0;
 	if (main_peak_in_interval == 'R')
 	{
 		if (*(filter_signal.end() - 1) < 0)
-			push_el(filter_signal_pol, 0., mem);
+			push_el(filter_signal_pol, 0.f, mem);
 		else
 			push_el(filter_signal_pol, *(filter_signal.end() - 1), mem);
 	} else
 		{
 			if (*(filter_signal.end() - 1) > 0)
-				push_el(filter_signal_pol, 0., mem);
+				push_el(filter_signal_pol, 0.f, mem);
 			else
 				push_el(filter_signal_pol, *(filter_signal.end() - 1), mem);
 		}
@@ -59,7 +59,7 @@ void one_lead::deriv_of_signal(double& new_sample) {
 
 
 
-void one_lead::filter( vector<double>&input,  vector<double>&output, int order)
+void one_lead::filter( vector<float>&input,  vector<float>&output, int order)
 {
 	static  vector<float> a, b;
 
@@ -93,7 +93,7 @@ void one_lead::filter( vector<double>&input,  vector<double>&output, int order)
 		}
 	}
 	
-	double new_sample = b.at(0) * *(input.end() - 1) + z.at(0);
+	float new_sample = b.at(0) * *(input.end() - 1) + z.at(0);
 	
 	for (int i = 1; i < order; i++) 
 	{

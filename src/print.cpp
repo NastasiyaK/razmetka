@@ -28,7 +28,7 @@ void Leads_Info::print( pair<int,  string>& value,  string paths) {
 	 ofstream output(path_full,  ios::app);
 	output << value.first << ": " << value.second << "\n";
 }
-void Leads_Info::print(int start,  string type, double slope,  string paths) 
+void Leads_Info::print(int start,  string type, float slope,  string paths) 
 {
 	 string type_string;
 	MAKE_TYPE_LEAD_STRING(type_string, type_of_lead);

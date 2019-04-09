@@ -53,7 +53,7 @@ des = #T1; \
 
 
 
-inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>& array_of_new_peaks,const int& Fs,int N_leads,double fusion_window_sec)
+inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>& array_of_new_peaks,const int& Fs,int N_leads,float fusion_window_sec)
 {
     int NUM_PEAKS = 0;
 	int _num_of_leads = 0;
@@ -64,7 +64,7 @@ inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>&
 			array_of_new_peaks.erase(array_of_new_peaks.begin() + i);
 	}
     _num_of_leads = array_of_new_peaks.size();
-	double sum = 0;
+	float sum = 0;
 
 	if (!array_of_new_peaks.empty() && !array_of_new_peaks.at(0).empty())
 	{

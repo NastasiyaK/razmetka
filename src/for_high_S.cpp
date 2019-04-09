@@ -40,7 +40,7 @@ bool one_lead::first_check_peak_S()
 	int dist = set_indices(new_peak, count_iter, mem, mem_sdvig);
 
 	//start of RR sometimes isn't correct,with diff extra test of R peak
-	double diff = 0;
+	float diff = 0;
 	if (dist - (int)(3 * Fs*QRS.low / 2) > 0) {
 		diff =  abs(filter_signal.at(dist) - filter_signal.at(dist - (int)(3 * Fs*QRS.low / 2)));
 	}
@@ -67,7 +67,7 @@ bool one_lead::first_check_peak_S()
 				array_of_extrasys.erase(array_of_extrasys.end() - 1);
 
 			if (dist - (int)(Fs*QRS.low / 2) > 0) {
-				//double original_hight_peak =  abs(signal.at(dist) -
+				//float original_hight_peak =  abs(signal.at(dist) -
 				//	* min_element(signal.begin() + dist - (int)(Fs*QRS.low / 2), signal.begin() + dist));
 
 				//Sometimes filtered signal isn't as original,so added check is useful
@@ -114,7 +114,7 @@ bool one_lead::first_check_peak_S()
                             set_extrasystole(static_cast<int>( distance(signal.begin() + i1, (it_max_lost)) + QRS.height*Fs) + *(array_of_peak_R.end() - 2), *(array_of_peak_R.end() - 2));
 
                     }
-                    if (array_of_peak_R.size() >= 2 && *(array_of_peak_R.end() - 1) - *(array_of_peak_R.end() - 2) >  max(average_R*1.4, static_cast<const double>(RR.middle*Fs)))
+                    if (array_of_peak_R.size() >= 2 && *(array_of_peak_R.end() - 1) - *(array_of_peak_R.end() - 2) >  max(average_R*1.4, static_cast<const float>(RR.middle*Fs)))
                     {
                         len_R = *(array_of_peak_R.end() - 1) - *(array_of_peak_R.end() - 2);
                         int i2 = *(array_of_peak_R.end() - 1) - static_cast<int>(QRS.height*Fs);
@@ -152,14 +152,14 @@ bool one_lead::first_check_peak_S()
                     // in this case it can be extrasystole or peak R (V E)
                     // if disnance between R and extrasys is normal, ex is R or V E
                     int ind_extra = set_indices(array_of_extrasys.at(0), count_iter, mem, mem_sdvig);
-                    if (((double)(dist) / (dist2) > 1.2 || ((double)(dist) / (dist2)) < 0.8) && ind_extra > 0)
+                    if (((float)(dist) / (dist2) > 1.2 || ((float)(dist) / (dist2)) < 0.8) && ind_extra > 0)
                     {
                         //here V E
 
-                        double amp = filter_signal.at(ind_extra);
+                        float amp = filter_signal.at(ind_extra);
                         int start_peak = start_of_R(array_of_extrasys.at(0), 2 * Fs * (QRS.height), 1, nullptr);
-                        double diff_end_of_peak = signal.at(ind_extra) - signal.at(ind_extra + static_cast<int>(Fs*QRS.height));
-                        double temp_QRS2 = (double)(array_of_extrasys.at(0) - start_peak) / Fs;
+                        float diff_end_of_peak = signal.at(ind_extra) - signal.at(ind_extra + static_cast<int>(Fs*QRS.height));
+                        float temp_QRS2 = (float)(array_of_extrasys.at(0) - start_peak) / Fs;
                         // here R
                         if (QRS.height / 2 > temp_QRS2 && diff_end_of_peak > QRS_hight_min)
                             if (type_of_P(array_of_extrasys.at(0)) == 1)
@@ -173,11 +173,11 @@ bool one_lead::first_check_peak_S()
                             array_of_extrasys.clear();
                     }
                     else
-                        if (((double)(dist) / (dist2) < 1.2 && ((double)(dist) / (dist2)) > 0.8))
+                        if (((float)(dist) / (dist2) < 1.2 && ((float)(dist) / (dist2)) > 0.8))
                         {
                             int index_of_extrasys = set_indices(array_of_extrasys.at(0), count_iter, mem, mem_sdvig);
-                            double dif_stop_R =  abs(signal.at(index_of_extrasys) - signal.at(index_of_extrasys + static_cast<int>(Fs*(QRS.height) / 2)));
-                            double dif_start_R =  abs(signal.at(index_of_extrasys) - signal.at(index_of_extrasys - static_cast<int>(Fs*(QRS.height) / 2)));
+                            float dif_stop_R =  abs(signal.at(index_of_extrasys) - signal.at(index_of_extrasys + static_cast<int>(Fs*(QRS.height) / 2)));
+                            float dif_start_R =  abs(signal.at(index_of_extrasys) - signal.at(index_of_extrasys - static_cast<int>(Fs*(QRS.height) / 2)));
 
                             // here R
                             if ( min(dif_stop_R, dif_start_R) > QRS_hight_min)
@@ -209,7 +209,7 @@ bool one_lead::first_check_peak_S()
 
                     if (ind > 0 && ind2 < signal.size() && array_of_extrasys.at(1) != array_of_extrasys.at(0))
                     {
-                        vector <double> bufer;
+                        vector <float> bufer;
                         copy(begin(signal) + ind, begin(signal) + ind2, back_inserter(bufer));
 
                         auto temp =  min_element(bufer.begin() + (array_of_extrasys.at(0) - ind_vn),

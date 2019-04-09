@@ -59,7 +59,7 @@ void to_merge_peaks( vector< pair<int,pat_name >>* main_peaks,  vector<int>* odd
 bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 
 	bool decision = false;
-	 vector <double>vect0;
+	 vector <float>vect0;
 	//finding of real max value of signal  	
 	if (signal.size() - len_st > 0)
 		st_f = signal.size() - len_st;
@@ -70,8 +70,8 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 
 	//finding of the next peak, its amplitude
 	int max_el = static_cast<int>( distance(vect0.begin(),  max_element(vect0.begin(), vect0.end())));
-	double max_ampl = *( max_element(vect0.begin(), vect0.begin() + max_el));
-	double ampl = vect0.at(max_el);
+	float max_ampl = *( max_element(vect0.begin(), vect0.begin() + max_el));
+	float ampl = vect0.at(max_el);
 	max_el += st_f;
 
 	int d1;
@@ -143,7 +143,7 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 
 			i++;
 		}
-		double rhythm_vf = (static_cast<double>(num_beat)) / 3 * 60;
+		float rhythm_vf = (static_cast<float>(num_beat)) / 3 * 60;
 
 		//part of heart rating analysing
 		if (rhythm_vf > 140 && rhythm_vf < 200)

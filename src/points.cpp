@@ -4,22 +4,22 @@
 #include "LeadII_V.h"
 
 
-void Leads_Info::start_P( vector<double>& bufer,int& ind_start,bool& lost_R_is){
- vector<double> diff_bufer;
+void Leads_Info::start_P( vector<float>& bufer,int& ind_start,bool& lost_R_is){
+ vector<float> diff_bufer;
 int peak;
 size_t start_z = 0;
-double max_del,limit_pq;
+float max_del,limit_pq;
 //finding of peak, its index
 
 peak = P.peak-ind_start;
 if (bufer.size()>3){
 
 //find of start (the derivative will be 0.7 of the maximum)
-	 vector<double> diff_bufer;
+	 vector<float> diff_bufer;
 	for (int i = 1; i < bufer.size(); i++) {
 		diff_bufer.push_back((bufer.at(i) - bufer.at(0)) / i);
 	}
- vector<double>::iterator it =  max_element(diff_bufer.begin(), diff_bufer.end());
+ vector<float>::iterator it =  max_element(diff_bufer.begin(), diff_bufer.end());
 max_del = *it;
 limit_pq = 0.1*max_del;
 //left bound
@@ -33,7 +33,7 @@ for (size_t j = 0;j<peak-2;j++){
     }
 }
 
-double naim =  abs(*(bufer.end()-1) -bufer.at(start_z));
+float naim =  abs(*(bufer.end()-1) -bufer.at(start_z));
 size_t stop_z =bufer.size()-1;
 for(size_t j = bufer.size()-2;j>peak;j--){
     if ( abs(bufer.at(j) -bufer.at(start_z))<naim && naim !=0){
@@ -49,12 +49,12 @@ P.stop = ind_start + stop_z + 2;
 }
 
 
-int Leads_Info::start_of_peak( vector<double>& bufer,const int& start_in_sig,const  string& name){
+int Leads_Info::start_of_peak( vector<float>& bufer,const int& start_in_sig,const  string& name){
 int ind_of_start=0;
- vector<double>::iterator it =  max_element(bufer.begin(),bufer.end());
+ vector<float>::iterator it =  max_element(bufer.begin(),bufer.end());
 size_t ind_peak =static_cast<size_t>( distance(bufer.begin(),it));
 
-double min =  abs((isolinia - bufer.at(0)));
+float min =  abs((isolinia - bufer.at(0)));
 for (size_t i = 1;i<ind_peak;i++){
     if (min> abs(bufer.at(i)-isolinia) && min!=0){
         min =  abs(bufer.at(i)-isolinia);
@@ -78,11 +78,11 @@ if (name =="Q"){
 return ind_of_start;
 }
 
-int Leads_Info::stop_of_peak( vector<double>& bufer,const int& start_in_sig,const  string& name){
+int Leads_Info::stop_of_peak( vector<float>& bufer,const int& start_in_sig,const  string& name){
 
 int ind_peak =  distance(bufer.begin(), max_element(bufer.begin(),bufer.end()));
 int ind_of_stop=ind_peak;
-double min =  abs(isolinia - (bufer.at(ind_peak)));
+float min =  abs(isolinia - (bufer.at(ind_peak)));
 for (int i = ind_peak+1;i<bufer.size();i++){
     if (min> abs(bufer.at(i)-isolinia)){
         min =  abs(bufer.at(i)-isolinia);
@@ -103,10 +103,10 @@ return ind_of_stop;
 
 
 
-void leadII_V::start_T( vector<double>& bufer,int& ind_start){
- vector<double> diff_bufer;
+void leadII_V::start_T( vector<float>& bufer,int& ind_start){
+ vector<float> diff_bufer;
 int peak, start_z = 0;
-double max_del,limit_pq;
+float max_del,limit_pq;
 //finding of peak
 
 peak = T.peak-ind_start;
@@ -116,12 +116,12 @@ if (peak==0)
 for (int i = 1; i < bufer.size(); i++) {
 	diff_bufer.push_back((bufer.at(i) - bufer.at(0)) / i);
 }
- vector <double> abs_diff = abs(diff_bufer);
+ vector <float> abs_diff = abs(diff_bufer);
 if (abs_diff.size()>1){
- vector<double>::iterator it =  max_element(abs_diff.begin(),abs_diff.end());
+ vector<float>::iterator it =  max_element(abs_diff.begin(),abs_diff.end());
 max_del = *it;
 limit_pq = 0.05*max_del;
-double naim;
+float naim;
 //left bound
 if (peak  >=diff_bufer.size())
     peak = diff_bufer.size() -1;

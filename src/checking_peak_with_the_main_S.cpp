@@ -73,7 +73,7 @@ void one_lead::testing_of_SS()
 			if (ind_of_last_extrasystole < peak3)
 			{
 				while (peak2 != 0 && peak3 != 0 &&  abs(peak2 - peak3) < average_R && (peak1 - peak2) > average_R
-					&& static_cast<double>(peak2 - peak3) / (peak1 - peak2) < 0.75 && peak1 - peak3 < (2 + count_cur / 2.0)*0.9*average_R) {
+					&& static_cast<float>(peak2 - peak3) / (peak1 - peak2) < 0.75 && peak1 - peak3 < (2 + count_cur / 2.0)*0.9*average_R) {
 					count_cur++;
 					if (type_of_P(peak2 - static_cast<int>(Fs*QRS.height)) == -1) {
 						ADD_EXRASYS(A_b);
@@ -94,14 +94,14 @@ void one_lead::testing_of_SS()
 				}
 			}
 			//vectricular extrasystole
-			if (!R_v.empty() && static_cast<double>((peak1 - peak2) / (peak2 - peak3)) < 1.2 &&
-				static_cast<double>((peak1 - peak2) / (peak2 - peak3)) < 1 / 1.2  && ind_of_last_extrasystole < peak2)
+			if (!R_v.empty() && static_cast<float>((peak1 - peak2) / (peak2 - peak3)) < 1.2 &&
+				static_cast<float>((peak1 - peak2) / (peak2 - peak3)) < 1 / 1.2  && ind_of_last_extrasystole < peak2)
 			{
 				int dist = set_indices(peak2, count_iter, mem, mem_sdvig);
 				if (dist - static_cast<int>(Fs*QRS.height) < signal.size() && dist - static_cast<int>(Fs*QRS.height) < signal.size())
 				{
-					double diff =  abs(signal.at(dist) - * min_element(signal.begin() + dist - static_cast<int>(Fs*QRS.height / 2), signal.begin() + dist)); 
-					double diff2 =  abs(signal.at(dist) - * min_element(signal.begin() + dist, signal.begin() + dist + static_cast<int>(Fs*QRS.height) / 2)); 
+					float diff =  abs(signal.at(dist) - * min_element(signal.begin() + dist - static_cast<int>(Fs*QRS.height / 2), signal.begin() + dist)); 
+					float diff2 =  abs(signal.at(dist) - * min_element(signal.begin() + dist, signal.begin() + dist + static_cast<int>(Fs*QRS.height) / 2)); 
 
 						if ((diff < QRS_hight_min) || (diff2 < QRS_hight_min) && diff2 != 0)
 						{
@@ -119,8 +119,8 @@ void one_lead::testing_of_SS()
 			}
 			/*if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
 			{
-				if (static_cast<double>((peak2 - peak3) / (peak1 - peak2) < 1.2 &&
-					static_cast<double>((peak2 - peak3) / (peak1 - peak2) > 0.8) && ind_of_last_extrasystole < peak3))
+				if (static_cast<float>((peak2 - peak3) / (peak1 - peak2) < 1.2 &&
+					static_cast<float>((peak2 - peak3) / (peak1 - peak2) > 0.8) && ind_of_last_extrasystole < peak3))
 				{
 					ADD_EXRASYS(V_b);
 				}

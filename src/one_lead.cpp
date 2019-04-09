@@ -29,7 +29,7 @@ const leads_name one_lead:: get_lead_name() const
 {
 	return type_of_lead;
 }
-vector<double>*  one_lead::get_signal(char* type_signal)
+vector<float>*  one_lead::get_signal(char* type_signal)
 {
 	if (type_signal == "O")
 		return &signal;

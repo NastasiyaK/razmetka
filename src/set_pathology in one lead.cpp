@@ -225,7 +225,7 @@ vector<int> check_SV_A_extras(vector<int>& array_of_peak_R, int ind_of_last_extr
 	int count_cur = 0;
 	if (ind_of_last_extrasystole < peak3) {
 		while (peak2 != 0 && peak3 != 0 && abs(peak2 - peak3) < average_R && (peak1 - peak2) > average_R
-			   && static_cast<double>(peak2 - peak3) / (peak1 - peak2) < 0.75 &&
+			   && static_cast<float>(peak2 - peak3) / (peak1 - peak2) < 0.75 &&
 			   peak1 - peak3 < (2 + count_cur / 2.0) * 1.05 * average_R) {
 			count_cur++;
 			//if (type_of_P(peak2) > 0) {
