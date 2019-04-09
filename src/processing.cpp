@@ -7,7 +7,7 @@
 
 //extern float fusion_window_sec;
 
-bool& one_lead::processing_lead(float& sam, bool& signal_new_peak) 
+void one_lead::processing_lead(float& sam)
 {
 	if (count == 1664)
 		int a = 1;
@@ -30,9 +30,6 @@ bool& one_lead::processing_lead(float& sam, bool& signal_new_peak)
 
 	count++;
 
-
-	bool res_finding_of_peak = 0;
-	
 	try{
 		deriv_of_signal(sam);
 		
@@ -112,5 +109,7 @@ bool& one_lead::processing_lead(float& sam, bool& signal_new_peak)
 		exit(1);
 
 	}
-	return signal_new_peak;
+
 }
+
+

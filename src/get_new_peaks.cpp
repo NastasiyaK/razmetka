@@ -109,7 +109,6 @@ inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>&
 void leadII_V::get_new_peaks()
 {
 
-
     count = ptr_all_leads->temp_leads.at(1)->get_count();
 	if (!check_VT())
 	{
@@ -194,8 +193,8 @@ void leadII_V::get_new_peaks()
 						//bool res = check_last_four_peaks( clean_peaks, average_R);
 						bool res_e = check_SV_A_extrasustole( clean_peaks, average_R);
 
-						//if (!res)
-							rhythm(type_sample_des, R_s);
+
+                        rhythm(type_sample_des, R_s);
 						if (res_e)
 							type_sample_des.second = E;
 
@@ -207,7 +206,6 @@ void leadII_V::get_new_peaks()
 						}
 
 						push_el(clean_peaks, type_sample_des,n_peaks);
-
 
 
 

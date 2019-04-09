@@ -61,7 +61,8 @@ public:
      *  - analysis of peak's type
      *  - set info about current new peak
      */
-	bool& processing_lead(float& sam, bool&);
+
+	void processing_lead(float& sam);
 	/**
 	 *
 	 * @return a current index of analysing signal

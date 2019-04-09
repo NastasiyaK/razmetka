@@ -113,7 +113,7 @@ protected:
 
     //for rhythm
     vector<int>last_points;
-    int N_last_points;
+    int N_last_points = 0;
     int last_peak_for_rhythm;
     float current_rhythm;
 

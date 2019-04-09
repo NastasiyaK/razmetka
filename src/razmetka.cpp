@@ -15,7 +15,6 @@
 #include "LeadII_V.h"
 
 
-//int All_Leads::count_leads = 0;
 int All_Leads::count_leads = 0;
 int Leads_Info::N_leads = 1;
 float Leads_Info::Fs = 257;
@@ -87,20 +86,20 @@ void test_leadII()
 	float c = 0;
 	bool res;
 	if (N_leads ==12) {
-        for (int k = 0; k < n; k++) {
-           if (k == 1666)
-             int a = 1;
 
-            for (int i = 0; i < 12; i++) {
-              if (i == 2)
-                  int a = 1;
-                array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k), res);
-               cout << i << endl;
+        for (int k = 0; k < n; k++) {
+        cout<< k << endl;
+          for (int i = 0; i < 12; i++) {
+              array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k));
+
+          }
+
+            if (k == 1666)
+            {
+                int b = 1;
             }
 
-            cout << k << endl;
-
-            lead2.get_new_peaks();
+        lead2.get_new_peaks();
         }
     }
     if (N_leads == 1) {
@@ -109,7 +108,7 @@ void test_leadII()
                 int a = 1;
 
 
-            array_of_leads.At(1)->processing_lead(leads_samples.at(1).at(k), res);
+            array_of_leads.At(1)->processing_lead(leads_samples.at(1).at(k));
 
 
             //cout << k << endl;
