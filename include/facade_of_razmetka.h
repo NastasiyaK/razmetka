@@ -25,45 +25,45 @@ public:
      * @return array of QRS (a number of waves)
      */
 
-    vector<wave>* get_R();
+    vector<wave> get_R();
 
     /**
      * Gets data
      * @return array of P (a number of waves)
      */
 
-    vector<wave>* get_P();
+    vector<wave> get_P();
 
     /**
      * Gets data
      * @return array of S (a number of waves)
      */
 
-    vector<wave>* get_S();
+    vector<wave> get_S();
     /**
      * Gets data
      * @return array of Q(a number of waves)
      */
 
-    vector<wave>* get_Q();
+    vector<wave> get_Q();
     /**
      * Gets data
      * @return array of T (a number of waves)
      */
 
-    vector<wave>* get_T();
+    vector<wave> get_T();
     /**
      * Gets data
      * @return array of ST (a number of waves)
      */
 
-    vector<segment_ST>* get_ST();
+    vector<segment_ST> get_ST();
     /**
      * Gets data
      * @return array of structure which contains info about pathlogies
      */
 
-    list_of_output_pathlogies* get_pathlogies();
+    list_of_output_pathlogies& get_pathlogies();
 
 
 

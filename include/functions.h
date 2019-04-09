@@ -3,7 +3,8 @@
 
 #include <algorithm>
 #include "add_structs.h"
-
+#include "ouput_struct_of_pathlogies.h"
+#include "pat_storage.h"
 using namespace std;
 
 
@@ -75,3 +76,11 @@ void push_el( vector <  pair<int, pat_name >> &,int, pat_name , const size_t);
 int set_indices(int, const int&, size_t&, const size_t&);
 void set_indices(int&, int&, int&, const int&, size_t&, const size_t&);
 
+/**
+ * @brief creates list of pathologies for output
+ * @param int index_start_wave_copy is the last possible point in the storage
+ * @param pathologies is a storage of pathology
+ * @list is a structure which stores info about apthlogies for output
+ */
+
+list_of_output_pathlogies& create_list_of_pathlogies(unsigned int index_start_wave_copy, my_map& pathologies, list_of_output_pathlogies& list );

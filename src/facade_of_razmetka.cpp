@@ -54,31 +54,31 @@ void facade_of_razmetka::set_new_signal(float* new_data){
 };
 
 
-vector<wave>* facade_of_razmetka::get_R(){
+vector<wave> facade_of_razmetka::get_R(){
     return lead2->get_R();
 }
 
-vector<wave>* facade_of_razmetka::get_P(){
+vector<wave> facade_of_razmetka::get_P(){
     return lead2->get_P();
 }
 
-vector<wave>* facade_of_razmetka::get_S(){
+vector<wave> facade_of_razmetka::get_S(){
     return lead2->get_S();
 }
 
-vector<wave>* facade_of_razmetka::get_Q(){
+vector<wave> facade_of_razmetka::get_Q(){
     return lead2->get_Q();
 }
 
-vector<wave>* facade_of_razmetka::get_T(){
+vector<wave> facade_of_razmetka::get_T(){
     return lead2->get_T();
 }
 
-vector<segment_ST>* facade_of_razmetka::get_ST(){
+vector<segment_ST> facade_of_razmetka::get_ST(){
     return lead2->get_ST();
 }
 
-list_of_output_pathlogies* facade_of_razmetka::get_pathlogies(){
-    return lead2->get_pathlogies();
+list_of_output_pathlogies& facade_of_razmetka::get_pathlogies(){
+    return lead2->get_pathologies();
 }
 

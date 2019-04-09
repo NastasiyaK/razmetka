@@ -3,6 +3,11 @@
 using  namespace std;
 
 struct list_of_output_pathlogies {
+    list_of_output_pathlogies(){};
+    ~list_of_output_pathlogies()
+    {
+        delete[] data;
+    };
 
     unsigned int V_beat = 0;    //<several beats, their number
     unsigned int SV_beat = 0;

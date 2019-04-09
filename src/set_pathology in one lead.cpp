@@ -79,8 +79,7 @@ void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 	N_peaks_fibr++;
 	if (array_of_RR.size() >= win_fibr && N_peaks_fibr >= win_fibr)
 	{
-		//vector<int>intervals(win_fibr);
-		//adjacent_difference(array_of_peak_R.end() - win_fibr, array_of_peak_R.end(), intervals.begin());
+
 		bool afibr_decision = fibr(array_of_RR);
 		push_el(afibr_decision_memory, afibr_decision, n_peaks);	
 
@@ -142,8 +141,10 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 	
 	if (new_pair.second == N_b)
 	{
-		if (R_s.size() >= win_fibr)
-        	check_Afibr(R_peak_for_fibr, *(R_s.end()-win_fibr));
+		if (R_s.size() >= win_fibr) {
+			check_Afibr(R_peak_for_fibr, *(R_s.end() - win_fibr));
+			index_start_wave_copy = *(R_s.end() - win_fibr);
+		}
 		check_BlockII(R_s, ind_of_last_extrasystole);
 		set_peaks(new_pair.first);
 		check_WPW(R_v);
@@ -175,7 +176,7 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 	{
 		if (R_v.size() > 0)
 			if (pathology_signal.ventr_comlex == 0)
-				path_mathods.insert(pathologies, (R_v.end() - 1)->peak, SVT, n_peaks);
+				path_mathods.insert(pathologies, (R_v.end() - 1)->peak, SVTA, n_peaks);
 			else
 				path_mathods.insert(pathologies, (R_v.end() - 1)->peak, VT, n_peaks);
 	}
@@ -207,7 +208,7 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 		path_mathods.erase(pathologies, BLOCKII, count - 2*Fs);
 	}
 
-	if (path_mathods.find(pathologies, SVT) - count > Fs)
+	if (path_mathods.find(pathologies, SVTA) - count > Fs)
 	{
 		path_mathods.erase(pathologies, WPW, count - Fs);
 	}
@@ -227,13 +228,10 @@ vector<int> check_SV_A_extras(vector<int>& array_of_peak_R, int ind_of_last_extr
 		while (peak2 != 0 && peak3 != 0 && abs(peak2 - peak3) < average_R && (peak1 - peak2) > average_R
 			   && static_cast<float>(peak2 - peak3) / (peak1 - peak2) < 0.75 &&
 			   peak1 - peak3 < (2 + count_cur / 2.0) * 1.05 * average_R) {
+
 			count_cur++;
-			//if (type_of_P(peak2) > 0) {
-			//ADD_EXRASYS(A_b);
-			//}
-			//else {
-			//ADD_EXRASYS(SV_b);
-			//}
+
+
 			decision.push_back(peak2);
 			peak2 = 0;
 			array_of_peak_R.erase(array_of_peak_R.end() - 2);
