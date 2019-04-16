@@ -25,7 +25,7 @@ vector<int>* one_lead::get_peaks(char peak)
 	return nullptr;
 
 }
-const leads_name one_lead:: get_lead_name() const
+leads_name one_lead:: get_lead_name() const
 {
 	return type_of_lead;
 }
@@ -51,7 +51,7 @@ int one_lead::get_VT(char* type_signal)
 		return 0;
 
 };
-const int one_lead::get_count()const
+ int one_lead::get_count()const
 {
 	return count;
 }

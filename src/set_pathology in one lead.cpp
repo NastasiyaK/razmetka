@@ -83,11 +83,11 @@ void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 		bool afibr_decision = fibr(array_of_RR);
 		push_el(afibr_decision_memory, afibr_decision, n_peaks);	
 
-		if (afibr_decision_memory.size() > 1 && afibr_decision == 1 && *(afibr_decision_memory.end() - 2) == 1)
+		if (pathology_signal.P_peaks_normal < 3 && afibr_decision_memory.size() > 1 && afibr_decision == 1 && *(afibr_decision_memory.end() - 2) == 1)
 		{
 			if (pathology_signal.AFIb == 0)
 			{
-				path_mathods.insert(pathologies, array_of_RR.at(array_of_RR.size() - win_fibr), AFIBR, n_peaks);
+
 
 				erase(&Q_v, last_point);//array_of_peak_R.at(n_peaks - win_fibr)
 				erase(&P_v, last_point);
@@ -96,7 +96,7 @@ void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 
 				
 			}
-            if (peaks_p_norm < 3 )
+            if (pathology_signal.P_peaks_normal < 3 )
 			    pathology_signal.AFIb++;
 		}else
 		{
@@ -109,11 +109,14 @@ void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 		}
 		N_peaks_fibr = win_fibr - 32;//as window
 	}
+    if (pathology_signal.AFIb > 3){
+        path_mathods.insert(pathologies, array_of_RR.at(array_of_RR.size() - win_fibr), AFIBR, n_peaks);
+    }
 	
 }
 void leadII_V::check_WPW( vector<wave>& R_s)
 {
-	if (!R_s.empty() && ((R_s.end() - 1)->peak - (R_s.end() - 1)->start >= static_cast<int>(QRS.height *Fs/2)-1) &&
+	if (!R_s.empty() && ((R_s.end() - 1)->peak - (R_s.end() - 1)->start > static_cast<int>((QRS.low + QRS.height) *Fs/4)-1) &&
 			(R_s.end() - 1)->start - (R_s.end() - 1)->stop < static_cast<int>(RR.middle*Fs))
 			pathology_signal.WPW++;
 		else
@@ -200,7 +203,8 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 		path_mathods.insert(pathologies, count, AS, n_peaks);
 	}
 
-		
+
+
 		
 		
 	if( abs(path_mathods.find(pathologies, AFIBR)-2*count) > Fs)

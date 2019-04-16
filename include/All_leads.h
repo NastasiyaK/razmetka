@@ -29,7 +29,7 @@ public:
 	virtual ~All_Leads();
 
 	///to get time of a lead
-	const int time();
+	 int time();
 
 	///to get one lead
 	one_lead* At(const int i);

@@ -14,10 +14,17 @@ struct Type_Of_Beats
 
 };
 
+pair<int,pat_name > min_delta(const vector<pair<int,pat_name > >* data, const int peak){
+    pair<int, pat_name> data_min_dalta = make_pair(-peak,No);
 
-#define CHECK_FIELDS(field,type)   \
-if (field == type){ \
-type_of_beats.field++; }\
+    for (size_t i = 0; i < min(data->size(),(size_t)6); i++ )
+    {
+        if (abs(data->at(i).first - peak) < abs(data_min_dalta.first - peak)) {
+            data_min_dalta = data->at(i);
+        }
+    }
+     return data_min_dalta;
+}
 
 #define CHECK_TYPE( type_of_beats,type); \
 switch (type) \
@@ -53,7 +60,7 @@ des = #T1; \
 
 
 
-inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>& array_of_new_peaks,const int& Fs,int N_leads,float fusion_window_sec)
+  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>& array_of_new_peaks,const int& Fs,int N_leads,float fusion_window_sec)
 {
     int NUM_PEAKS = 0;
 	int _num_of_leads = 0;
@@ -96,7 +103,7 @@ inline  pair< int,  pat_name> in_window( vector< deque< pair< int, pat_name> >>&
 		}
 
 	}
-	if (NUM_PEAKS < _num_of_leads/2 || NUM_PEAKS < N_leads/2-2)
+	if (NUM_PEAKS < 2*_num_of_leads/3 || NUM_PEAKS < N_leads/2-2)
 	    sum = 0;
 	char* des;
 	pat_name patho;
@@ -114,6 +121,8 @@ void leadII_V::get_new_peaks()
 	{
 		 deque< pair<int,  pat_name >> new_peaks;
 		 vector< deque< pair<int,  pat_name >>> new_peaks_of_all_leads;
+
+
 		static int _last_peak = 0;
 		int point_II = 0;
 		pat_name pat_II;
@@ -129,7 +138,7 @@ void leadII_V::get_new_peaks()
 			if (abs(_sample_of_new_iteration - _last_peak) > ptr_info_new_peak->fusion_window_sec *Fs / 2 )
 			for (int i = 0; i < N_leads; i++)
 			{
-			    auto type = ptr_all_leads->temp_leads.at(i)->get_lead_name();
+			    leads_name type = ptr_all_leads->temp_leads.at(i)->get_lead_name();
 
 				vector_pair* ptr_vector_new_peaks = ptr_all_leads->temp_leads.at(i)->get_peaks("all peaks");
 
@@ -142,22 +151,25 @@ void leadII_V::get_new_peaks()
 					while (count_peaks <= ptr_vector_new_peaks->size() &&
 						(ptr_vector_new_peaks->end() - count_peaks)->first > (clean_peaks.end() - 1)->first)
 					{
-						//cout << (ptr_vector_new_peaks->end() - count_peaks)->first << endl;
+
 						if (_last_peak < (ptr_vector_new_peaks->end() - count_peaks)->first &&
 							( abs(_sample_of_new_iteration - (ptr_vector_new_peaks->end() - count_peaks)->first) <
 								ptr_info_new_peak->fusion_window_sec*Fs / 2 ||
 								_sample_of_new_iteration > (ptr_vector_new_peaks->end() - count_peaks)->first))
 						{
+                            if (type == II && !new_peaks.empty()) {
+                              auto info_II = min_delta(ptr_vector_new_peaks, _sample_of_new_iteration);
+
+                                point_II = info_II.first;
+                                pat_II = info_II.second;
+                            }
 							new_peaks.push_front(*(ptr_vector_new_peaks->end() - count_peaks));
 						}
 						count_peaks++;
 					}
 				}
 
-				if (type == II && !new_peaks.empty()) {
-					point_II = (new_peaks.end() - 1)->first;
-					pat_II = ( new_peaks.end() - 1 )->second;
-				}
+
 
 				if (!new_peaks.empty())
 					new_peaks_of_all_leads.push_back(new_peaks);
@@ -169,11 +181,13 @@ void leadII_V::get_new_peaks()
 
 			int NUM_OF_PEAK = 0;
 			int count_while = 0;
-			while (!new_peaks_of_all_leads.empty())
+
+            pair< int,  pat_name> type_sample_des = make_pair(0,No);
+			while ( (new_peaks_of_all_leads.size() > 0) )
 			{
 
 				count_while++;
-				auto type_sample_des = in_window(new_peaks_of_all_leads, Fs, N_leads, ptr_info_new_peak->fusion_window_sec);
+				type_sample_des = in_window(new_peaks_of_all_leads, Fs, N_leads, ptr_info_new_peak->fusion_window_sec);
 
 
 				if (clean_peaks.empty() ||
@@ -190,9 +204,7 @@ void leadII_V::get_new_peaks()
 							type_sample_des.second = pat_II;
 
 						}
-						//bool res = check_last_four_peaks( clean_peaks, average_R);
 						bool res_e = check_SV_A_extrasustole( clean_peaks, average_R);
-
 
                         rhythm(type_sample_des, R_s);
 						if (res_e)
@@ -205,7 +217,10 @@ void leadII_V::get_new_peaks()
 							push_el(R_peak_for_fibr,(type_sample_des.first -  (clean_peaks.end() - 1)->first), n_peaks);
 						}
 
-						push_el(clean_peaks, type_sample_des,n_peaks);
+                        if ((clean_peaks.end()-1)->second != N_b && type_sample_des.second == V_b)
+                            *(clean_peaks.end()-1) = type_sample_des;
+                        else
+						    push_el(clean_peaks, type_sample_des,n_peaks);
 
 
 

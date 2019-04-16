@@ -27,15 +27,16 @@ if (ind>0 && ind2>ind)
    
      
 
-	if (P.amplitude > ampl_P_threshold) {
+	if (P.amplitude > ampl_P_threshold && P.amplitude < 1.1 * ampl_P_standart ) {
 		push_el(P_v, P, n_peaks);
-        peaks_p_norm++;
+		pathology_signal.P_peaks_normal++;
+
 		return true;
 
 	}
 
 	 if (P.amplitude < ampl_P_threshold){
-         peaks_p_norm = 0;
+		 pathology_signal.P_peaks_normal = 0;
          flutter(R_s, ptr_signal);
     }
 		return false;

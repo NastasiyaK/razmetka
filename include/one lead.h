@@ -67,12 +67,12 @@ public:
 	 *
 	 * @return a current index of analysing signal
 	 */
-	const int get_count() const;
+	int get_count() const;
 
 	/**
 	 * @return Returns name of current lead (I, II, III, aVF, ...)
 	 */
-    const leads_name get_lead_name() const;
+    leads_name get_lead_name() const;
 
 
 private:

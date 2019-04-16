@@ -94,6 +94,8 @@ string pat_to_string(pat_name pat)
 			return "A_T";
 		case A_B:
 			return "A_B";
+		case SVTA:
+			return "SVTA";
 		default:
 			return "No";
 	}

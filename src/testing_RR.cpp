@@ -45,7 +45,7 @@ bool one_lead::check_ventr_extrasys(vector<float>*signal, const int& peak1, int&
 					ADD_EXRASYS(V_b);
 					return true;
 				}
-				if ((diff < QRS_filtered_min) || (diff2 < QRS_filtered_min)  || ((stop_int - start_int) > Fs*QRS.height ))
+				if ((diff < QRS_filtered_min) || (diff2 < QRS_filtered_min)  || ((stop_int - start_int) > static_cast<int>(Fs*QRS.height) ))
 				{
 					if ((diff < QRS_filtered_min) && (diff2 < QRS_filtered_min )) {
 						array_of_peak_R.erase(array_of_peak_R.end() - 2);
@@ -205,12 +205,16 @@ void one_lead::testing_of_RR()
 				if (ind > 0 && ind2 > ind)
 				{
 					auto temp =  min_element(bufer.begin(), bufer.end());
-					size_t temp_d =  distance(bufer.begin(), temp);
+
+					size_t temp_d =0;
+					if (temp != bufer.end())
+					    temp_d =  distance(bufer.begin(), temp);
+
 					if (temp_d > 0 && bufer.at(temp_d) - isolinia < -0.25*QRS_height &&
 						signal.at(ind + static_cast<int>(Fs*QRS.height)) < 0.6) {
 						extrasystoles.erase(extrasystoles.end() - 1);
 					}
-					if (temp_d >= 0 && temp_d < bufer.size() / 3) {
+					if (temp_d < bufer.size() / 3) {
 						extrasystoles.erase(extrasystoles.end() - 1);
 					}
 				}

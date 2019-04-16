@@ -10,7 +10,7 @@ int one_lead::start_peak(const int &peak, vector<float> *ptr_signal) {
 
     vector<float> bufer;
     int ind, ind2, ind_vn;
-    ind = peak - static_cast<int>(2 * QRS.height * Fs / 3);
+    ind = peak - static_cast<int>(2 * QRS.low * Fs / 3);
     ind2 = peak;
     int start_R = 0;
     set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
@@ -42,11 +42,11 @@ int one_lead::start_peak(const int &peak, vector<float> *ptr_signal) {
         for (i ; i < ind2; i++)
         {
             if ( !_FIND_VAL &&
-                    abs(ptr_signal->at(i) - ptr_signal->at( start_R )) > 0.13 &&
+                    abs(ptr_signal->at(i) - ptr_signal->at( start_R )) > 0.1 &&
                     (abs( ptr_signal->at( start_R ) - isolinia) < 0.2 || abs( ptr_signal->at( start_R ) - 0) < 0.2))
             {
                 _FIND_VAL = true;
-                start_R =  i ;
+                start_R =  i -1;
                 break;
             }
         }

@@ -89,7 +89,7 @@ All_Leads::All_Leads (info_for_new_peak* ptr_info_new_peak, int N)
 
 };
 
-const int All_Leads::time() 
+int All_Leads::time()
 {
 	return count_leads;
 }

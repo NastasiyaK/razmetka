@@ -130,8 +130,9 @@ public:
 private:
     list_of_output_pathlogies list;
     unsigned  int index_start_wave_copy = 0;
-	///The variable stores type of wave P (normal or abnormal)
-    int peaks_p_norm = 0;
+
+	float ampl_P_standart = 0.25;
+
 	///the pointer that points to all leads
 	All_Leads* ptr_all_leads = nullptr;
 	///vector of R peaks only

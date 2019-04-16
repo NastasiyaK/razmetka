@@ -3,6 +3,8 @@ project(razmetka)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -O2 -fPIC")
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 FILE(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.c*)

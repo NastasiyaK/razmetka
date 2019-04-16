@@ -83,7 +83,8 @@ struct Signal{
 	int SBR = 0;
 	int VT = 0;
 	int SVTA = 0;
-		
+	int P_peaks_normal  = 0;
+
 
 };
 

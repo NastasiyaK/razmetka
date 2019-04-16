@@ -22,7 +22,7 @@ size_t Leads_Info::window = static_cast<size_t>(30 * Fs);
 size_t Leads_Info::mem = static_cast<size_t>(Fs * 8 * 60);
 
 void test_one_lead();
-int n = 100000;
+int n = 90000;
  //string input_path = "C:\\Users\\Amantayr\\Documents\\Visual Studio 2015\\Projects\\razmetka\\razmetka\\signals for project\\";
  string input_path = "/home/amantayr/signals for projects/";
 
@@ -42,10 +42,10 @@ int main()
 
 void test_leadII()
 {
+
 	int N_leads = 12;
-	//ofstream output("new_.txt");
-	//output << "fdf"  << endl;
-	ifstream input("I21.txt");
+
+	ifstream input("I52.txt");
 	vector<vector<float>> leads_samples(13);
 
 	float sam = 0;
@@ -83,7 +83,7 @@ void test_leadII()
 
 	leadII_V lead2(II, info_new_peak, N_leads, array_of_leads.At(1)->get_signal("O"), array_of_leads.At(6));
 	lead2.set_all_leads(&array_of_leads);
-	float c = 0;
+
 	bool res;
 	if (N_leads ==12) {
 
@@ -94,7 +94,7 @@ void test_leadII()
 
           }
 
-            if (k == 1666)
+            if (k == 5000)
             {
                 int b = 1;
             }
@@ -104,7 +104,7 @@ void test_leadII()
     }
     if (N_leads == 1) {
         for (int k = 1; k < n; k++) {
-            if (k == 1100)
+            if (k == 48500)
                 int a = 1;
 
 
