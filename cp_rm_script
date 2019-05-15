@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd cmake-build-debug/
+rm -r Results
+cd ..
+cp -r Results cmake-build-debug/
