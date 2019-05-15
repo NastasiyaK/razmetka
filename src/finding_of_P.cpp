@@ -27,7 +27,7 @@ if (ind>0 && ind2>ind)
    
      
 
-	if (P.amplitude > ampl_P_threshold && P.amplitude < 1.1 * ampl_P_standart ) {
+	if (abs(P.amplitude) > ampl_P_threshold && abs(P.amplitude) < 1.1 * ampl_P_standart ) {
 		push_el(P_v, P, n_peaks);
 		pathology_signal.P_peaks_normal++;
 

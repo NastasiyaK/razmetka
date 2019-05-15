@@ -81,37 +81,31 @@ void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 	{
 
 		bool afibr_decision = fibr(array_of_RR);
-		push_el(afibr_decision_memory, afibr_decision, n_peaks);	
+		push_el(afibr_decision_memory, afibr_decision, n_peaks);
 
-		if (pathology_signal.P_peaks_normal < 3 && afibr_decision_memory.size() > 1 && afibr_decision == 1 && *(afibr_decision_memory.end() - 2) == 1)
-		{
-			if (pathology_signal.AFIb == 0)
-			{
+        if (pathology_signal.P_peaks_normal < 3 )
+            pathology_signal.AFIb++;
+		//if (pathology_signal.P_peaks_normal < 3 && afibr_decision_memory.size() > 1 && afibr_decision == 1 && *(afibr_decision_memory.end() - 2) == 1)
+        if (pathology_signal.AFIb > 3){
 
-
-				erase(&Q_v, last_point);//array_of_peak_R.at(n_peaks - win_fibr)
-				erase(&P_v, last_point);
-				erase(&T_v, last_point);
-				erase(&ST_v, last_point);
-
+            path_mathods.insert(pathologies, last_point, AFIBR, n_peaks);
+            erase(&Q_v, last_point);//array_of_peak_R.at(n_peaks - win_fibr)
+            erase(&P_v, last_point);
+            erase(&T_v, last_point);
+            erase(&ST_v, last_point);
 				
-			}
-            if (pathology_signal.P_peaks_normal < 3 )
-			    pathology_signal.AFIb++;
-		}else
-		{
-			if (afibr_decision_memory.size() > 1 && afibr_decision == 0 && pathology_signal.AFIb != 0) 
-			{
-				path_mathods.insert(pathologies, last_point, no_AFIBR, n_peaks);
-				pathology_signal.AFIb = 0;
-			}
+        }
+
+        if (afibr_decision_memory.size() > 1 && !afibr_decision && pathology_signal.AFIb != 0)
+        {
+            path_mathods.insert(pathologies, last_point, no_AFIBR, n_peaks);
+            pathology_signal.AFIb = 0;
+        }
 			
-		}
+
 		N_peaks_fibr = win_fibr - 32;//as window
 	}
-    if (pathology_signal.AFIb > 3){
-        path_mathods.insert(pathologies, array_of_RR.at(array_of_RR.size() - win_fibr), AFIBR, n_peaks);
-    }
+
 	
 }
 void leadII_V::check_WPW( vector<wave>& R_s)
@@ -159,8 +153,10 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 			for (int j = 1; j < _extrasystoles.size(); j++)
 			{
 				for (int i = 1; i < 5; i++) {
-					if (_extrasystoles.at(j) == clean_peaks.at(i).first)
-						clean_peaks.at(i).second = E;
+					if (_extrasystoles.at(j) == clean_peaks.at(i).first){
+
+					}
+						//clean_peaks.at(i).second = E;
 
 				}
 		}

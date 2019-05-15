@@ -16,11 +16,11 @@ struct Type_Of_Beats
 
 pair<int,pat_name > min_delta(const vector<pair<int,pat_name > >* data, const int peak){
     pair<int, pat_name> data_min_dalta = make_pair(-peak,No);
-
+	int data_size = data->size();
     for (size_t i = 0; i < min(data->size(),(size_t)6); i++ )
     {
-        if (abs(data->at(i).first - peak) < abs(data_min_dalta.first - peak)) {
-            data_min_dalta = data->at(i);
+        if (abs(data->at(data_size-1 - i).first - peak) < abs(data_min_dalta.first - peak)) {
+            data_min_dalta = data->at(data_size - i - 1);
         }
     }
      return data_min_dalta;
@@ -84,7 +84,7 @@ des = #T1; \
 		{
 			
 			if (!array_of_new_peaks.at(i).empty() &&  abs(array_of_new_peaks.at(i).begin()->first - 
-				array_of_new_peaks.at(0).begin()->first) < 2*Fs * fusion_window_sec/3 )
+				array_of_new_peaks.at(0).begin()->first) < Fs * fusion_window_sec )
 			{
 				NUM_PEAKS++;
 				sum += array_of_new_peaks.at(i).begin()->first;
@@ -103,7 +103,7 @@ des = #T1; \
 		}
 
 	}
-	if (NUM_PEAKS < 2*_num_of_leads/3 || NUM_PEAKS < N_leads/2-2)
+	if ( NUM_PEAKS < _num_of_leads/2 || _num_of_leads < N_leads/2)
 	    sum = 0;
 	char* des;
 	pat_name patho;
@@ -136,44 +136,45 @@ void leadII_V::get_new_peaks()
 			int _sample_of_new_iteration = ptr_info_new_peak->get_sample();
 			int count_peaks = 1;
 			if (abs(_sample_of_new_iteration - _last_peak) > ptr_info_new_peak->fusion_window_sec *Fs / 2 )
-			for (int i = 0; i < N_leads; i++)
-			{
-			    leads_name type = ptr_all_leads->temp_leads.at(i)->get_lead_name();
+			for (int i = 0; i < 12; i++) {
+                if (ptr_all_leads->temp_leads.at(i) != nullptr) {
+                    leads_name type = ptr_all_leads->temp_leads.at(i)->get_lead_name();
 
-				vector_pair* ptr_vector_new_peaks = ptr_all_leads->temp_leads.at(i)->get_peaks("all peaks");
+                    vector_pair *ptr_vector_new_peaks = ptr_all_leads->temp_leads.at(i)->get_peaks("all peaks");
 
-				//because of we take the third peak
-				count_peaks = 3;
-				new_peaks.clear();
-				if (ptr_vector_new_peaks != nullptr && !ptr_vector_new_peaks->empty())
-				{
+                    //because of we take the third peak
+                    count_peaks = 3;
+                    new_peaks.clear();
+                    if (ptr_vector_new_peaks != nullptr && !ptr_vector_new_peaks->empty()) {
 
-					while (count_peaks <= ptr_vector_new_peaks->size() &&
-						(ptr_vector_new_peaks->end() - count_peaks)->first > (clean_peaks.end() - 1)->first)
-					{
+                        while (count_peaks <= ptr_vector_new_peaks->size() &&
+                               (ptr_vector_new_peaks->end() - count_peaks)->first > (clean_peaks.end() - 1)->first)
+                        {
 
-						if (_last_peak < (ptr_vector_new_peaks->end() - count_peaks)->first &&
-							( abs(_sample_of_new_iteration - (ptr_vector_new_peaks->end() - count_peaks)->first) <
-								ptr_info_new_peak->fusion_window_sec*Fs / 2 ||
-								_sample_of_new_iteration > (ptr_vector_new_peaks->end() - count_peaks)->first))
-						{
-                            if (type == II && !new_peaks.empty()) {
-                              auto info_II = min_delta(ptr_vector_new_peaks, _sample_of_new_iteration);
+                            if (_last_peak < (ptr_vector_new_peaks->end() - count_peaks)->first &&
+                                (abs(_sample_of_new_iteration - (ptr_vector_new_peaks->end() - count_peaks)->first) <
+                                 ptr_info_new_peak->fusion_window_sec * Fs / 2 ||
+                                 _sample_of_new_iteration > (ptr_vector_new_peaks->end() - count_peaks)->first))
+                            {
+                            	
+                                if (type == II && !new_peaks.empty())
+                                {
+                                    auto info_II = min_delta(ptr_vector_new_peaks, _sample_of_new_iteration);
 
-                                point_II = info_II.first;
-                                pat_II = info_II.second;
+                                    point_II = info_II.first;
+                                    pat_II = info_II.second;
+                                }
+                                new_peaks.push_front(*(ptr_vector_new_peaks->end() - count_peaks));
                             }
-							new_peaks.push_front(*(ptr_vector_new_peaks->end() - count_peaks));
-						}
-						count_peaks++;
-					}
-				}
+                            count_peaks++;
+                        }
+                    }
 
 
-
-				if (!new_peaks.empty())
-					new_peaks_of_all_leads.push_back(new_peaks);
-			}
+                    if (!new_peaks.empty())
+                        new_peaks_of_all_leads.push_back(new_peaks);
+                }
+            }
 			if (!new_peaks.empty())
 				_last_peak = (new_peaks.end() - 1)->first;
 
@@ -194,7 +195,7 @@ void leadII_V::get_new_peaks()
 					!(clean_peaks.empty() && type_sample_des.first > (clean_peaks.end() - 1)->first)) {
                     if (clean_peaks.empty() ||
                         (!clean_peaks.empty() &&
-                         (type_sample_des.first - (clean_peaks.end() - 1)->first) > (length.T_middle + length.ST_seg) * Fs))
+                         (type_sample_des.first - (clean_peaks.end() - 1)->first) > 0.8*(length.T_middle + length.ST_seg + QRS.height/2) * Fs))
                     {
                         if (clean_peaks.size() == 1 && clean_peaks.at(0).first == 0)
                             clean_peaks.clear();
@@ -217,23 +218,23 @@ void leadII_V::get_new_peaks()
 							push_el(R_peak_for_fibr,(type_sample_des.first -  (clean_peaks.end() - 1)->first), n_peaks);
 						}
 
-                        if ((clean_peaks.end()-1)->second != N_b && type_sample_des.second == V_b)
+                        if ((clean_peaks.end()-1)->second != N_b && type_sample_des.second == V_b &&
+                                abs( (clean_peaks.end()-1)->first - type_sample_des.first ) < Fs * RR.middle /3 )
                             *(clean_peaks.end()-1) = type_sample_des;
                         else
-						    push_el(clean_peaks, type_sample_des,n_peaks);
+                            push_el(clean_peaks, type_sample_des,n_peaks);
 
+                        if (type_sample_des.first !=0) {
+                            if (type_sample_des.second == N_b) {
+                                if (!R_s.empty())
+                                    len_R = abs(*(R_s.end() - 1) - type_sample_des.first);
+                                else
+                                    len_R = RR.middle * Fs;
 
-
-                        if (type_sample_des.second == N_b)
-                        {
-                            if (!R_s.empty())
-                                len_R = abs (*(R_s.end() - 1) - type_sample_des.first);
-                            else
-                                len_R = RR.middle * Fs;
-
-                            push_el(R_s,type_sample_des.first,n_peaks);
+                                push_el(R_s, type_sample_des.first, n_peaks);
+                            }
+                            set_pathology(*(clean_peaks.end() - 1), R_s);
                         }
-                        set_pathology(*(clean_peaks.end() - 1), R_s);
 
                     }
                 }

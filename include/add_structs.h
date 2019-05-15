@@ -8,10 +8,11 @@
 
 using namespace std;
 ///This structure describes all types of the pathologies, which are analyzed and all types of leads
+//A = 6; V = 1; SB = 2;
 enum pat_name {N_b, V_b, SV_b, VT, E, WPW, A_b, AFIBR, no_AFIBR, VFIBR, no_VFIBR, AFl, SVTA, BLOCKII, V_T, V_B, SBR, no_VT,No, AS, A_B,A_T, SV_B, SV_T  };
 
 ///This structure contains all types of leads
-enum leads_name { I, II, III, aVR, aVL, aVF, v1, v2, v3, v4, v5, v6 };
+enum leads_name { I, II, III, aVR, aVL, aVF, v1, v2, v3, v4, v5, v6, None };
 
 /*
  * these marks is denoting a containers for using of pathologies

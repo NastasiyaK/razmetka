@@ -84,3 +84,21 @@ void set_indices(int&, int&, int&, const int&, size_t&, const size_t&);
  */
 
 list_of_output_pathlogies& create_list_of_pathlogies(unsigned int index_start_wave_copy, my_map& pathologies, list_of_output_pathlogies& list );
+
+/**
+ * @brief sometimes it is easy to make a Ventricular extrasystole as others.
+ * @param delta  - for finding minimum
+ * @return decision of forme of peak
+ */
+bool check_diffic_ventr(vector<float >* signal, const int& peak2, float delta);
+
+
+/**
+ * @brief This awful function explores outliers in the signal near peak and counts a number of
+ * peaks that cross a threshold which contains in the space razmetka.
+ *
+ * @param QRS_length - the parameter provides estimates for duration between extremums
+ * @param QRS_amplitude  - in the case of splitting QRS
+ * @return a decision about aoutliers
+ */
+bool casual_outliers(vector<float>* signal, const size_t peak, const int QRS_length, const float QRS_amplitude, const int diff_last);

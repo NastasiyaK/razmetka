@@ -63,6 +63,8 @@ if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
 	}
 	
     min_point =  min_element(bufer.begin(),bufer.begin()+bufer.size()/2);
+	if (current_amplitude < isolinia_here)
+		isolinia_here = 0;
     int min_point_ind = static_cast<int>( distance(bufer.begin(),min_point)+ind_vn);
     float k = (current_amplitude -*min_point)/(peak - min_point_ind);
     float b = current_amplitude - k*(peak);

@@ -9,4 +9,4 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 FILE(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.c*)
 
-add_executable(razmetka ${SOURCE_FILES} src/LeadII_getters.cpp include/ouput_struct_of_pathlogies.h src/create_list_of_pathlogies.cpp)
+add_executable(razmetka ${SOURCE_FILES} src/LeadII_getters.cpp include/ouput_struct_of_pathlogies.h src/create_list_of_pathlogies.cpp src/splitting_of_peak.cpp src/casual_outliers.cpp)

@@ -74,35 +74,29 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 	float ampl = vect0.at(max_el);
 	max_el += st_f;
 
-	int d1;
-	int max_el2 = (count_iter == 0) ? (max_el) : (max_el + (count_iter - 1)*(mem)+mem_sdvig);
-
-	if (max_el2 - static_cast<int>(QRS.height*Fs) <0)
-		d1 = max_el2;
+	size_t d1 = 0;
+	if (max_el - static_cast<int>(QRS.height*Fs) < 0)
+		d1 = max_el;
 	else
 		d1 = static_cast<int>(QRS.low*Fs);
 
 	//peak is saved if min value between other peaks enough good
 	auto min1 =  min_element(filter_signal.begin() + max_el - d1, filter_signal.begin() + max_el);
-	if (max_el + d1 > filter_signal.size())
-		d1 = static_cast<int>(filter_signal.size() - 1);
-	else
-		d1 = max_el + d1;
-
-	//auto min2 =  min_element(filter_signal.begin() + max_el, filter_signal.begin() + d1);
-
-	max_el = (count_iter == 0) ? (max_el) : (max_el + (count_iter - 1)*(mem)+mem_sdvig);
+	
 
 	int extras_last = 0;
-	if (!list_extrasys.empty())
+	if ( !list_extrasys.empty() )
 		extras_last = set_indices(*(list_extrasys.end()-1), count_iter, mem, mem_sdvig);
 
 
 	if ( abs(ampl - *min1)>QRS_hight_min && extras_last >= 0 && extras_last < filter_signal.size() &&
 	ampl > 0.3*filter_signal.at(extras_last))
 	{
+		max_el = (count_iter == 0) ? (max_el) : (max_el + (count_iter - 1)*(mem)+mem_sdvig);
+		
 		if (list_extrasys.size() == 0 || ( abs(max_el - *(list_extrasys.end() - 1)) > 2 * QRS.height*Fs))
 		{
+			
 			push_el(list_extrasys, max_el, n_peaks);
 			push_el(list_ampl, max_ampl, n_peaks);
 
@@ -146,7 +140,7 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 		float rhythm_vf = (static_cast<float>(num_beat)) / 3 * 60;
 
 		//part of heart rating analysing
-		if (rhythm_vf > 140 && rhythm_vf < 200)
+		if (rhythm_vf > 180 && rhythm_vf < 200)
 
 		{
 			//cout<<type_of_lead<<endl;
@@ -165,6 +159,7 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 		{
 			if (pathology_signal.VT > 0) 
 			{
+				pathology_signal.VT = 0;
 				decision = true;
 				start_vf = 0;
 			}

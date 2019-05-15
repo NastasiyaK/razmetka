@@ -25,6 +25,7 @@ bool one_lead::check_ventr_extrasys(vector<float>*signal, const int& peak1, int&
 
 		{
 			int dist = set_indices(peak2, count_iter, mem, mem_sdvig);
+
 			if (dist - static_cast<int>(Fs*QRS.height / 2) > 0 &&
 				dist + static_cast<int>(Fs*QRS.height / 2) < signal->size())
 			{
@@ -37,6 +38,7 @@ bool one_lead::check_ventr_extrasys(vector<float>*signal, const int& peak1, int&
 				int st_tem = set_indices(start_int, count_iter, mem, mem_sdvig);
 				int st_tem2 = set_indices(stop_int, count_iter, mem, mem_sdvig);
 
+				
 				if (st_tem2 < filter_signal.size() && st_tem > 0  && st_tem < filter_signal.size()
 				&& abs(filter_signal.at(dist) - filter_signal.at(st_tem)) < 0.9 * QRS_filtered_min &&
 								abs(filter_signal.at(dist) - filter_signal.at(st_tem2)) < 0.9 * QRS_filtered_min)
@@ -45,7 +47,8 @@ bool one_lead::check_ventr_extrasys(vector<float>*signal, const int& peak1, int&
 					ADD_EXRASYS(V_b);
 					return true;
 				}
-				if ((diff < QRS_filtered_min) || (diff2 < QRS_filtered_min)  || ((stop_int - start_int) > static_cast<int>(Fs*QRS.height) ))
+
+				if ((diff < QRS_filtered_min) || (diff2 < 0.9 * QRS_filtered_min)  || ((stop_int - start_int) > static_cast<int>(Fs*QRS.height+1) ))
 				{
 					if ((diff < QRS_filtered_min) && (diff2 < QRS_filtered_min )) {
 						array_of_peak_R.erase(array_of_peak_R.end() - 2);
@@ -56,7 +59,14 @@ bool one_lead::check_ventr_extrasys(vector<float>*signal, const int& peak1, int&
 						return true;
 					}
 				}
-
+				if ((diff < average_amplitude.get()/3) || (diff2 < average_amplitude.get()/3)  || ((stop_int - start_int) > static_cast<int>(Fs*QRS.height+1) ))
+				{
+					if ((diff <average_amplitude.get()/3) && (diff2 <average_amplitude.get()/3 )) {
+						array_of_peak_R.erase(array_of_peak_R.end() - 2);
+						peak2 = 0;
+					}
+				}
+				
 			}
 		}
 	return false;
@@ -74,20 +84,13 @@ void one_lead::testing_of_RR()
 			if (filter_signal.at(_first) < QRS_hight_min * 1.5)
 				array_of_peak_R.erase(array_of_peak_R.end()-2);
 			else
-				array_of_peak_R.erase(array_of_peak_R.end()-1);
+			{
+				peaks_with_types.erase(peaks_with_types.end() - 1);
+				array_of_peak_R.erase(array_of_peak_R.end() - 1);
+			}
 
 		}
-
-        /*{
-            int _first = set_indices(*(array_of_peak_R.end() - 2), count_iter, mem, mem_sdvig);
-            int _second = set_indices(*(array_of_peak_R.end() - 1), count_iter, mem, mem_sdvig);
-
-            if (_first > 0 && _second > 0 && _first < filter_signal.size() && _second < filter_signal.size() &&
-            filter_signal.at(_first) < filter_signal.at(_second) )
-                    array_of_peak_R.erase(array_of_peak_R.end()-1);
-                else
-                    array_of_peak_R.erase(array_of_peak_R.end()-2);
-        }*/
+		
     }
 
 
@@ -104,14 +107,22 @@ void one_lead::testing_of_RR()
 		int peak1 = *(array_of_peak_R.end() - 1);
 		int peak2 = *(array_of_peak_R.end() - 2);
 		int peak3 = *(array_of_peak_R.end() - 3);
-
-
+		
+		int temp_peak = set_indices(peak3, count_iter, mem, mem_sdvig);
+		average_amplitude.set(filter_signal.at(temp_peak));
+		
+		if (temp_peak - (int)(Fs*QRS.low) > 0)
+		{
+			diff_last_peak = filter_signal.at(temp_peak) - *min_element(filter_signal.begin() + ( (int)(Fs*QRS.low / 2)),  filter_signal.begin() + temp_peak);
+			if (diff_last_peak > 0.8 * QRS_height)
+				diff_last_peak = QRS_height/2;
+		}
+		
+		
 		//Sometimes it can be other outlers,not a useful peak. this outlier can be noise or arthefact. 
 		//So this amplitude isn't similiar to adjusted amplitudes;
 		if (!(check_peak_amplitudes_max(peak1, peak2, peak3)))
 		{
-			//array_of_peak_R.erase(array_of_peak_R.end() - 2);
-			//peak2 = 0;
 			ADD_EXRASYS(V_b);
 		}
 		if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
@@ -124,26 +135,18 @@ void one_lead::testing_of_RR()
 			}
 
 		}
-
-		//bool res1 = check_last_four_peaks(array_of_peak_R, average_R);
-		bool res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
-
-
-		//going to original signal and checking those peaks
-		if (peak2 != 0)
+		
+			temp_peak = set_indices(peak2, count_iter, mem, mem_sdvig);
+		if (temp_peak != 0)
 		{
-			peak2 = set_indices(*(array_of_peak_R.end() - 2), count_iter, mem, mem_sdvig);
-			auto i =  max_element(signal.begin() + peak2 - (int)(Fs*QRS.height), signal.begin() + peak2);
-			int ind_max_tem = static_cast<int>( distance(signal.begin() + peak2, i));
-
-			if (ind_max_tem +peak2 >0 && signal.size() > peak2 + ind_max_tem &&
-			signal.at(peak2 + ind_max_tem) > signal.at(peak2)) {
-				*(array_of_peak_R.end() - 2) = ind_max_tem + peak2;
-			}
-
-
+			bool split = splitting(temp_peak, &filter_signal, Fs * QRS.height );
+			
+			if (!split)
+				bool res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
 		}
 
+		
+		
 		//mistaken value of peaks (one peak twice)
 		if ((peak1 - peak2) < 3 * Fs*QRS.height)
 		{
@@ -162,12 +165,19 @@ void one_lead::testing_of_RR()
 			while (peak2 != 0 && peak3 != 0 &&  abs(peak2 - peak3) < average_R && (peak1 - peak2) > 0.95 * average_R
 				&& static_cast<float>(peak2 - peak3) / (peak1 - peak2) < 0.75 && peak1 - peak3 < (2 + count_cur / 2.0)*1.05*average_R) {
 				count_cur++;
-				if (type_of_P(peak2) > 0) {
-					ADD_EXRASYS(A_b);
+                int peak_f = set_indices(peak2, count_iter, mem, mem_sdvig);
+                bool ventr = check_diffic_ventr(&filter_signal, peak_f, QRS.low *Fs);
+
+				if ( ! ventr) {
+				   if ( type_of_P(peak2) > 0) { ADD_EXRASYS(A_b);
+
+                   }else {
+				       ADD_EXRASYS(SV_b);
+                   }
 				}
-				else {
-					ADD_EXRASYS(SV_b);
-				}
+				if (ventr)
+                {ADD_EXRASYS(V_b);}
+
 				if (array_of_peak_R.size() >= 2 + count_cur)
 					peak2 = *(array_of_peak_R.end() - (2 + count_cur));
 				else
@@ -180,9 +190,9 @@ void one_lead::testing_of_RR()
 
 			}
 		}
-		res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
+		//res = check_ventr_extrasys(&filter_signal, peak1, peak2, peak3);
 
-		if (extrasystoles.size() > 2)
+		/*if (extrasystoles.size() > 2)
 		{
 			bool n1 = ( abs(ind_of_last_extrasystole - *(extrasystoles.end() - 2)) < 3 * QRS.height*Fs);
 
@@ -219,6 +229,20 @@ void one_lead::testing_of_RR()
 					}
 				}
 			}
-		}
+		}*/
 	} 
+}
+
+
+bool check_diffic_ventr(vector<float >* signal, const int& peak2, float delta){
+
+    if (peak2 > 0 && signal->size() > peak2 + delta)
+    {
+    	int dist = distance(signal->begin(), min_element(signal->begin()+peak2, signal->begin()+peak2 + delta ));
+        float min_amplituda = *min_element(signal->begin()+peak2, signal->begin()+peak2 + delta ) ;
+        if (abs(min_amplituda) > signal->at(peak2))
+            return true;
+    }
+    return false;
+
 }

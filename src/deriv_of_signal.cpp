@@ -12,15 +12,17 @@ void one_lead::deriv_of_signal(float& new_sample) {
 
 	mem_sdvig++;
 	//saving signal:new sample - sample of original signal
-
+	
 	if (signal.size() == mem)
 	{
 		 rotate(signal.begin(), signal.begin() + 1, signal.end());
+
 		*(signal.end() - 1) = new_sample;
 		if (mem_sdvig > mem) {
 			mem_sdvig -= mem;
 			count_iter++;
 		}
+		
 	}else 
 	{
 		signal.push_back(new_sample);
@@ -102,6 +104,6 @@ void one_lead::filter( vector<float>&input,  vector<float>&output, int order)
 	
 	z.erase(z.end() - 1);
 	print(new_sample, "filtered.txt");
-	output.push_back(new_sample);
+	push_el(output,new_sample,mem);
 
 };

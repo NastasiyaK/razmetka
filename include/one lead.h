@@ -82,6 +82,12 @@ private:
      * @return an index of a finish of the peak
      */
     int stop_peak(const int peak, vector<float>* signal);
+	
+    /**
+     * @param otstup defines a possible length of a peak
+     * @return a decision about splitting of the peak;
+     */
+	bool splitting(int peak, vector<float>*signal, const int otstup);
 	/**
      * @param peak index of the peak which is required to analyze
      * @param signal points out to signal
@@ -137,8 +143,7 @@ private:
 	 //these vectors storage some values for R-detection algorithm
 	 vector<float> array_of_pol, vect_of_2part,filter_signal_pol;
      int st = 0;
-	 //vector<float>after_filter, in_ECG,
-
+	 int last_peak_outlier = 0;
 	//Provides such operations as derivatig and filtering
 	void deriv_of_signal(float&);
 	void filter( vector<float>&,  vector<float>&, int);
@@ -174,6 +179,8 @@ private:
 	vector<int>list_extrasys;
 	vector<float>list_ampl;
 	int start_vf = 0;
+	float diff_last_peak = 0.f;
+	float param_limit = 0.f;
 
 };
 

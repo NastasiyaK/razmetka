@@ -11,7 +11,7 @@ void average_value::set(float new_value)
 		sum = 0;
 		for (int i = 0; i < N; i++)
 			sum += list_value[i];
-		sum /= 2*N;
+		sum /= N;
 	}
 
 }

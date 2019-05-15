@@ -106,13 +106,15 @@ void leadII_V::print_all() {
 	count = ptr_all_leads->temp_leads.at(1)->get_count();
 	//if (R_s.size()>1 &&
 	//	*(R_s.end()-1) - 60 * Fs* 2 * minutes>2*Fs * 60)
-	if (count- 60 * Fs* 2 * minutes > 2*Fs * 60)
+	if (count- 60 * Fs * minutes > 2*Fs * 60)
 	{
 		
 		minutes++;
-		int print_min = 2;
+		int print_min = 1;
 		 string path, path_full;
-		int time_find = (count - static_cast<int>(1.3 * print_min * 60 * Fs));
+		 //cout <<count<<endl;
+		int time_find = (count - static_cast<int>(2 * print_min * 60 * Fs));
+		cout <<time_find << " "<< (clean_peaks.end()-1)->first<<endl;
         if (time_find < 0)
             time_find = 0;
 		
@@ -184,21 +186,30 @@ void Leads_Info::print(const my_map& paths, int time_start, int time_stop) const
 
 void Leads_Info::print( pair<int, pat_name>& peaks) const
 {
-	if (peaks.first == 92159)
-		int a = 1;
+
 
 	 string type_string;
 	MAKE_TYPE_LEAD_STRING(type_string, type_of_lead);
 	string path_full;
-	if (peaks.first >8500)
-	    int a = 1;
-	if (peaks.second == N_b)
-	 path_full = where + type_string + "/norm_peaks.txt";
-	else
-		path_full = where + type_string + "/ne_norm_peaks.txt";
 
-	 ofstream output(path_full,  ios::app);
-	//output << peaks.first << ": " << peaks.second << '\n';
+	if (peaks.second == N_b) {
+        path_full = where + type_string + "/norm_peaks.txt";
+    }
+	else {
+        path_full = where + type_string + "/ne_norm_peaks.txt";
+    }
+
+    ofstream output(path_full,  ios::app);
 	output << peaks.first << "\n";
+
+    if (peaks.second != N_b) {
+        path_full = where + type_string + "/ne_norm_peaks_type.txt";
+        ofstream output2(path_full,  ios::app);
+
+        output2 << peaks.first << ": " << peaks.second << '\n';
+    }
+
+
+	//output << peaks.first << "\n";*/
 }
 

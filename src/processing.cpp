@@ -9,8 +9,7 @@
 
 void one_lead::processing_lead(float& sam)
 {
-	if (count == 1664)
-		int a = 1;
+	
 	static int N = 0;
 	if (N_leads == N) 
 	{N = 0;
@@ -55,7 +54,7 @@ void one_lead::processing_lead(float& sam)
 								ptr_info_new_peak->set_is_peak(true);
 								ptr_info_new_peak->set_sample(*(array_of_peak_R.end() - 3));
 								ptr_info_new_peak->set_is_peak(true);
-								print(*(array_of_peak_R.end() - 3), "main_peaks.txt");
+								//print(*(array_of_peak_R.end() - 3), "main_peaks.txt");
 								//for finding of original isolinia;
 								finding_of_P(*(array_of_peak_R.end() - 3));
 							}

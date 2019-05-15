@@ -7,7 +7,7 @@ bool one_lead::finding_of_R() {
 	int temp_d;
 	size_t Npol_P, min_zde;
 	//duration for finding
-	static size_t len_st = (int)((QRS.height*Fs) / 4);
+	static size_t len_st = (int)((QRS.height*Fs) / 2);
 	temp_d = (after_diff_signal.size() - 1);
 	//finding of start positive part
 
@@ -111,8 +111,9 @@ bool one_lead::finding_of_R() {
 						auto temp_iso =  min_element(filter_signal.begin() + new_peak - min_t, filter_signal.begin() + new_peak);
 						isolinia = (*temp_iso) / 2;
 						amplitude_new_peak -= (*temp_iso) / 2;
+						int new_peak_temp = set_indices(new_peak, count_iter, mem, mem_sdvig);
 						if (new_peak - QRS.height > 0)
-							original_isolinia = signal.at(new_peak - QRS.height);
+							original_isolinia = signal.at(new_peak_temp - QRS.height);
 						else
 							original_isolinia = signal.at(0);
 

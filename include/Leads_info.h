@@ -61,22 +61,14 @@ public:
 
 	
 protected:
-	//vector<float> derivatived_signal;
-    //const float T_length = 0.2;
-    //void allorhythm_lead( vector<int>& ,const int,  pat_name);
-    //bool check_peak_R(const int&);
-    //void erase_add(const int a, const int b,  pat_name pat,  pat_name pat2);
-
 	 vector <  pair<int,  string >> all_peaks_in_lead;
-
-
+	 
 	 //Point out vector of original ECG signal
 	 vector<float>* ptr_signal;
-
-
+	 
 
 	//which lead:I,II,...
-	leads_name type_of_lead;
+	leads_name type_of_lead = None;
 	
 
 	const  string where = "Results/";	//for directory with reuslts

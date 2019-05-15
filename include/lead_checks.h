@@ -12,7 +12,7 @@ class average_value
 private:
 	
 	//for analysis used last 3 number
-	const size_t N = 3;
+	const size_t N = 5;
 	float* list_value = new float[N];
 	float sum = 0.f;
 	int  place = 0;
