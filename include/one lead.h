@@ -54,7 +54,7 @@ public:
 	 * @return Returns start of ventricular pathologies or
 	 * 0, when pathology doesn't exist
 	 */
-	int get_VT(char* );
+	int get_VF(char* );
 
     /** Provides processing of signals:
      *  - finding of peaks
@@ -73,9 +73,35 @@ public:
 	 * @return Returns name of current lead (I, II, III, aVF, ...)
 	 */
     leads_name get_lead_name() const;
-
+	
+	
+	///checking	amplitudes of last 3 peaks because of second peak can be a random disturbance
+	bool check_peak_amplitudes_max(int& first_peak, int& second_peak, int& third_peak);
+	
+	///checking	amplitudes of last 3 peaks because of second peak can be extrasystole with other amplitude
+	bool check_peak_amplitudes_min(int& first_peak, int& second_peak, int& third_peak, int type);
+	
+	void get_ptr_mem(int** sdvig, int** count_iter );
 
 private:
+	
+	
+	
+	//storage_of_pathology path_mathods;
+	
+	//Signal pathology_signal;
+	bool finish_vf = 0;
+	float last_rhythm = 0.f;
+	int old_start_vf = 0;
+	int start_vf2 = 0;
+	
+	int stop_of_R(const int peak, bool type);
+	
+	///checks a place of extrasystole comparing with last peak R
+	bool check_extras(const int& new_peak);
+	int start_of_R(const int &peak, float otstup, bool type, vector<float> *use_signal);
+	int mem_sdvig = 0;
+	int count_iter = 0;
     /**
      * @param peak index of the peak which is required to analyze
      * @param signal points out to signal
@@ -144,12 +170,14 @@ private:
 	 vector<float> array_of_pol, vect_of_2part,filter_signal_pol;
      int st = 0;
 	 int last_peak_outlier = 0;
+	 float S_amplitude = 0.f;
 	//Provides such operations as derivatig and filtering
 	void deriv_of_signal(float&);
 	void filter( vector<float>&,  vector<float>&, int);
 
 	//additional vector for filtering
 	 vector<float>z;
+	 bool high_rhythm  = false;
 
 
 	vector< pair<int, pat_name>> peaks_with_types; //Contains peaks with types (N, V and so on)
@@ -167,8 +195,8 @@ private:
 	/*some_sometimes there'ra different type of wave P - it can be as usual, in
 	can be inverted or absented - 1,-1 or 0 */
 	int type_of_P(int start_peak);
-
-
+	
+	bool check_V_forme(vector<pair<int, pat_name>>& peaks, int average_RR);
 
 	/*for ventricular flutter.
 	 * The function provides finding of R;

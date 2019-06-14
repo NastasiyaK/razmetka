@@ -43,15 +43,8 @@ void one_lead::testing_of_SS()
 			//if peaks aren't in order
 			if (*(array_of_peak_R.end() - 2) < *(array_of_peak_R.end() - 3))
 				 swap(*(array_of_peak_R.end() - 2), *(array_of_peak_R.end() - 3));
+			
 
-			//going to original signal and checking those peaks
-			//int peak2 = set_indices(*(array_of_peak_R.end() - 2), count_iter, mem, mem_sdvig);
-			/*auto i =  min_element(signal.begin() + peak2 - (int)(Fs*QRS.height), signal.begin() + peak2);
-			int ind_min_tem = static_cast<int>( distance(signal.begin() + peak2, i));
-			if (signal.at(peak2 + ind_min_tem) < signal.at(peak2)) {
-				*(array_of_peak_R.end() - 2) = ind_min_tem + peak2;
-			}
-*/
 			//for camfortable using
 			int peak1 = *(array_of_peak_R.end() - 1);
 			int peak2 = *(array_of_peak_R.end() - 2);
@@ -117,17 +110,7 @@ void one_lead::testing_of_SS()
 				array_of_peak_R.erase(array_of_peak_R.end() - 2);
 				peak2 = 0;
 			}
-			/*if (!(check_peak_amplitudes_min(peak1, peak2, peak3, 1)))
-			{
-				if (static_cast<float>((peak2 - peak3) / (peak1 - peak2) < 1.2 &&
-					static_cast<float>((peak2 - peak3) / (peak1 - peak2) > 0.8) && ind_of_last_extrasystole < peak3))
-				{
-					ADD_EXRASYS(V_b);
-				}
-				else {
-					ADD_EXRASYS(SV_b);
-				}
-			}*/
+			
 
 		}
 	}

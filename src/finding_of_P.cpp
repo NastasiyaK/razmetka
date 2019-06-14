@@ -11,18 +11,18 @@ int ind,ind2,ind_vn,otstup;
 
 otstup = (lost_R_is) ? abs( 0.9 * average_R) : 0;
 
-ind = peak  - static_cast<int>(length.PQ_int*Fs + (Fs*QRS.low)/2)-otstup;
-ind2 = peak - static_cast<int>((Fs*QRS.height)/2+length.PQ_seg*Fs/2)-otstup;
+ind = peak  - static_cast<int>(length.PQ_int*Fs + (Fs*QRS.height)/2)-otstup;
+ind2 = peak - static_cast<int>((Fs*QRS.height)/2+0.4*length.PQ_seg*Fs)-otstup;
 
-set_indices(ind_vn,ind,ind2,count_iter,mem,mem_sdvig);
+set_indices(ind_vn,ind,ind2,*count_iter,mem, *mem_sdvig);
 
 if (ind>0 && ind2>ind)
 {
-     copy(begin(*ptr_signal)+ind,begin(*ptr_signal)+ind2 ,back_inserter(bufer));
+	copy(begin(*ptr_signal)+ind,begin(*ptr_signal)+ind2 ,back_inserter(bufer));
     it =  max_element(bufer.begin(),bufer.end());
     P.peak =  distance(bufer.begin(), it) +ind_vn;
     start_P(bufer,ind_vn,lost_R_is);
-	int start_p = set_indices(ind2, count_iter, mem, mem_sdvig);
+	int start_p = set_indices(P.start, *count_iter, mem, *mem_sdvig);
     P.amplitude =  abs(*it - ptr_signal->at(start_p));
    
      

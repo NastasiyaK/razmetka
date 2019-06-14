@@ -21,19 +21,19 @@
 class leadII_V : public Leads_Info
 {
 public:
-
-    //bool& processing_lead(float& sam, bool&);
-    //bool check_last_four_peaks( vector<pair<int,pat_name > > & , const int& );
-	//void initialization(char*);
-    //bool check_last_four_peaks( vector<pair<int,pat_name > > &, const int& );
-
+	
 	/*
      * This function gets new peaks from  the objects - leads
      * Then if there is new peaks, the function analyzes the data and
      * makes decision about pathlogies
      */
 	void get_new_peaks();
-
+//functions for analysing
+	
+	
+	void start_P( vector<float>&, int&, bool&);
+	//virtual int start_of_R(const int &, float, bool, vector<float> *use_signal);
+	//virtual int stop_of_R(const int peak, bool type);
 
 
 	//There is the object to get info about new peaks
@@ -47,6 +47,7 @@ public:
 	 */
 	leadII_V(leads_name type, info_for_new_peak* ptr_info_new_peak, int N_leads, vector<float>* ptr_signal, one_lead* ptr_leadV);
 	virtual ~leadII_V();
+	storage_of_pathology path_mathods;
 
 	/// The functions print data into file.txt
 	void printing_vector(const  vector<wave>&,  string, int);
@@ -126,8 +127,12 @@ public:
      */
 
     list_of_output_pathlogies& get_pathologies();
-
+	
+	int sdvig;
 private:
+	int* count_iter = nullptr;
+	int* mem_sdvig = nullptr;
+	
     list_of_output_pathlogies list;
     unsigned  int index_start_wave_copy = 0;
 
@@ -143,7 +148,7 @@ private:
 	vector<bool> afibr_decision_memory;
 
 	int N_peaks_fibr;
-
+	
 	vector<int>extrasystoles; //for all extrasystoles of lead
 	one_lead* leadV;
 	///for ventricular flutter list of peaks and the amplitudes
@@ -152,8 +157,9 @@ private:
 	//the point of sart of pathlogies
 	int start_vf;
     vector<int> R_peak_for_fibr;
-
-
+	
+	bool fibr( vector<int>&);
+	bool flutter(const vector<int>&,const vector<float>* );
 	/*THis vector stores peaks after collecting data from all leads.
 	 *Every pair is the sample of peak and its type
 	 */
@@ -165,7 +171,7 @@ private:
     //to find a start and a stop of peak
 	int start_of_R(const int &peak, float otstup, bool type);
     int stop_of_R(const int, bool type);
-
+	
 	/**
 	 * @brief Check a length of last RR intervals and absence of extrastole
 	 */

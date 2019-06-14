@@ -4,7 +4,7 @@
 #include "LeadII_V.h"
 
 
-void Leads_Info::start_P( vector<float>& bufer,int& ind_start,bool& lost_R_is){
+void leadII_V::start_P( vector<float>& bufer,int& ind_start,bool& lost_R_is){
  vector<float> diff_bufer;
 int peak;
 size_t start_z = 0;

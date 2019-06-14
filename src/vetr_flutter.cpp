@@ -5,17 +5,20 @@
 if signal have regular high peaks in
 *the lenght of last interval RR. 
  if there're rhythm 240  - VFL*/
+namespace razmetka
+{
+	int len_window_vf = 5; //sec
+	
+};
 
 
 #define GET_START_VF(start_vf, count,average_R); \
-start_vf = static_cast<int>(count - 3 * Fs); \
-start_vf = start_severe_distortion(&all_extrasys_of_lead, &array_of_peak_R, start_vf, average_R); \
+start_vf = static_cast<int>(count - razmetka::len_window_vf * Fs); \
 if (start_vf < 0)\
 	start_vf = 0; \
-if (type_of_lead == II || type_of_lead == v5) \
-to_merge_peaks(&peaks_with_types,&list_extrasys, start_vf); \
 
 
+//start_vf = start_severe_distortion(&all_extrasys_of_lead, &array_of_peak_R, start_vf, average_R); \
 
 //fuction to merge array of all different peaks and ventricular peaks
 void to_merge_peaks( vector< pair<int,pat_name >>* main_peaks,  vector<int>* odd_peaks, int start)
@@ -49,7 +52,7 @@ void to_merge_peaks( vector< pair<int,pat_name >>* main_peaks,  vector<int>* odd
 	
 	for (size_t i = start_in_first; i < odd_peaks->size(); i++)
 	{
-		main_peaks->push_back( pair< int, pat_name>(odd_peaks->at(i),V_b));
+		main_peaks->push_back( pair< int, pat_name>(odd_peaks->at(i),VF));
 	}
 
 };
@@ -79,6 +82,13 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 		d1 = max_el;
 	else
 		d1 = static_cast<int>(QRS.low*Fs);
+	if (max_el - (int)QRS.low*Fs < signal.size())
+	{
+		auto it_max_el = max_element(filter_signal.begin() + max_el - (int) (QRS.low * Fs),
+		                             filter_signal.begin() + max_el);
+		if (*it_max_el > filter_signal.at(max_el))
+			max_el = distance(filter_signal.begin(), it_max_el);
+	}
 
 	//peak is saved if min value between other peaks enough good
 	auto min1 =  min_element(filter_signal.begin() + max_el - d1, filter_signal.begin() + max_el);
@@ -88,32 +98,82 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 	if ( !list_extrasys.empty() )
 		extras_last = set_indices(*(list_extrasys.end()-1), count_iter, mem, mem_sdvig);
 
-
+	
 	if ( abs(ampl - *min1)>QRS_hight_min && extras_last >= 0 && extras_last < filter_signal.size() &&
 	ampl > 0.3*filter_signal.at(extras_last))
 	{
 		max_el = (count_iter == 0) ? (max_el) : (max_el + (count_iter - 1)*(mem)+mem_sdvig);
 		
-		if (list_extrasys.size() == 0 || ( abs(max_el - *(list_extrasys.end() - 1)) > 2 * QRS.height*Fs))
+		if (list_extrasys.size() == 0 || ( abs(max_el - *(list_extrasys.end() - 1)) >  QRS.height*Fs))
 		{
 			
 			push_el(list_extrasys, max_el, n_peaks);
 			push_el(list_ampl, max_ampl, n_peaks);
 
-
-			if (list_extrasys.size() > 1)
+			bool delet = false;
+			
+			
+			if (list_extrasys.size() > 2)
 			{
+				
+				
 				int ind = set_indices(*(list_extrasys.end() - 2), count_iter, mem, mem_sdvig);
 				int ind2 = set_indices(*(list_extrasys.end() - 1), count_iter, mem, mem_sdvig);
+				int ind3 = set_indices(*(list_extrasys.end() - 3), count_iter, mem, mem_sdvig);
+				
+				
+				
 				if (filter_signal.at(ind) - filter_signal.at(ind + QRS.height*Fs) < static_cast<int>(QRS_hight_min) ||
 					 abs(filter_signal.at(ind) / filter_signal.at(ind2)) < 1 / 2.5 )
 				{
 					if ( abs(ind2 - ind) < length.T_middle/2 * Fs)
+					{
 						list_extrasys.erase(list_extrasys.end() - 2);
+						delet = true;
+					}
 				}
-				if ( (ind2 - ind) < 2 * QRS.height*Fs)
-					list_extrasys.erase(list_extrasys.end() - 2);
 				
+				if ( (ind2 - ind) < 2 * QRS.height*Fs && !delet)
+				{
+					list_extrasys.erase(list_extrasys.end() - 2);
+					delet = true;
+				}
+				
+				if ( abs( *min_element(filter_signal.begin()+ind, filter_signal.begin() + ind2) - min(filter_signal.at(ind), filter_signal.at(ind2))) <0.1
+				&& !delet)
+				{
+					list_extrasys.erase(list_extrasys.end() - 2);
+					delet = true;
+				}
+				///Если в 2 раза меньше соседние амплитуды - кикнуть
+				float diff1 = filter_signal.at(ind) - *min( filter_signal.begin()+ ind - QRS.height*Fs/2, filter_signal.begin()+ ind + QRS.height*Fs/2);
+				float diff2 = filter_signal.at(ind2) - *min( filter_signal.begin()+ ind2 - QRS.height*Fs/2, filter_signal.begin()+ ind2 + QRS.height*Fs/2);
+				float diff3 = filter_signal.at(ind3) - *min( filter_signal.begin()+ ind3 - QRS.height*Fs/2, filter_signal.begin()+ ind3 + QRS.height*Fs/2);
+				if (diff1 > diff2 * 2 && !delet && (diff2 < QRS_filtered_min) && ind2 - ind < RR.middle * Fs/2)
+				{
+					list_extrasys.erase(list_extrasys.end() - 1) ;
+					delet = true;
+				}
+				
+				if (abs( filter_signal.at(ind) - filter_signal.at(ind2) )> 0.95 && !delet && ind2 - ind < 2.7*length.T_middle * Fs )
+				{
+					if ( filter_signal.at(ind) > filter_signal.at(ind2))
+						list_extrasys.erase(list_extrasys.end() - 1);
+					else
+						list_extrasys.erase(list_extrasys.end() - 2);
+					
+					delet = true;
+				}
+				
+				if (abs( filter_signal.at(ind) - filter_signal.at(ind3) )> 0.95 && !delet && ind3 - ind < 2.7*length.T_middle * Fs )
+				{
+					if ( filter_signal.at(ind) > filter_signal.at(ind3))
+						list_extrasys.erase(list_extrasys.end() - 3);
+					else
+						list_extrasys.erase(list_extrasys.end() - 1);
+					
+					delet = true;
+				}
 			}
 			if (list_extrasys.size() > 2 )
 				print(*(list_extrasys.end()-3),"ventr.txt");
@@ -121,10 +181,10 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 	}
 
 	/*there type of window */
-	static int win1 = 0, win2 = static_cast<int>(3 * Fs);
+	static int win1 = 0, win2 = static_cast<int>(razmetka::len_window_vf * Fs);
 	 vector <int> peaks_rhythm;
 
-	if (signal.size()>3 * RR.middle*Fs)
+	if (signal.size()>razmetka::len_window_vf * RR.middle*Fs)
 	{
 		size_t i = 0;
 		int num_beat = 0;
@@ -137,39 +197,27 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 
 			i++;
 		}
-		float rhythm_vf = (static_cast<float>(num_beat)) / 3 * 60;
-
-		//part of heart rating analysing
-		if (rhythm_vf > 180 && rhythm_vf < 200)
-
+		float rhythm_vf = (static_cast<float>(num_beat)) / razmetka::len_window_vf * 60;
+		
+		
+		if (rhythm_vf > 132 || (rhythm_vf == 132 && last_rhythm >= 132 ) )
 		{
-			//cout<<type_of_lead<<endl;
-			current_rhythm = 60.f * Fs / rhythm_vf;
-			if (pathology_signal.VT == 0 && start_vf == 0) 
-			{
-				GET_START_VF(start_vf, count,average_R)
-				
-			} else 
-			{
-				static int window_old = 0;
-				if (window_old != win1) 
-					window_old = win1;
-			}
-		} else 
-		{
-			if (pathology_signal.VT > 0) 
-			{
-				pathology_signal.VT = 0;
-				decision = true;
-				start_vf = 0;
-			}
-		}
-		if (rhythm_vf >= 200) 
-		{
+			finish_vf = 0;
+			if (rhythm_vf > 160)
+				high_rhythm = true;
+			
+			if (last_rhythm != rhythm_vf)
+				last_rhythm = rhythm_vf;
+			
 			current_rhythm = 60 * Fs / rhythm_vf;
-			if (pathology_signal.VFib == 0 && start_vf == 0) 
+			if (pathology_signal.VFib == 0 && (start_vf == 0))
 			{
 				GET_START_VF(start_vf,count,average_R);
+				if (start_vf < old_start_vf)
+					start_vf = old_start_vf;
+				pathology_signal.VFib++;
+				if (start_vf2 != 1)
+					start_vf2 = 1;
 
 			}else {
 				static int window_old = 0;
@@ -178,14 +226,25 @@ bool one_lead::ventr_flutter(size_t st_f, const int& len_st) {
 				}
 			}
 		} else {
-			if (pathology_signal.VFib>0) {
+			if (pathology_signal.VFib > 0)
+			{
+				finish_vf = 1;
+				if (type_of_lead == II || type_of_lead == v5)
+					to_merge_peaks(&peaks_with_types,&list_extrasys, start_vf);
+				if (old_start_vf > start_vf)
+					start_vf = old_start_vf;
+				
+				if (last_rhythm != rhythm_vf)
+					last_rhythm = rhythm_vf;
 				decision = true;
 				//if there's end VF - deleting of all points because of 
 				//they're mistaken
+				old_start_vf = count;
 				pathology_signal.SVTA = 0;
-				
-				start_vf = 0;
+				start_vf2 = 0;
+				//start_vf = 0;
 				pathology_signal.VFib = 0;
+				
 
 			}
 			else

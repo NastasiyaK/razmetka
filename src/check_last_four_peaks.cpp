@@ -4,51 +4,7 @@
 #include "one lead.h"
 #include "LeadII_V.h"
 
-/*
-bool one_lead::check_last_four_peaks( vector< int > & peaks, const int& average_interval)
 
-{
-    bool result = false;
-    if (peaks.size() > 6)
-    {
-        int peak1 = *(peaks.end()-1) ;
-        int peak2 = *(peaks.end()-2) ;
-        int peak3 = *(peaks.end()-3) ;
-        int peak4 = *(peaks.end()-4) ;
-
-        if (peak1 - peak3 < 1.1 * average_interval && peak1 - peak3 > 0.9 * average_interval
-        && peak3 - peak4 < 1.1 * average_interval && peak3 - peak4 > 0.9 * average_interval )
-        {
-            peaks.erase(peaks.end() - 2);
-            result = true;
-        }
-    }
-return result;
-}
-
-bool leadII_V::check_last_four_peaks( vector<pair<int,pat_name > > & peaks, const int& average_interval)
-
-{
-    bool result = false;
-    if (peaks.size() >= 3) {
-        int peak1 = (peaks.end() - 1)->first;
-        int peak2 = (peaks.end() - 2)->first;
-        int peak3 = (peaks.end() - 3)->first;
-        //int peak4 = (peaks.end() - 4)->first;
-
-        if (peak1 - peak3 < 1.1 * average_interval && peak1 - peak3 > 0.9 * average_interval &&
-            //(peaks.end() - 2)->second != V_b && (peaks.end() - 2)->second != N_b) {
-            (float) (abs((peak2 - peak3)/(peak1 - peak2))) > 0.9 ){
-            peaks.erase(peaks.end() - 2);
-            result = true;
-        }
-
-
-    }
-
-return result;
-}
-*/
 
 bool leadII_V::check_SV_A_extrasustole( vector<pair<int,pat_name > > & peaks, const int& average_interval)
 

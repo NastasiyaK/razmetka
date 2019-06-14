@@ -40,22 +40,30 @@ void leadII_V::rhythm(pair<int, pat_name > new_some_point, vector<int>& array_of
 					}
 
 				}
+		
+		
+		static bool SBR_is = false;
 
 
-
-
-
-		if ( current_rhythm !=0 &&  60 * Fs / current_rhythm + 1 < 55 && R_v.size() > 3)
+		if (  current_rhythm !=0 &&  60 * Fs / current_rhythm + 1 < 55 && R_v.size() > 3)
 			pathology_signal.SBR++;
 
-		if (current_rhythm != 0 && 60 * Fs / current_rhythm + 1 > 55 && pathology_signal.SBR > 0)
+		
+		if ( current_rhythm != 0 && 60 * Fs / current_rhythm + 1 >= 55 && pathology_signal.SBR > 4)
 		{
 			pathology_signal.SBR = -1;
 			if (pathology_signal.SBR > 4)
 				pathology_signal.SBR++;
+			SBR_is = true;
 		}
-
-		if (current_rhythm != 0 && 60 * Fs / current_rhythm >= 100 && R_v.size() > 3)
+		
+		int count_no_N = 0;
+		for (int i = 1; i <= 5; i++)
+		{
+			if (clean_peaks.size() > 4 && (clean_peaks.end() - i)->second != N_b)
+				count_no_N++;
+		}
+		if (count_no_N >=3 && current_rhythm != 0 && 60 * Fs / current_rhythm >= 100 && R_v.size() > 3)
 			pathology_signal.SVTA++;
 		else
 			pathology_signal.SVTA = 0;

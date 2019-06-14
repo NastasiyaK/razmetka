@@ -9,7 +9,7 @@ void leadII_V::finding_of_S(const int& peak) {
 	int ind, ind2, ind_vn, max_value;
 	ind2 = peak + static_cast<int>(((QRS.height)*Fs) / 2);
 	ind = peak;
-	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
+	set_indices(ind_vn, ind, ind2, *count_iter, mem, *mem_sdvig);
 	if (ind >= 0 && ptr_signal->size() > ind2) {
 
 		 vector <float> bufer;

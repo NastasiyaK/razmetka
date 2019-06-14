@@ -62,7 +62,7 @@ void push_el( vector <  pair< int, pat_name >> &v, int sample, pat_name type, co
 	in_ECG.erase(in_ECG.begin());
 	return after_filter1;
 }
-void set_indices(int& ind_vn, int& ind, int& ind2, const int& count_iter, size_t& mem, const size_t& mem_sdvig) {
+void set_indices(int& ind_vn, int& ind, int& ind2, int& count_iter, size_t& mem, int& mem_sdvig) {
 	if (count_iter>1) {
 		ind -= (count_iter - 1)*mem;
 		ind2 -= (count_iter - 1)*mem;
@@ -73,7 +73,7 @@ void set_indices(int& ind_vn, int& ind, int& ind2, const int& count_iter, size_t
 	}
 	if (count_iter == 0) {
 		ind_vn = ind;
-
+		
 	}
 	else {
 		ind_vn = ind + mem_sdvig + (count_iter - 1)*mem;
@@ -82,17 +82,18 @@ void set_indices(int& ind_vn, int& ind, int& ind2, const int& count_iter, size_t
 	if (ind < 0) ind = 0;
 }
 
-int set_indices(int ind, const int& count_iter, size_t& mem, const size_t& mem_sdvig) {
+int set_indices(int ind, int& count_iter, size_t& mem, int& mem_sdvig) {
 	if (count_iter>1) {
 		ind -= (count_iter - 1)*mem;
 	}
 	if (count_iter>0) {
 		ind -= mem_sdvig;
 	}
-	if (ind < 0) 
+	if (ind < 0)
 		ind = 0;
 	return ind;
 }
+
 
 
 void change_type_in_all_peak( vector <  pair<int, pat_name >>& changing_vector, pat_name new_type, const int& sample, const float fusion_window)

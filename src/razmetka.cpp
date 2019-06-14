@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>  
 #include <fstream>
+
 #include "leads.h"
 #include "one lead.h"
 #include "functions.h"
@@ -22,7 +23,7 @@ size_t Leads_Info::window = static_cast<size_t>(30 * Fs);
 size_t Leads_Info::mem = static_cast<size_t>(Fs * 1 * 60);
 
 void test_one_lead();
-int n = 650'000;
+int n = 640'000;
  //string input_path = "C:\\Users\\Amantayr\\Documents\\Visual Studio 2015\\Projects\\razmetka\\razmetka\\signals for project\\";
  string input_path = "/home/amantayr/signals for projects/";
 
@@ -35,7 +36,7 @@ int main()
 {
 	//test_leadII();
 	//test_one_lead();
-	test_mitdb();
+	 test_mitdb();
 	
     return 0;
 }
@@ -46,7 +47,7 @@ void test_mitdb(){
 	
     int N_leads = 1;
 
-    ifstream input("m202.text");
+    ifstream input("m230.text");
     vector<vector<float>> leads_samples(2);
 
     float sam = 0;
@@ -58,7 +59,7 @@ void test_mitdb(){
         {
             std::stringstream strStream(line);
 
-            for (int i = 0; i <= N_leads; i++) {
+            for (int i = 0; i <= N_leads+1; i++) {
                 strStream >> sam;
                 
                 if (i != 0)
@@ -86,13 +87,13 @@ void test_mitdb(){
     if (N_leads == 2)
     {
 
-        for (int k = 0; k < n; k++)
+        for (int k =0; k < n; k++)
         {
-            cout<< k << endl;
+            //cout<< k << endl;
             array_of_leads.At(1)->processing_lead(leads_samples.at(0).at(k));
             array_of_leads.At(10)->processing_lead(leads_samples.at(1).at(k));
 	
-	        if (k == 8600)
+	        if (k == 64000)
 	        {
 		        int b = 1;
 	        }
@@ -103,17 +104,17 @@ void test_mitdb(){
 
 
     if (N_leads == 1) {
-        for (int k = 360'000; k < n; k++)
+        for (int k = 0; k < n; k++)
         {
-            if (k == 360000 + 3400)
+            if (k == 20800)
             {
 	            int a = 1;
             }
-            
+            //cout << k<<endl;
             array_of_leads.At(1)->processing_lead(leads_samples.at(0).at(k));
 	        lead2.get_new_peaks();
 
-           cout << k << endl;
+           //cout << k << endl;
         }
     }
 
@@ -126,10 +127,10 @@ void test_mitdb(){
 void test_leadII()
 {
 
-	int N_leads = 10;
+	int N_leads = 1;
 
-	ifstream input("I53.txt");
-	vector<vector<float>> leads_samples(13);
+	ifstream input("m203.text");
+	vector<vector<float>> leads_samples(12);
 
 	float sam = 0;
 	if (input)
@@ -139,11 +140,13 @@ void test_leadII()
 		while (std::getline(input, line)) {
 			std::stringstream strStream(line);
 
+			
 			for (int i = 0; i <= 12; i++) {
-
+			
 				strStream >> sam;
 				if (i != 0)
 				    leads_samples[i-1].push_back(move(sam));
+				//leads_samples[i].push_back(move(sam));
 			}
 
 		}
@@ -168,54 +171,56 @@ void test_leadII()
 	lead2.set_all_leads(&array_of_leads);
 
 	bool res;
-	if (N_leads ==12) {
-
-        for (int k = 2000; k < n; k++) {
-        //cout<< k << endl;
-          for (int i = 0; i < 12; i++) {
-              //if (i == 0 && i == 4)
-              array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k));
-
-          }
-
-            if (k == 9250)
-            {
-                int b = 1;
-            }
-
-        lead2.get_new_peaks();
-        }
-    }
-    if (N_leads ==10) {
-
-        for (int k = 2000; k < n; k++) {
-            cout<< k << endl;
+	
+    if (N_leads == 9)
+    {
+        for (int k = 0; k < n; k++) {
             for (int i = 0; i < 12; i++) {
-                if (i != 0 && i != 4)
-                array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k));
+            		
+                if (i != 0 && i != 4 && i != 6 )
+                    array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k));
 
             }
 
-            if (k == 2402)
+            if (k == 347)
             {
                 int b = 1;
             }
-
             lead2.get_new_peaks();
         }
     }
-    if (N_leads == 1) {
-        for (int k = 1; k < n; k++) {
-            if (k == 5600)
+	if (N_leads == 5)
+	{
+		for (int k = 0; k < n; k++) {
+			for (int i = 0; i < 12; i++) {
+				
+				if (i == 1 || (i >= 8 && i <= 11 ))
+					array_of_leads.At(i)->processing_lead(leads_samples.at(i).at(k));
+				
+			}
+			
+			if (k == 347)
+			{
+				int b = 1;
+			}
+			lead2.get_new_peaks();
+		}
+	}
+    if (N_leads == 1)
+    {
+        for (int k = 2000; k < n; k++)
+        {
+            if (k == 5800)
                 int a = 1;
 
 
+            cout << k<< endl;
             array_of_leads.At(1)->processing_lead(leads_samples.at(1).at(k));
 
 
             //cout << k << endl;
 
-            //lead2.get_new_peaks();
+            lead2.get_new_peaks();
         }
     }
 

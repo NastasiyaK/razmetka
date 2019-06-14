@@ -31,7 +31,7 @@ signal to not make new method
 
 It depends from variable main peak. It can be S or R. Signal is reversed or not.
 */
-int Leads_Info::start_of_R(const int &peak, float otstup, bool type, vector<float> *use_signal)
+int one_lead::start_of_R(const int &peak, float otstup, bool type, vector<float> *use_signal)
 {
 ptr_signal = &signal;
  vector<float>bufer;
@@ -106,7 +106,8 @@ return start_R;
  }
 return start_R;
 }
-int Leads_Info::stop_of_R(const int peak, bool type)
+
+int one_lead::stop_of_R(const int peak, bool type)
 {
 
 	 vector<float>bufer;
@@ -117,7 +118,7 @@ int Leads_Info::stop_of_R(const int peak, bool type)
 	ind2 = peak + static_cast<int>(Fs*QRS.height);
 	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
 	int type_of_finding = 1;
-	if (ind >= 0 && ind2 >0 && signal.size()>ind2) {
+	if (ind >= 0 && ind2 >0 && signal.size() > ind2) {
 		float amplitude = ptr_signal->at(ind);
 		float isolinia_here, current_amplitude = filter_signal.at(ind);
 		copy(begin(*ptr_signal) + ind, begin(*ptr_signal) + ind2, back_inserter(bufer));
@@ -190,7 +191,7 @@ int stop_R = 0;
 int ind,ind2,ind_vn;
 ind = peak;
 ind2 = peak+ static_cast<int>(Fs*QRS.height);
-set_indices(ind_vn,ind,ind2,count_iter,mem,mem_sdvig); 
+set_indices(ind_vn,ind,ind2, *count_iter,mem, *mem_sdvig);
 
 if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
 {
@@ -218,10 +219,10 @@ if (ind >=0 && ind2 >0 && ptr_signal->size()>ind2)
     stop_R = (stop_R>0)?stop_R:ind2;
     stop_R = (stop_R>min_point_ind)?min_point_ind-1:stop_R;
     int start = 0;     
-    if (peak>mem)
+    if (peak > mem)
 	{
-       start = mem_sdvig + (count_iter-1)*mem;
-       set_indices(ind_vn,stop_R,ind2,count_iter,mem,mem_sdvig); 
+       start = *mem_sdvig + (*count_iter-1)*mem;
+       set_indices(ind_vn,stop_R,ind2, *count_iter,mem, *mem_sdvig);
 	} else 
         ind_vn = 0;
 
@@ -247,10 +248,10 @@ int leadII_V::start_of_R(const int &peak, float otstup, bool type)
 
 	 vector<float>bufer;
 	int ind, ind2, ind_vn;
-	ind = peak - static_cast<int>(QRS.height*Fs / 2);
+	ind = peak - static_cast<int>(QRS.low*Fs / 2);
 	ind2 = peak;
 	int start_R = 0;
-	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
+	set_indices(ind_vn, ind, ind2, *count_iter, mem, *mem_sdvig);
 	 vector<float>::iterator min_point;
 	//int type_of_finding = 1; // if main_peak S it's necessary to reverse our_signal;
 	
@@ -269,12 +270,12 @@ int leadII_V::start_of_R(const int &peak, float otstup, bool type)
 
 		start_R = static_cast<int>(round(x));
 		int start = 0;
-		if (start_R<min_point_ind)
+		if (start_R<min_point_ind && start_R >=ind )
 			start_R = min_point_ind + 1;
-		if (start_R>mem)
+		if (start_R > mem)
 		{
-			start = static_cast<int>(mem_sdvig + (count_iter - 1)*mem);
-			set_indices(ind_vn, start_R, ind2, count_iter, mem, mem_sdvig);
+			start = static_cast<int>(*mem_sdvig + (*count_iter - 1)*mem);
+			set_indices(ind_vn, start_R, ind2, *count_iter, mem, *mem_sdvig);
 		}
 		else
 		{

@@ -38,11 +38,15 @@ bool value_ok(const int& ind,const int&);
 ///The additional function changes type of beat in the vector of beats.
 void change_type_in_all_peak( vector<  pair<int, pat_name> >&, pat_name, const int&, const float);
 
+pair<float,float> getApprox(const vector<int>& index,const vector<float>& signal, int num_of_points, int& peak);
 
 ///These functions erase wrong data from index to end
  void erase(vector<wave>*, const int index);
  void erase(vector<int>*, const int index );
  void erase(vector<segment_ST>*, const int index);
+
+
+bool find_VT(const vector<pair<int, pat_name>>& peaks_with_types, float Fs);
 
  ///The function returns an absolute value of vector
 template <typename T>
@@ -73,8 +77,8 @@ void push_el( vector <  pair<int, pat_name >> &,int, pat_name , const size_t);
 
 
 //They change indexes to find them in the storage
-int set_indices(int, const int&, size_t&, const size_t&);
-void set_indices(int&, int&, int&, const int&, size_t&, const size_t&);
+int set_indices(int, int&, size_t&,  int&);
+void set_indices(int&, int&, int&, int&, size_t&, int&);
 
 /**
  * @brief creates list of pathologies for output

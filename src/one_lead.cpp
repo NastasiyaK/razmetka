@@ -9,7 +9,16 @@ one_lead::one_lead(leads_name type, int N_lead, info_for_new_peak* ptr_info_new_
 	N_leads = N_lead;
 	average_R = static_cast<int>(RR.middle*Fs);
 	this->ptr_info_new_peak = ptr_info_new_peak;
+	list_extrasys.reserve(n_peaks);
 
+};
+
+void one_lead::get_ptr_mem(int** mem_sdvig, int** count_iter )
+{
+	*mem_sdvig  = new int;
+	*count_iter  = new int;
+	**mem_sdvig = this->mem_sdvig;
+	**count_iter = this->count_iter;
 };
 
 vector< pair<int,  pat_name > >* one_lead::get_peaks(const char* peak)
@@ -38,18 +47,32 @@ vector<float>*  one_lead::get_signal(char* type_signal)
 
 }
 
-int one_lead::get_VT(char* type_signal)
+
+int one_lead::get_VF(char* type_signal )
 {
-	if (type_signal == "VT")
-	{
-		if (pathology_signal.VT != 0)
-			return start_vf;
-
-		if (pathology_signal.VT == 0)
+	static int answer = 0;
+	;
+		if (pathology_signal.VFib != 0)
+		{
+			if (start_vf2 == 1)
+			{
+				answer = start_vf;
+				
+			}
+		}
+		
+		if (pathology_signal.VFib == 0)
+		{
+			if (finish_vf)
+			{
+				start_vf = 0;
+				start_vf2 = 2;
+			}
 			return 0;
-	}
-		return 0;
-
+		}
+	
+	return answer;
+	
 };
  int one_lead::get_count()const
 {

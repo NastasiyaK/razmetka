@@ -54,7 +54,8 @@ class Leads_Info
 {
 private:
 	
-
+	int count_iter = 0;
+	int mem_sdvig = 0;
 public:
 	 Leads_Info() {};
 	virtual ~Leads_Info() {};
@@ -85,7 +86,7 @@ protected:
 	rr RR; 
 	Lengths length;
 
-	float QRS_hight_min, QRS_height, ampl_P_threshold = 0.1,
+	float QRS_hight_min, QRS_height, ampl_P_threshold = 0.05,
 		ampl_P_standart, ampl_T_standart, QRS_filtered_min;
 	average_value average_amplitude;    //average amplitude of QRS peaks
 
@@ -94,8 +95,9 @@ protected:
     int last_peak = 0, average_R, ind_of_last_extrasystole = 0;
 
     vector <float> filter_signal, signal;// vectors with signals
-    size_t mem_sdvig = 0;
-    int count_iter = 0, sdvig = 0, count; //awful variable of awful tracking of signal' data
+    float last_slope = 0.f;
+    
+    int count; //awful variable of awful tracking of signal' data
     int N_count = 0;//number of intervals
     int new_peak, len_R, minutes;
     float amplitude_extrasys;
@@ -108,7 +110,7 @@ protected:
     int N_last_points = 0;
     int last_peak_for_rhythm;
     float current_rhythm;
-
+	int sdvig = 0;
     string class_of_sys;
 
     //arrays ofpoints
@@ -123,34 +125,14 @@ protected:
     //int ind_last_extrasys_old = 0;
    // pat_name old_class_of_sys = No;
     vector<int>array_of_extrasys;	//array for temporal extrasystoles, in this cardiointerval only
-
-
-    //functions for analysing
-
+	
 	int  start_of_peak( vector<float>&, const int&, const  string&);
 	int stop_of_peak( vector<float>& bufer, const int& start_in_sig, const  string& name);
-
-    void start_P( vector<float>&, int&, bool&);
-    virtual int start_of_R(const int &, float, bool, vector<float> *use_signal);
-    virtual int stop_of_R(const int peak, bool type);
-
-    //pathologies
-	my_map pathologies;
-	storage_of_pathology path_mathods;
-	bool fibr( vector<int>&);
-	bool flutter(const vector<int>&,const vector<float>* );
+	
 	Signal pathology_signal;
-
-
-
-	///checking	amplitudes of last 3 peaks because of second peak can be a random disturbance
-	bool check_peak_amplitudes_max(int& first_peak, int& second_peak, int& third_peak);
-
-    ///checking	amplitudes of last 3 peaks because of second peak can be extrasystole with other amplitude
-	bool check_peak_amplitudes_min(int& first_peak, int& second_peak, int& third_peak, int type);
-
-	///checks a place of extrasystole comparing with last peak R
-	bool check_extras(const int& new_peak);
+	//pathologies
+	my_map pathologies;
+	bool  check_extras(const int& new_peak);
 
 
 	/**
@@ -161,15 +143,28 @@ protected:
 	void print( pair<int,  string>& value,  string paths);
 
 	template <typename T>
-	void print(T& value,  string paths) 
+	void print(T& value,  string paths)
 	
 	{
 		string type_string;
 		MAKE_TYPE_LEAD_STRING(type_string, type_of_lead);  //make_path(type_string, type_of_lead);
-
+		
 		string path_full= where + type_string + "/" + paths;
-		 ofstream output(path_full,  ios::app);
+		ofstream output(path_full,  ios::app);
 		output << value <<  '\n';
+	}
+	
+	
+	template <typename T>
+	void print_diapazon(T& value1, T& value2,  string paths)
+	
+	{
+		string type_string;
+		MAKE_TYPE_LEAD_STRING(type_string, type_of_lead);  //make_path(type_string, type_of_lead);
+		
+		string path_full= where + type_string + "/" + paths;
+		ofstream output(path_full,  ios::app);
+		output << value1 << " "<<value2<< '\n';
 	}
 
 	void print(int,  string, float,  string);
@@ -187,5 +182,6 @@ protected:
 	}
 	void print(const my_map&, int time_start, int time_stop) const;
 	void print( pair<int, pat_name>&) const;
+	
 
 };

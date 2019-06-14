@@ -202,12 +202,18 @@ void Leads_Info::print( pair<int, pat_name>& peaks) const
     ofstream output(path_full,  ios::app);
 	output << peaks.first << "\n";
 
-    if (peaks.second != N_b) {
+    if (peaks.second != N_b && peaks.second != V_b) {
         path_full = where + type_string + "/ne_norm_peaks_type.txt";
         ofstream output2(path_full,  ios::app);
 
         output2 << peaks.first << ": " << peaks.second << '\n';
     }
+	if (peaks.second == V_b) {
+		path_full = where + type_string + "/V_peaks.txt";
+		ofstream output2(path_full,  ios::app);
+		
+		output2 << peaks.first  << '\n';
+	}
 
 
 	//output << peaks.first << "\n";*/

@@ -22,7 +22,7 @@ float ampl_st_of_T;
 otstup = average_R;
 g1 = peak + static_cast<int>((length.ST_seg + QRS.low)*Fs/2);
 g2 = peak + static_cast<int>(otstup*length.QT_perc +Fs*QRS.height/2);            
-set_indices(ind_vn,g1,g2,count_iter,mem,mem_sdvig); 
+set_indices(ind_vn,g1,g2,*count_iter,mem,*mem_sdvig);
 
 /*we finding of max deviation of bufer
  * if it>0 T>0 else T<0. 
@@ -95,7 +95,7 @@ int g1,g2,ind_vn;
 //finding of parameters of T 
 g1 = peak + static_cast<int>(Fs*(QRS.height/2));
 g2 = peak + static_cast<int>(Fs*(QRS.height/2 + length.ST_seg));
-set_indices(ind_vn,g1,g2,count_iter,mem,mem_sdvig);  
+set_indices(ind_vn,g1,g2, *count_iter,mem, *mem_sdvig);
 if (g1 >=0 && g2>g1){
     size_t min_zde=(g2>ptr_signal->size())?ptr_signal->size()-1:g1;
     if(g1<min_zde) {

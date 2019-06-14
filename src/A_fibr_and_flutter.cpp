@@ -3,9 +3,10 @@
 #include "leads.h"
 #include "Afib.h"
 #include "Leads_info.h"
+#include "LeadII_V.h"
 
 //method for interation with testing of fibrillation 
-bool Leads_Info::fibr( vector<int>&reshaped)
+bool leadII_V::fibr( vector<int>&reshaped)
 {
 	AFibr detect_fibr;
 	detect_fibr.set_RR_int(reshaped);
@@ -17,7 +18,7 @@ bool Leads_Info::fibr( vector<int>&reshaped)
 }
 
 
-bool Leads_Info::flutter(const vector<int>& array_of_peak_R, const vector<float>* ptr_signal ) {
+bool leadII_V::flutter(const vector<int>& array_of_peak_R, const vector<float>* ptr_signal ) {
 	/*if max deviation of section of P > therehold
 	* it can be flutter. Firstly we build line because of
 	* deviation of isolinia
@@ -27,7 +28,7 @@ bool Leads_Info::flutter(const vector<int>& array_of_peak_R, const vector<float>
 	float max_el_temp = *(array_of_peak_R.end() - 1);
 	ind = static_cast<int>(max_el_temp - (length.PQ_int + (QRS.height / 2))*Fs);
 	ind2 = static_cast<int>(max_el_temp - Fs*(QRS.height / 2));
-	set_indices(ind_vn, ind, ind2, count_iter, mem, mem_sdvig);
+	set_indices(ind_vn, ind, ind2, *count_iter, mem, *mem_sdvig);
 	float y1 = ptr_signal->at(ind);
 	float y2 = ptr_signal->at(ind2);
 	float k = (y1 - y2) / (ind - ind2);

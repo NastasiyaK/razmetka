@@ -5,17 +5,11 @@
 #include <numeric>
 #include "LeadII_V.h"
 
-
-#define ERASE_PTHOLOGIES(therehold)\
-path_mathods.erase(pathologies,"WPW", therehold);  \
-path_mathods.erase(pathologies,"SBR ",therehold);\
-path_mathods.erase(pathologies,"lost_R", therehold);\
-path_mathods.erase(pathologies,"SV B",therehold);\
-path_mathods.erase(pathologies,"V B", therehold);\
-path_mathods.erase(pathologies,"V T", therehold);\
-path_mathods.erase(pathologies,"E", therehold);\
-path_mathods.erase(pathologies,"SVTA", therehold);\
-
+namespace razmetka
+{
+	
+	float pr_WPW = 0.12f; //sec
+};
 vector<int> check_SV_A_extras(vector<int>&, int, int );
 
 void leadII_V::check_BlockII( vector<int>& array_of_peak_R, int ind_of_last_extrasystole)
@@ -40,7 +34,9 @@ void leadII_V::check_BlockII( vector<int>& array_of_peak_R, int ind_of_last_extr
 			int ind_vn;
 			int i1 = *(array_of_peak_R.end() - 1) -
 					 static_cast<int>(len_R / 2 - length.PQ_int * Fs + (QRS.height * Fs) / 2);
-			set_indices(ind_vn, i1, i2, count_iter, mem, mem_sdvig);
+			
+			set_indices(ind_vn, i1, i2, *count_iter, mem, *mem_sdvig);
+			
 			if (ptr_signal->size() > i2 + static_cast<int>((QRS.height * Fs) / 2)) {
 				auto it_max_lost = max_element(begin(*ptr_signal) + i2,
 											   begin(*ptr_signal) + i2 + static_cast<int>((QRS.height * Fs) / 2));
@@ -77,29 +73,63 @@ void leadII_V::check_BlockII( vector<int>& array_of_peak_R, int ind_of_last_extr
 void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 {
 	N_peaks_fibr++;
+	static bool Fibr_is = false;
+	
+	if (pathology_signal.P_peaks_normal > 10 )
+	{
+		if ( Fibr_is )
+		{
+			path_mathods.insert(pathologies, last_point, no_AFIBR, n_peaks);
+			Fibr_is = false;
+			cout <<last_point <<" fin" <<endl;
+			
+		}
+		if ( pathology_signal.AFIb > 0)
+			pathology_signal.AFIb = 0;
+	}
+	
 	if (array_of_RR.size() >= win_fibr && N_peaks_fibr >= win_fibr)
 	{
 
 		bool afibr_decision = fibr(array_of_RR);
 		push_el(afibr_decision_memory, afibr_decision, n_peaks);
 
-        if (pathology_signal.P_peaks_normal < 3 )
+		
+		static int last_point_afib = 0;
+        if (pathology_signal.P_peaks_normal < 3 && afibr_decision && afibr_decision_memory.size() > 1 && *(afibr_decision_memory.end() - 2))
+        {
+	        if ( pathology_signal.AFIb == 0)
+		        last_point_afib = last_point;
             pathology_signal.AFIb++;
-		//if (pathology_signal.P_peaks_normal < 3 && afibr_decision_memory.size() > 1 && afibr_decision == 1 && *(afibr_decision_memory.end() - 2) == 1)
-        if (pathology_signal.AFIb > 3){
+           
+        }
+        
+        
+        if (Fibr_is &&  pathology_signal.AFIb == 0)
+        	int a = 1;
+		
+		
+		
+		if (!Fibr_is && pathology_signal.AFIb > 3)
+		{
 
-            path_mathods.insert(pathologies, last_point, AFIBR, n_peaks);
-            erase(&Q_v, last_point);//array_of_peak_R.at(n_peaks - win_fibr)
-            erase(&P_v, last_point);
-            erase(&T_v, last_point);
-            erase(&ST_v, last_point);
+            path_mathods.insert(pathologies, last_point_afib, AFIBR, n_peaks);
+            cout<< last_point_afib << " st "<<endl;
+            erase(&Q_v, last_point_afib);//array_of_peak_R.at(n_peaks - win_fibr)
+            erase(&P_v, last_point_afib);
+            erase(&T_v, last_point_afib);
+            erase(&ST_v, last_point_afib);
+            Fibr_is = true;
 				
         }
 
-        if (afibr_decision_memory.size() > 1 && !afibr_decision && pathology_signal.AFIb != 0)
+        if (Fibr_is && afibr_decision_memory.size() > 1 && !afibr_decision && pathology_signal.AFIb != 0)
         {
+        	cout <<last_point <<" fin" <<endl;
             path_mathods.insert(pathologies, last_point, no_AFIBR, n_peaks);
             pathology_signal.AFIb = 0;
+            Fibr_is = false;
+            last_point_afib = 0;
         }
 			
 
@@ -111,8 +141,14 @@ void leadII_V::check_Afibr(vector<int> &array_of_RR, const int &last_point)
 void leadII_V::check_WPW( vector<wave>& R_s)
 {
 	if (!R_s.empty() && ((R_s.end() - 1)->peak - (R_s.end() - 1)->start > static_cast<int>((QRS.low + QRS.height) *Fs/4)-1) &&
-			(R_s.end() - 1)->start - (R_s.end() - 1)->stop < static_cast<int>(RR.middle*Fs))
+			(R_s.end() - 1)->stop- (R_s.end() - 1)->start < static_cast<int>(RR.middle*Fs))
+	{
+		float pr = 0.f;
+		if  ( !P_v.empty() )
+			float pr = ((R_s.end() - 1)->peak - (P_v.end() - 1)->peak)/Fs;
+		if (pr < razmetka::pr_WPW && pr != 0)
 			pathology_signal.WPW++;
+	}
 		else
 			if (pathology_signal.WPW > 0)
 				pathology_signal.WPW = -1;
@@ -156,12 +192,26 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 					if (_extrasystoles.at(j) == clean_peaks.at(i).first){
 
 					}
-						//clean_peaks.at(i).second = E;
-
+					
 				}
 		}
 		}
 
+		static bool VT_is = false;
+		bool res = find_VT(clean_peaks, Fs);
+		
+		if (res)
+		{
+			path_mathods.insert(pathologies, (clean_peaks.end() - 4)->first, VT, n_peaks);
+			VT_is = true;
+		}
+		
+		if ( !res  && VT_is)
+		{
+			path_mathods.insert(pathologies, (clean_peaks.end() - 3)->first, No, n_peaks);
+			VT_is = false;
+		}
+		
 		//atrial flutter
 		if (array_of_peak_R.size() > 3 && pathology_signal.AFl >= 3)
 		{
@@ -170,25 +220,39 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 	}
 
 	auto it = pathologies.end();
-	if (pathologies.size() > 1 && (current_rhythm != 0) && pathology_signal.SVTA>=3 && (--it)->second != no_VT
-		&& (--it)->second != no_VFIBR)
+	static bool SVTA_is = false;
+	
+	if (pathologies.size() > 1 && (current_rhythm != 0) && pathology_signal.SVTA>=2
+		&& (--it)->second != no_VFIBR && !SVTA_is)
 	{
+		SVTA_is = true;
 		if (R_v.size() > 0)
 			if (pathology_signal.ventr_comlex == 0)
 				path_mathods.insert(pathologies, (R_v.end() - 1)->peak, SVTA, n_peaks);
 			else
 				path_mathods.insert(pathologies, (R_v.end() - 1)->peak, VT, n_peaks);
+	} else
+	{
+		if (pathology_signal.SVTA < 2 && SVTA_is)
+		{
+			SVTA_is = false;
+		}
 	}
 	
-		
-	if (R_s.size()>1 && pathology_signal.SBR>2 )
+	static bool SBR_is = false;
+	
+	if (R_s.size()>1 && pathology_signal.SBR>2 && !SBR_is )
+	{
 		path_mathods.insert(pathologies, *(R_s.end() - 2), SBR, n_peaks);
-
-	if (!R_s.empty() && pathology_signal.SBR == -1) {
-			
-		pathology_signal.SBR = 0;
+		SBR_is = true;
 	}
 
+	if (!R_s.empty() && pathology_signal.SBR == -1)
+	{
+		pathology_signal.SBR = 0;
+		SBR_is = false;
+	}
+	
 	
 		
 		//asystolia
@@ -206,6 +270,13 @@ void leadII_V::set_pathology( pair<int, pat_name >& new_pair,  vector<int>& R_s)
 	if( abs(path_mathods.find(pathologies, AFIBR)-2*count) > Fs)
 	{
 		path_mathods.erase(pathologies, BLOCKII, count - 2*Fs);
+	}
+	
+	if( abs(path_mathods.find(pathologies, no_VFIBR)-2*count) > Fs)
+	{
+		path_mathods.erase(pathologies, BLOCKII, count - 2*Fs);
+		path_mathods.erase(pathologies, SBR, count - 2*Fs);
+		path_mathods.erase(pathologies, VT, count - 2*Fs);
 	}
 
 	if (path_mathods.find(pathologies, SVTA) - count > Fs)

@@ -12,9 +12,13 @@ void one_lead::processing_lead(float& sam)
 	
 	static int N = 0;
 	if (N_leads == N) 
-	{N = 0;
+	{
+		N = 0;
+		array_of_peak_R.reserve(n_peaks);
+		peaks_with_types.reserve(n_peaks);
 		All_Leads::count_leads++;
-	} else	N++;
+	} else
+		N++;
 
 	static int first = 0;
 	if (first<N_leads)
@@ -46,27 +50,27 @@ void one_lead::processing_lead(float& sam)
 						if (check_peak())
 						{
 							testing_of_RR();
+							bool res = check_V_forme(peaks_with_types, average_R);
 							if (array_of_peak_R.size()>2 && !ptr_info_new_peak->get_R_is() &&
-									ptr_info_new_peak->get_sample() <  *(array_of_peak_R.end() - 3))
+									ptr_info_new_peak->get_sample() <  (peaks_with_types.end() - 3)->first)
 							{
-                                //if (type_of_lead ==II)
-                                //    int a = 1;
+        
 								ptr_info_new_peak->set_is_peak(true);
-								ptr_info_new_peak->set_sample(*(array_of_peak_R.end() - 3));
+								ptr_info_new_peak->set_sample((peaks_with_types.end() - 3)->first);
 								ptr_info_new_peak->set_is_peak(true);
-								//print(*(array_of_peak_R.end() - 3), "main_peaks.txt");
-								//for finding of original isolinia;
+								
 								finding_of_P(*(array_of_peak_R.end() - 3));
 							}
 							if (array_of_peak_R.size() > 2)
 							{
-								print(*(array_of_peak_R.end() - 3), "main_peaks.txt");
+								print((peaks_with_types.end() - 3)->first, "main_peaks.txt");
+								//print(*(array_of_peak_R.end() - 3), "main_peaks.txt");
 							}
 
 
 						}
 
-					} else 
+					} /*else
 						if (first_check_peak_S()) 
 						{
 							testing_of_SS();
@@ -84,7 +88,7 @@ void one_lead::processing_lead(float& sam)
 							{
 								print(*(array_of_peak_R.end() - 3), "main_peaks.txt");
 							}
-						}
+						}*/
 					
 				}
 			}

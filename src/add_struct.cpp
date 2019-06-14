@@ -61,7 +61,7 @@ string pat_to_string(pat_name pat)
 		case V_b:
 			return "V";
 		case SV_b:
-			return "SV";
+			return "A_b";
 		case VT:
 			return "VT";
 		case E:
@@ -96,6 +96,8 @@ string pat_to_string(pat_name pat)
 			return "A_B";
 		case SVTA:
 			return "SVTA";
+		case VF:
+			return "!";
 		default:
 			return "No";
 	}

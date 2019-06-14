@@ -14,7 +14,7 @@ int leadII_V::finding_of_Q(const int& peak){
 int ind,ind2,ind_vn;  
 ind =  peak - static_cast<int>(Fs*QRS.height);
 ind2 = peak;
-set_indices(ind_vn,ind,ind2,count_iter,mem,mem_sdvig); 
+set_indices(ind_vn,ind,ind2, *count_iter, mem, *mem_sdvig);
 
 
 if (peak - Fs*(QRS.height/2)>0 && ind>0 && ind2>ind){

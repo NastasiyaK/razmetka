@@ -88,7 +88,10 @@ des = #T1; \
 			{
 				NUM_PEAKS++;
 				sum += array_of_new_peaks.at(i).begin()->first;
-				array_of_new_peaks.at(i).pop_front();
+				if (array_of_new_peaks.at(i).size() == 1)
+					array_of_new_peaks.erase(array_of_new_peaks.begin() + i);
+				else
+					array_of_new_peaks.at(i).pop_front();
 				CHECK_TYPE(type_of_beats,array_of_new_peaks.at(0).begin()->second);
 			}
 			
@@ -99,7 +102,10 @@ des = #T1; \
 		for (int i = array_of_new_peaks.size()-1; i >= 0; i--)
 		{
 			if (array_of_new_peaks.at(i).size() == 0)
-				array_of_new_peaks.erase(array_of_new_peaks.begin() + i);
+				if (array_of_new_peaks.size() == 1)
+					array_of_new_peaks.clear();
+				else
+					array_of_new_peaks.erase(array_of_new_peaks.begin() + i);
 		}
 
 	}
@@ -117,12 +123,17 @@ void leadII_V::get_new_peaks()
 {
 
     count = ptr_all_leads->temp_leads.at(1)->get_count();
+    static int count_err = 0;
+	
 	if (!check_VT())
 	{
-		 deque< pair<int,  pat_name >> new_peaks;
-		 vector< deque< pair<int,  pat_name >>> new_peaks_of_all_leads;
-
-
+		
+		 
+		vector< deque< pair<int,  pat_name >>> new_peaks_of_all_leads;
+		deque< pair<int,  pat_name >>* new_peaks_ptr = new deque<pair<int,  pat_name >>(5);
+		deque< pair<int,  pat_name >> new_peaks = *new_peaks_ptr;
+		new_peaks_of_all_leads.reserve(12);
+		
 		static int _last_peak = 0;
 		int point_II = 0;
 		pat_name pat_II;
@@ -136,8 +147,16 @@ void leadII_V::get_new_peaks()
 			int _sample_of_new_iteration = ptr_info_new_peak->get_sample();
 			int count_peaks = 1;
 			if (abs(_sample_of_new_iteration - _last_peak) > ptr_info_new_peak->fusion_window_sec *Fs / 2 )
-			for (int i = 0; i < 12; i++) {
-                if (ptr_all_leads->temp_leads.at(i) != nullptr) {
+			for (int i = 0; i < 12; i++)
+			{
+                if (ptr_all_leads->temp_leads.at(i) != nullptr)
+                {
+                	static bool get_mem  = true;
+                	if (get_mem)
+	                {
+		                ptr_all_leads->temp_leads.at(i)->get_ptr_mem(&mem_sdvig,&count_iter);
+		                //get_mem = false;
+	                }
                     leads_name type = ptr_all_leads->temp_leads.at(i)->get_lead_name();
 
                     vector_pair *ptr_vector_new_peaks = ptr_all_leads->temp_leads.at(i)->get_peaks("all peaks");
@@ -154,7 +173,7 @@ void leadII_V::get_new_peaks()
                             if (_last_peak < (ptr_vector_new_peaks->end() - count_peaks)->first &&
                                 (abs(_sample_of_new_iteration - (ptr_vector_new_peaks->end() - count_peaks)->first) <
                                  ptr_info_new_peak->fusion_window_sec * Fs / 2 ||
-                                 _sample_of_new_iteration > (ptr_vector_new_peaks->end() - count_peaks)->first))
+                                 _sample_of_new_iteration > (ptr_vector_new_peaks->end() - count_peaks-1)->first))
                             {
                             	
                                 if (type == II && !new_peaks.empty())
@@ -186,7 +205,9 @@ void leadII_V::get_new_peaks()
             pair< int,  pat_name> type_sample_des = make_pair(0,No);
 			while ( (new_peaks_of_all_leads.size() > 0) )
 			{
-
+				count_err++;
+				//cout << count_err << endl;
+				
 				count_while++;
 				type_sample_des = in_window(new_peaks_of_all_leads, Fs, N_leads, ptr_info_new_peak->fusion_window_sec);
 
@@ -205,13 +226,13 @@ void leadII_V::get_new_peaks()
 							type_sample_des.second = pat_II;
 
 						}
-						bool res_e = check_SV_A_extrasustole( clean_peaks, average_R);
+						//bool res_e = check_SV_A_extrasustole( clean_peaks, average_R);
 
                         rhythm(type_sample_des, R_s);
-						if (res_e)
-							type_sample_des.second = E;
+						//if (res_e)
+						//	type_sample_des.second = E;
 
-						//R_peak_for_fibr
+						
 						if ( type_sample_des.second == N_b &&
 								clean_peaks.size() > 1  &&  (clean_peaks.end() - 1)->second == N_b ){
 
@@ -244,6 +265,7 @@ void leadII_V::get_new_peaks()
 	{
 		if (leadV != nullptr)
 		{
+			int a = 1;
 			// vector<int>* auto_vector = leadV->get_peaks('V');
 			//to_merge_peaks(&clean_peaks,auto_vector,start_vf);
 			

@@ -17,7 +17,11 @@ leadII_V::leadII_V(leads_name type, info_for_new_peak* ptr_info_new_peak, int N_
 
 leadII_V:: ~leadII_V() 
 {
+	
 	print_all_pathologies();
+	delete mem_sdvig;
+	delete count_iter;
+	
 };
 
 void leadII_V::set_all_leads(All_Leads* ptr_leads)
